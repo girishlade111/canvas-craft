@@ -947,6 +947,518 @@ const APP_CATALOG: AppDef[] = [
       { step: 3, title: 'Paste above', description: 'Enter URL and optional secret.' },
     ],
   },
+
+  // ── NEW: Additional AI ──
+  {
+    key: 'claude-code', name: 'Claude Code', description: 'AI-powered coding agent by Anthropic — terminal-native agentic coding',
+    category: 'AI', icon: ClaudeCodeIcon, rating: 4.8, installs: '95K+', free: false, price: 0,
+    docsUrl: 'https://docs.anthropic.com/en/docs/claude-code',
+    configFields: [
+      { key: 'anthropic_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'sk-ant-...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Get Anthropic API key', description: 'Go to console.anthropic.com → API Keys.' },
+      { step: 2, title: 'Install Claude Code', description: 'Run: npm install -g @anthropic-ai/claude-code' },
+      { step: 3, title: 'Enter API key above', description: 'Paste your key to enable Claude Code integration.' },
+    ],
+  },
+  {
+    key: 'gemini', name: 'Google Gemini', description: 'Google\'s multimodal AI — text, image, code & reasoning',
+    category: 'AI', icon: GeminiIcon, rating: 4.8, installs: '200K+', free: false, price: 0,
+    docsUrl: 'https://ai.google.dev/docs',
+    configFields: [
+      { key: 'gemini_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'AIzaSy...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to Google AI Studio', description: 'Visit aistudio.google.com and sign in.' },
+      { step: 2, title: 'Create API key', description: 'Click "Get API Key" → Create in new project.' },
+      { step: 3, title: 'Enter above', description: 'Paste key to use Gemini models.' },
+    ],
+  },
+  {
+    key: 'mistral', name: 'Mistral AI', description: 'Open-weight AI models — Mistral, Mixtral & Codestral',
+    category: 'AI', icon: MistralIcon, rating: 4.7, installs: '50K+', free: false, price: 0,
+    docsUrl: 'https://docs.mistral.ai/',
+    configFields: [
+      { key: 'mistral_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Mistral', description: 'Go to console.mistral.ai and register.' },
+      { step: 2, title: 'Create API key', description: 'Navigate to API Keys → Create.' },
+      { step: 3, title: 'Enter above', description: 'Paste key to access Mistral models.' },
+    ],
+  },
+  {
+    key: 'huggingface', name: 'Hugging Face', description: 'Open-source ML hub — models, datasets & inference API',
+    category: 'AI', icon: HuggingFaceIcon, rating: 4.8, installs: '150K+', free: true,
+    docsUrl: 'https://huggingface.co/docs/api-inference',
+    configFields: [
+      { key: 'hf_api_token', label: 'Access Token', type: 'token' as const, placeholder: 'hf_...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Hugging Face', description: 'Go to huggingface.co and create an account.' },
+      { step: 2, title: 'Create access token', description: 'Settings → Access Tokens → New Token.' },
+      { step: 3, title: 'Enter above', description: 'Paste token to use Inference API.' },
+    ],
+  },
+  {
+    key: 'stability-ai', name: 'Stability AI', description: 'Stable Diffusion image generation API',
+    category: 'AI', icon: StabilityIcon, rating: 4.6, installs: '65K+', free: false, price: 0,
+    docsUrl: 'https://platform.stability.ai/docs/api-reference',
+    configFields: [
+      { key: 'stability_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'sk-...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Stability AI', description: 'Go to platform.stability.ai and register.' },
+      { step: 2, title: 'Get API key', description: 'Dashboard → API Keys → Create.' },
+      { step: 3, title: 'Enter above', description: 'Paste key to generate images.' },
+    ],
+  },
+
+  // ── NEW: Payments ──
+  {
+    key: 'paypal', name: 'PayPal', description: 'Accept PayPal & credit card payments worldwide',
+    category: 'eCommerce', icon: PayPalIcon, rating: 4.7, installs: '180K+', free: true,
+    docsUrl: 'https://developer.paypal.com/docs/api/overview/',
+    configFields: [
+      { key: 'paypal_client_id', label: 'Client ID', type: 'client_id' as const, placeholder: 'AXxxxx', required: true },
+      { key: 'paypal_client_secret', label: 'Client Secret', type: 'client_secret' as const, placeholder: 'ELxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to PayPal Developer', description: 'Visit developer.paypal.com and log in.' },
+      { step: 2, title: 'Create an app', description: 'My Apps → Create App → get credentials.' },
+      { step: 3, title: 'Enter above', description: 'Paste Client ID and Secret.' },
+    ],
+  },
+  {
+    key: 'razorpay', name: 'Razorpay', description: 'Indian payment gateway — UPI, cards, wallets & more',
+    category: 'eCommerce', icon: RazorpayIcon, rating: 4.7, installs: '90K+', free: true,
+    docsUrl: 'https://razorpay.com/docs/api/',
+    configFields: [
+      { key: 'razorpay_key_id', label: 'Key ID', type: 'api_key' as const, placeholder: 'rzp_live_xxxxx', required: true },
+      { key: 'razorpay_key_secret', label: 'Key Secret', type: 'api_key' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Razorpay', description: 'Go to dashboard.razorpay.com and register.' },
+      { step: 2, title: 'Get API keys', description: 'Settings → API Keys → Generate Key.' },
+      { step: 3, title: 'Enter above', description: 'Paste Key ID and Secret.' },
+    ],
+  },
+  {
+    key: 'lemonsqueezy', name: 'Lemon Squeezy', description: 'All-in-one payments, tax & subscriptions for digital products',
+    category: 'eCommerce', icon: LemonSqueezyIcon, rating: 4.6, installs: '35K+', free: true,
+    docsUrl: 'https://docs.lemonsqueezy.com/api',
+    configFields: [
+      { key: 'lemonsqueezy_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Lemon Squeezy', description: 'Go to lemonsqueezy.com and register.' },
+      { step: 2, title: 'Generate API key', description: 'Settings → API → Create Key.' },
+      { step: 3, title: 'Enter above', description: 'Paste key to accept payments.' },
+    ],
+  },
+  {
+    key: 'paddle', name: 'Paddle', description: 'SaaS billing platform — subscriptions, tax & checkout',
+    category: 'eCommerce', icon: PaddleIcon, rating: 4.5, installs: '25K+', free: true,
+    docsUrl: 'https://developer.paddle.com/',
+    configFields: [
+      { key: 'paddle_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'xxxxx', required: true, secret: true },
+      { key: 'paddle_client_token', label: 'Client-side Token', type: 'token' as const, placeholder: 'test_xxxxx', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Paddle', description: 'Go to paddle.com and register.' },
+      { step: 2, title: 'Get API credentials', description: 'Developer Tools → Authentication.' },
+      { step: 3, title: 'Enter above', description: 'Paste API Key and Client Token.' },
+    ],
+  },
+  {
+    key: 'gumroad', name: 'Gumroad', description: 'Sell digital products, memberships & courses',
+    category: 'eCommerce', icon: GumroadIcon, rating: 4.4, installs: '30K+', free: true,
+    docsUrl: 'https://app.gumroad.com/api',
+    configFields: [
+      { key: 'gumroad_access_token', label: 'Access Token', type: 'token' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Log in to Gumroad', description: 'Go to gumroad.com and sign in.' },
+      { step: 2, title: 'Get access token', description: 'Settings → Advanced → Application API → Generate.' },
+      { step: 3, title: 'Enter above', description: 'Paste token to integrate Gumroad.' },
+    ],
+  },
+  {
+    key: 'woocommerce', name: 'WooCommerce', description: 'Open-source WordPress eCommerce plugin',
+    category: 'eCommerce', icon: WooCommerceIcon, rating: 4.5, installs: '110K+', free: true,
+    docsUrl: 'https://woocommerce.github.io/woocommerce-rest-api-docs/',
+    configFields: [
+      { key: 'woo_store_url', label: 'Store URL', type: 'custom' as const, placeholder: 'https://your-store.com', required: true },
+      { key: 'woo_consumer_key', label: 'Consumer Key', type: 'api_key' as const, placeholder: 'ck_xxxxx', required: true, secret: true },
+      { key: 'woo_consumer_secret', label: 'Consumer Secret', type: 'api_key' as const, placeholder: 'cs_xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to WooCommerce', description: 'WordPress Admin → WooCommerce → Settings → Advanced → REST API.' },
+      { step: 2, title: 'Create API keys', description: 'Add Key → set permissions → Generate.' },
+      { step: 3, title: 'Enter above', description: 'Paste Store URL and API keys.' },
+    ],
+  },
+
+  // ── NEW: Communication ──
+  {
+    key: 'discord', name: 'Discord', description: 'Bot integration — messages, webhooks & community management',
+    category: 'Communication', icon: DiscordIcon, rating: 4.7, installs: '85K+', free: true,
+    docsUrl: 'https://discord.com/developers/docs',
+    configFields: [
+      { key: 'discord_bot_token', label: 'Bot Token', type: 'token' as const, placeholder: 'xxxxx', required: true, secret: true },
+      { key: 'discord_webhook_url', label: 'Webhook URL (optional)', type: 'webhook_url' as const, placeholder: 'https://discord.com/api/webhooks/...', required: false },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create Discord Application', description: 'Go to discord.com/developers/applications → New Application.' },
+      { step: 2, title: 'Create a bot', description: 'Bot tab → Add Bot → copy token.' },
+      { step: 3, title: 'Enter above', description: 'Paste bot token and optional webhook URL.' },
+    ],
+  },
+  {
+    key: 'telegram', name: 'Telegram Bot', description: 'Build Telegram bots — messages, commands & inline queries',
+    category: 'Communication', icon: TelegramIcon, rating: 4.6, installs: '50K+', free: true,
+    docsUrl: 'https://core.telegram.org/bots/api',
+    configFields: [
+      { key: 'telegram_bot_token', label: 'Bot Token', type: 'token' as const, placeholder: '123456:ABCdefGhIJKlmNoPQRstuVWXyz', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Talk to BotFather', description: 'Open Telegram, search @BotFather, send /newbot.' },
+      { step: 2, title: 'Get bot token', description: 'BotFather will give you a token after creating the bot.' },
+      { step: 3, title: 'Enter above', description: 'Paste your bot token.' },
+    ],
+  },
+  {
+    key: 'teams', name: 'Microsoft Teams', description: 'Team collaboration, messaging & video conferencing',
+    category: 'Communication', icon: TeamsIcon, rating: 4.5, installs: '60K+', free: true,
+    docsUrl: 'https://learn.microsoft.com/en-us/graph/teams-concept-overview',
+    configFields: [
+      { key: 'teams_client_id', label: 'Application ID', type: 'client_id' as const, placeholder: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', required: true },
+      { key: 'teams_webhook_url', label: 'Incoming Webhook URL', type: 'webhook_url' as const, placeholder: 'https://outlook.office.com/webhook/...', required: false },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Register an app', description: 'Go to Azure Portal → App registrations → New.' },
+      { step: 2, title: 'Configure Teams permissions', description: 'Add Microsoft Graph permissions for Teams.' },
+      { step: 3, title: 'Enter above', description: 'Paste Application ID and webhook URL.' },
+    ],
+  },
+  {
+    key: 'zoom', name: 'Zoom', description: 'Video meetings, webinars & virtual events API',
+    category: 'Communication', icon: ZoomIcon, rating: 4.5, installs: '45K+', free: true,
+    docsUrl: 'https://developers.zoom.us/docs/',
+    configFields: [
+      { key: 'zoom_client_id', label: 'Client ID', type: 'client_id' as const, placeholder: 'xxxxx', required: true },
+      { key: 'zoom_client_secret', label: 'Client Secret', type: 'client_secret' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to Zoom Marketplace', description: 'Visit marketplace.zoom.us and sign in.' },
+      { step: 2, title: 'Create an app', description: 'Develop → Build App → OAuth → Create.' },
+      { step: 3, title: 'Enter above', description: 'Paste Client ID and Secret.' },
+    ],
+  },
+
+  // ── NEW: Hosting & Deploy ──
+  {
+    key: 'netlify', name: 'Netlify', description: 'Deploy & host websites with CI/CD and serverless functions',
+    category: 'Developer', icon: NetlifyIcon, rating: 4.7, installs: '95K+', free: true,
+    docsUrl: 'https://docs.netlify.com/',
+    configFields: [
+      { key: 'netlify_token', label: 'Personal Access Token', type: 'token' as const, placeholder: 'xxxxx', required: true, secret: true },
+      { key: 'netlify_site_id', label: 'Site ID', type: 'site_id' as const, placeholder: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', required: false },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Log in to Netlify', description: 'Go to app.netlify.com and sign in.' },
+      { step: 2, title: 'Create access token', description: 'User Settings → Applications → Personal Access Tokens.' },
+      { step: 3, title: 'Enter above', description: 'Paste token and optional Site ID.' },
+    ],
+  },
+  {
+    key: 'railway', name: 'Railway', description: 'Deploy apps, databases & cron jobs with zero config',
+    category: 'Developer', icon: RailwayIcon, rating: 4.6, installs: '40K+', free: true,
+    docsUrl: 'https://docs.railway.app/',
+    configFields: [
+      { key: 'railway_token', label: 'API Token', type: 'token' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Railway', description: 'Go to railway.app and create an account.' },
+      { step: 2, title: 'Generate token', description: 'Account Settings → Tokens → Create Token.' },
+      { step: 3, title: 'Enter above', description: 'Paste token to deploy via API.' },
+    ],
+  },
+  {
+    key: 'render', name: 'Render', description: 'Cloud hosting for web apps, APIs, databases & static sites',
+    category: 'Developer', icon: RenderIcon, rating: 4.5, installs: '35K+', free: true,
+    docsUrl: 'https://render.com/docs',
+    configFields: [
+      { key: 'render_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'rnd_xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Render', description: 'Go to render.com and create an account.' },
+      { step: 2, title: 'Create API key', description: 'Account Settings → API Keys → Create.' },
+      { step: 3, title: 'Enter above', description: 'Paste key to manage Render services.' },
+    ],
+  },
+  {
+    key: 'cloudflare', name: 'Cloudflare', description: 'CDN, DNS, Workers & security for websites',
+    category: 'Developer', icon: CloudflareIcon, rating: 4.8, installs: '120K+', free: true,
+    docsUrl: 'https://developers.cloudflare.com/',
+    configFields: [
+      { key: 'cloudflare_api_token', label: 'API Token', type: 'token' as const, placeholder: 'xxxxx', required: true, secret: true },
+      { key: 'cloudflare_zone_id', label: 'Zone ID', type: 'custom' as const, placeholder: 'xxxxxxxx', required: false },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Log in to Cloudflare', description: 'Go to dash.cloudflare.com and sign in.' },
+      { step: 2, title: 'Create API token', description: 'Profile → API Tokens → Create Token.' },
+      { step: 3, title: 'Enter above', description: 'Paste token and optional Zone ID.' },
+    ],
+  },
+  {
+    key: 'digitalocean', name: 'DigitalOcean', description: 'Cloud infrastructure — Droplets, App Platform & databases',
+    category: 'Developer', icon: DigitalOceanIcon, rating: 4.6, installs: '55K+', free: false, price: 0,
+    docsUrl: 'https://docs.digitalocean.com/',
+    configFields: [
+      { key: 'do_api_token', label: 'API Token', type: 'token' as const, placeholder: 'dop_v1_xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Log in to DigitalOcean', description: 'Go to cloud.digitalocean.com.' },
+      { step: 2, title: 'Generate token', description: 'API → Tokens → Generate New Token.' },
+      { step: 3, title: 'Enter above', description: 'Paste token to manage DO resources.' },
+    ],
+  },
+  {
+    key: 'deno', name: 'Deno Deploy', description: 'Edge-first serverless platform for TypeScript',
+    category: 'Developer', icon: DenoIcon, rating: 4.5, installs: '20K+', free: true,
+    docsUrl: 'https://deno.com/deploy/docs',
+    configFields: [
+      { key: 'deno_deploy_token', label: 'Access Token', type: 'token' as const, placeholder: 'ddp_xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Deno Deploy', description: 'Go to dash.deno.com and register.' },
+      { step: 2, title: 'Create access token', description: 'Account Settings → Access Tokens → New.' },
+      { step: 3, title: 'Enter above', description: 'Paste token to deploy edge functions.' },
+    ],
+  },
+
+  // ── NEW: CMS ──
+  {
+    key: 'wordpress', name: 'WordPress', description: 'World\'s most popular CMS — headless or traditional',
+    category: 'CMS', icon: WordPressIcon, rating: 4.7, installs: '200K+', free: true,
+    docsUrl: 'https://developer.wordpress.org/rest-api/',
+    configFields: [
+      { key: 'wp_site_url', label: 'Site URL', type: 'custom' as const, placeholder: 'https://your-site.com', required: true },
+      { key: 'wp_app_password', label: 'Application Password', type: 'token' as const, placeholder: 'xxxx xxxx xxxx xxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to WordPress Admin', description: 'Navigate to your WordPress admin panel.' },
+      { step: 2, title: 'Create app password', description: 'Users → Profile → Application Passwords → Add New.' },
+      { step: 3, title: 'Enter above', description: 'Paste site URL and app password.' },
+    ],
+  },
+  {
+    key: 'ghost', name: 'Ghost', description: 'Modern publishing platform — blogs, newsletters & memberships',
+    category: 'CMS', icon: GhostIcon, rating: 4.6, installs: '25K+', free: true,
+    docsUrl: 'https://ghost.org/docs/content-api/',
+    configFields: [
+      { key: 'ghost_url', label: 'Ghost URL', type: 'custom' as const, placeholder: 'https://your-site.ghost.io', required: true },
+      { key: 'ghost_content_key', label: 'Content API Key', type: 'api_key' as const, placeholder: 'xxxxx', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to Ghost Admin', description: 'Navigate to your Ghost admin panel.' },
+      { step: 2, title: 'Create integration', description: 'Settings → Integrations → Add Custom Integration.' },
+      { step: 3, title: 'Enter above', description: 'Paste Ghost URL and Content API Key.' },
+    ],
+  },
+  {
+    key: 'strapi', name: 'Strapi', description: 'Open-source headless CMS — customizable & self-hosted',
+    category: 'CMS', icon: StrapiIcon, rating: 4.6, installs: '40K+', free: true,
+    docsUrl: 'https://docs.strapi.io/',
+    configFields: [
+      { key: 'strapi_url', label: 'Strapi URL', type: 'custom' as const, placeholder: 'https://your-strapi.com', required: true },
+      { key: 'strapi_api_token', label: 'API Token', type: 'token' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Deploy Strapi', description: 'Set up Strapi locally or on a cloud provider.' },
+      { step: 2, title: 'Create API token', description: 'Settings → API Tokens → Create new API Token.' },
+      { step: 3, title: 'Enter above', description: 'Paste Strapi URL and API token.' },
+    ],
+  },
+
+  // ── NEW: Auth ──
+  {
+    key: 'auth0', name: 'Auth0', description: 'Authentication & authorization platform — SSO, MFA & social login',
+    category: 'Security', icon: Auth0Icon, rating: 4.7, installs: '80K+', free: true,
+    docsUrl: 'https://auth0.com/docs',
+    configFields: [
+      { key: 'auth0_domain', label: 'Domain', type: 'custom' as const, placeholder: 'your-tenant.auth0.com', required: true },
+      { key: 'auth0_client_id', label: 'Client ID', type: 'client_id' as const, placeholder: 'xxxxx', required: true },
+      { key: 'auth0_client_secret', label: 'Client Secret', type: 'client_secret' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create Auth0 account', description: 'Go to auth0.com and sign up.' },
+      { step: 2, title: 'Create an application', description: 'Applications → Create Application → Single Page App.' },
+      { step: 3, title: 'Enter above', description: 'Paste Domain, Client ID, and Secret.' },
+    ],
+  },
+  {
+    key: 'clerk', name: 'Clerk', description: 'Drop-in authentication — sign-up, sign-in & user management',
+    category: 'Security', icon: ClerkIcon, rating: 4.8, installs: '70K+', free: true,
+    docsUrl: 'https://clerk.com/docs',
+    configFields: [
+      { key: 'clerk_publishable_key', label: 'Publishable Key', type: 'api_key' as const, placeholder: 'pk_live_xxxxx', required: true },
+      { key: 'clerk_secret_key', label: 'Secret Key', type: 'api_key' as const, placeholder: 'sk_live_xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create Clerk account', description: 'Go to clerk.com and sign up.' },
+      { step: 2, title: 'Create an application', description: 'Dashboard → Create Application.' },
+      { step: 3, title: 'Enter above', description: 'Paste Publishable Key and Secret Key.' },
+    ],
+  },
+
+  // ── NEW: Search & Vector DB ──
+  {
+    key: 'algolia', name: 'Algolia', description: 'Lightning-fast search & discovery API',
+    category: 'Developer', icon: AlgoliaIcon, rating: 4.7, installs: '60K+', free: true,
+    docsUrl: 'https://www.algolia.com/doc/',
+    configFields: [
+      { key: 'algolia_app_id', label: 'Application ID', type: 'custom' as const, placeholder: 'XXXXXXXXXX', required: true },
+      { key: 'algolia_search_key', label: 'Search-Only API Key', type: 'api_key' as const, placeholder: 'xxxxx', required: true },
+      { key: 'algolia_admin_key', label: 'Admin API Key', type: 'api_key' as const, placeholder: 'xxxxx', required: false, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Algolia', description: 'Go to algolia.com and create an account.' },
+      { step: 2, title: 'Get API keys', description: 'Settings → API Keys → copy keys.' },
+      { step: 3, title: 'Enter above', description: 'Paste Application ID and API keys.' },
+    ],
+  },
+  {
+    key: 'pinecone', name: 'Pinecone', description: 'Vector database for AI applications — similarity search at scale',
+    category: 'AI', icon: PineconeIcon, rating: 4.6, installs: '40K+', free: true,
+    docsUrl: 'https://docs.pinecone.io/',
+    configFields: [
+      { key: 'pinecone_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'xxxxx', required: true, secret: true },
+      { key: 'pinecone_environment', label: 'Environment', type: 'custom' as const, placeholder: 'us-east-1-aws', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Pinecone', description: 'Go to pinecone.io and create an account.' },
+      { step: 2, title: 'Get API key', description: 'Console → API Keys.' },
+      { step: 3, title: 'Enter above', description: 'Paste API key and environment.' },
+    ],
+  },
+
+  // ── NEW: Monitoring ──
+  {
+    key: 'sentry', name: 'Sentry', description: 'Error tracking, performance monitoring & crash reporting',
+    category: 'Developer', icon: SentryIcon, rating: 4.7, installs: '90K+', free: true,
+    docsUrl: 'https://docs.sentry.io/',
+    configFields: [
+      { key: 'sentry_dsn', label: 'DSN', type: 'custom' as const, placeholder: 'https://xxxxx@o123.ingest.sentry.io/456', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create Sentry account', description: 'Go to sentry.io and sign up.' },
+      { step: 2, title: 'Create a project', description: 'Settings → Projects → Create Project → JavaScript/React.' },
+      { step: 3, title: 'Get DSN', description: 'Project Settings → Client Keys (DSN) → copy DSN.' },
+    ],
+  },
+  {
+    key: 'posthog', name: 'PostHog', description: 'Product analytics, feature flags, session replay & A/B testing',
+    category: 'Analytics', icon: PostHogIcon, rating: 4.7, installs: '45K+', free: true,
+    docsUrl: 'https://posthog.com/docs',
+    configFields: [
+      { key: 'posthog_api_key', label: 'Project API Key', type: 'api_key' as const, placeholder: 'phc_xxxxx', required: true },
+      { key: 'posthog_host', label: 'Host', type: 'custom' as const, placeholder: 'https://app.posthog.com', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at PostHog', description: 'Go to posthog.com and create an account.' },
+      { step: 2, title: 'Get API key', description: 'Project Settings → Project API Key.' },
+      { step: 3, title: 'Enter above', description: 'Paste API key and host URL.' },
+    ],
+  },
+  {
+    key: 'plausible', name: 'Plausible Analytics', description: 'Privacy-friendly, lightweight web analytics — no cookies',
+    category: 'Analytics', icon: PlausibleIcon, rating: 4.6, installs: '30K+', free: false, price: 9,
+    docsUrl: 'https://plausible.io/docs',
+    configFields: [
+      { key: 'plausible_domain', label: 'Domain', type: 'custom' as const, placeholder: 'your-site.com', required: true },
+      { key: 'plausible_api_key', label: 'API Key (optional)', type: 'api_key' as const, placeholder: 'xxxxx', required: false, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Plausible', description: 'Go to plausible.io and create an account.' },
+      { step: 2, title: 'Add your site', description: 'Add your website domain.' },
+      { step: 3, title: 'Enter above', description: 'Paste your domain and optional API key.' },
+    ],
+  },
+
+  // ── NEW: Databases ──
+  {
+    key: 'upstash', name: 'Upstash', description: 'Serverless Redis & Kafka — low-latency data at the edge',
+    category: 'Backend', icon: UpstashIcon, rating: 4.6, installs: '30K+', free: true,
+    docsUrl: 'https://upstash.com/docs',
+    configFields: [
+      { key: 'upstash_redis_url', label: 'Redis REST URL', type: 'custom' as const, placeholder: 'https://xxxxx.upstash.io', required: true },
+      { key: 'upstash_redis_token', label: 'Redis REST Token', type: 'token' as const, placeholder: 'AXxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Upstash', description: 'Go to upstash.com and register.' },
+      { step: 2, title: 'Create a database', description: 'Console → Create Database → copy REST URL and Token.' },
+      { step: 3, title: 'Enter above', description: 'Paste Redis REST URL and Token.' },
+    ],
+  },
+  {
+    key: 'neon', name: 'Neon', description: 'Serverless Postgres — branching, autoscaling & bottomless storage',
+    category: 'Backend', icon: NeonIcon, rating: 4.7, installs: '35K+', free: true,
+    docsUrl: 'https://neon.tech/docs',
+    configFields: [
+      { key: 'neon_connection_string', label: 'Connection String', type: 'custom' as const, placeholder: 'postgresql://user:pass@xxxxx.neon.tech/db', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Neon', description: 'Go to neon.tech and create an account.' },
+      { step: 2, title: 'Create a project', description: 'Console → New Project → copy connection string.' },
+      { step: 3, title: 'Enter above', description: 'Paste your Postgres connection string.' },
+    ],
+  },
+  {
+    key: 'turso', name: 'Turso', description: 'Edge-hosted SQLite database — low-latency reads worldwide',
+    category: 'Backend', icon: TursoIcon, rating: 4.5, installs: '15K+', free: true,
+    docsUrl: 'https://docs.turso.tech/',
+    configFields: [
+      { key: 'turso_db_url', label: 'Database URL', type: 'custom' as const, placeholder: 'libsql://xxxxx.turso.io', required: true },
+      { key: 'turso_auth_token', label: 'Auth Token', type: 'token' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Turso', description: 'Go to turso.tech and register.' },
+      { step: 2, title: 'Create a database', description: 'turso db create mydb → turso db tokens create mydb.' },
+      { step: 3, title: 'Enter above', description: 'Paste Database URL and Auth Token.' },
+    ],
+  },
+
+  // ── NEW: Design Tools ──
+  {
+    key: 'framer', name: 'Framer', description: 'Design & publish production websites with animations',
+    category: 'Design', icon: FramerIcon, rating: 4.6, installs: '50K+', free: true,
+    docsUrl: 'https://www.framer.com/developers/',
+    configFields: [
+      { key: 'framer_api_token', label: 'API Token', type: 'token' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Log in to Framer', description: 'Go to framer.com and sign in.' },
+      { step: 2, title: 'Get API access', description: 'Check developer settings for API token.' },
+      { step: 3, title: 'Enter above', description: 'Paste token to integrate Framer.' },
+    ],
+  },
+  {
+    key: 'webflow', name: 'Webflow', description: 'Visual website builder with CMS & hosting',
+    category: 'Design', icon: WebflowIcon, rating: 4.6, installs: '55K+', free: false, price: 14,
+    docsUrl: 'https://developers.webflow.com/',
+    configFields: [
+      { key: 'webflow_api_token', label: 'API Token', type: 'token' as const, placeholder: 'xxxxx', required: true, secret: true },
+      { key: 'webflow_site_id', label: 'Site ID', type: 'site_id' as const, placeholder: 'xxxxx', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Log in to Webflow', description: 'Go to webflow.com and sign in.' },
+      { step: 2, title: 'Create API token', description: 'Account Settings → Integrations → API Access.' },
+      { step: 3, title: 'Enter above', description: 'Paste API token and Site ID.' },
+    ],
+  },
 ];
 
 const CATEGORIES = [
