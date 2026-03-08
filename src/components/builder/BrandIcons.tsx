@@ -842,3 +842,115 @@ export const CrewAIIcon = createIcon(
   '0 0 24 24'
 );
 
+// ─── Cohere ───────────────────────────────────────────────
+export const CohereIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#39594D" />
+    <circle cx="12" cy="12" r="5" fill="#D18EE2" />
+    <circle cx="12" cy="12" r="2.5" fill="#39594D" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Together AI ──────────────────────────────────────────
+export const TogetherAIIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#0F0F0F" />
+    <path d="M6 12h12M12 6v12" stroke="#00D1FF" strokeWidth="2.5" strokeLinecap="round" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Groq ─────────────────────────────────────────────────
+export const GroqIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#F55036" />
+    <text x="12" y="16" textAnchor="middle" fill="#fff" fontSize="11" fontWeight="bold" fontFamily="sans-serif">G</text>
+  </>,
+  '0 0 24 24'
+);
+
+// ─── xAI (Grok) ──────────────────────────────────────────
+export const XAIIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#000" />
+    <path d="M7 7l10 10M17 7l-10 10" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── OpenRouter ───────────────────────────────────────────
+export const OpenRouterIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#6366F1" />
+    <path d="M6 12h3l3-5 3 10 3-5h3" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Fireworks AI ─────────────────────────────────────────
+export const FireworksAIIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#7C3AED" />
+    <path d="M12 4v8M8 6l4 6M16 6l-4 6M12 12l-5 6M12 12l5 6M12 12v6" stroke="#FCD34D" strokeWidth="1.5" strokeLinecap="round" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── AssemblyAI ───────────────────────────────────────────
+export const AssemblyAIIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#0000FF" />
+    <path d="M6 18l6-14 6 14" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8.5 13h7" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Runway ML ────────────────────────────────────────────
+export const RunwayIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#000" />
+    <path d="M6 17L12 7l6 10" stroke="#00E5FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── AI21 Labs ────────────────────────────────────────────
+export const AI21Icon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#EC4899" />
+    <text x="12" y="16" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="bold" fontFamily="sans-serif">AI21</text>
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Anthropic (alternate / API-focused) ──────────────────
+export const AnthropicAPIIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#D4A27F" />
+    <path d="M8 17l4-11 4 11M9.5 14h5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Meta Llama ───────────────────────────────────────────
+export const MetaLlamaIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#0668E1" />
+    <circle cx="12" cy="10" r="4" fill="#fff" />
+    <ellipse cx="12" cy="18" rx="6" ry="3" fill="#fff" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Cerebras ─────────────────────────────────────────────
+export const CerebrasIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#1E293B" />
+    <rect x="7" y="7" width="10" height="10" rx="2" stroke="#22D3EE" strokeWidth="1.5" fill="none" />
+    <rect x="9" y="9" width="6" height="6" rx="1" fill="#22D3EE" />
+  </>,
+  '0 0 24 24'
+);
+
