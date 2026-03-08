@@ -60,6 +60,8 @@ interface AppDef {
   docsUrl?: string;
   configFields: ConfigField[];
   setupSteps: SetupStep[];
+  isFeatured?: boolean;
+  isNew?: boolean;
 }
 
 /* ── Expanded app catalog ── */
