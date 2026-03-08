@@ -247,11 +247,7 @@ const BuilderCanvas = () => {
           {schema.sections.map((section) => (
             <DroppableSection key={section.id} section={section} />
           ))}
-          {schema.sections.length === 0 && (
-            <div className="flex items-center justify-center h-96 opacity-30 text-sm">
-              No sections yet. Add components from the sidebar.
-            </div>
-          )}
+          {schema.sections.length === 0 && <EmptyCanvasDropZone />}
         </div>
       </div>
 
