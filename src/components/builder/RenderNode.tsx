@@ -3,7 +3,7 @@ import { getComponent } from '@/engine/registry';
 import { useBuilderStore } from '@/store/builderStore';
 import { useDroppable, useDraggable } from '@dnd-kit/core';
 import { isContainerType, type BuilderComponent } from '@/types/builder';
-import { Trash2, Code2, GripVertical, Eye, EyeOff, Lock, Unlock } from 'lucide-react';
+import { Trash2, Code2, GripVertical, Eye, EyeOff, Lock, Unlock, Copy } from 'lucide-react';
 
 interface RenderNodeProps {
   node: BuilderComponent;
@@ -11,6 +11,9 @@ interface RenderNodeProps {
   parentId?: string;
   index?: number;
 }
+
+// ─── Text types that support inline editing ────────────────
+const TEXT_TYPES = new Set(['heading', 'paragraph', 'text', 'label', 'quote', 'blockquote', 'list-item', 'code-block', 'rich-text']);
 
 // ─── Resize Handles ────────────────────────────────────────
 
@@ -55,8 +58,6 @@ const ResizeHandles: React.FC<{
   </>
 );
 
-// ─── Dimension Badge ───────────────────────────────────────
-
 const DimensionBadge: React.FC<{ width: number; height: number }> = ({ width, height }) => (
   <div
     className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap z-20"
@@ -70,6 +71,39 @@ const DimensionBadge: React.FC<{ width: number; height: number }> = ({ width, he
   </div>
 );
 
+// ─── Inline Text Formatting Toolbar ────────────────────────
+
+const InlineTextToolbar: React.FC<{
+  onFormat: (cmd: string, value?: string) => void;
+}> = ({ onFormat }) => (
+  <div className="inline-text-toolbar" onClick={e => e.stopPropagation()}>
+    <button onMouseDown={e => { e.preventDefault(); onFormat('bold'); }} title="Bold (Ctrl+B)"><b>B</b></button>
+    <button onMouseDown={e => { e.preventDefault(); onFormat('italic'); }} title="Italic (Ctrl+I)"><i>I</i></button>
+    <button onMouseDown={e => { e.preventDefault(); onFormat('underline'); }} title="Underline (Ctrl+U)"><u>U</u></button>
+    <button onMouseDown={e => { e.preventDefault(); onFormat('strikeThrough'); }} title="Strikethrough"><s>S</s></button>
+    <span className="inline-toolbar-divider" />
+    <button onMouseDown={e => { e.preventDefault(); onFormat('justifyLeft'); }} title="Align Left">⫷</button>
+    <button onMouseDown={e => { e.preventDefault(); onFormat('justifyCenter'); }} title="Align Center">⫸</button>
+    <button onMouseDown={e => { e.preventDefault(); onFormat('justifyRight'); }} title="Align Right">⫹</button>
+    <span className="inline-toolbar-divider" />
+    <select
+      onChange={e => { onFormat('fontSize', e.target.value); }}
+      defaultValue="3"
+      className="inline-toolbar-select"
+      onMouseDown={e => e.stopPropagation()}
+    >
+      <option value="1">12px</option>
+      <option value="2">14px</option>
+      <option value="3">16px</option>
+      <option value="4">18px</option>
+      <option value="5">24px</option>
+      <option value="6">32px</option>
+      <option value="7">48px</option>
+    </select>
+    <button onMouseDown={e => { e.preventDefault(); onFormat('removeFormat'); }} title="Clear Format">✕</button>
+  </div>
+);
+
 // ─── Main Render Node ──────────────────────────────────────
 
 const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId, index = 0 }) => {
@@ -77,20 +111,23 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
     selectedComponentId, selectComponent, removeComponent,
     openCodeEditor, updateComponentStyles, deviceView,
     snapToGrid, gridSize, updateComponent,
+    addComponentToContainer,
   } = useBuilderStore();
 
   const isSelected = selectedComponentId === node.id;
   const isContainer = isContainerType(node.type);
   const isHidden = node.hidden;
   const isLocked = node.locked;
+  const isTextElement = TEXT_TYPES.has(node.type);
 
   const nodeRef = useRef<HTMLDivElement>(null);
+  const editableRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [showDimensions, setShowDimensions] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isInlineEditing, setIsInlineEditing] = useState(false);
 
-  // Make component DRAGGABLE (for reordering on canvas)
   const {
     attributes: dragAttributes,
     listeners: dragListeners,
@@ -107,10 +144,9 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
       label: node.label,
       componentType: node.type,
     },
-    disabled: isLocked || isResizing,
+    disabled: isLocked || isResizing || isInlineEditing,
   });
 
-  // Make component DROPPABLE (accepts drops)
   const { setNodeRef: setDropRef, isOver } = useDroppable({
     id: node.id,
     data: {
@@ -126,7 +162,6 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
 
   const Component = getComponent(node.type);
 
-  // Resolve responsive styles
   const resolvedStyles: React.CSSProperties = {
     ...(node.styles as React.CSSProperties),
     ...(node.responsiveStyles?.[deviceView] as React.CSSProperties),
@@ -180,7 +215,6 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
       if (dir.includes('s')) newH = snapValue(startH + dy);
       if (dir.includes('n')) newH = snapValue(startH - dy);
 
-      // Aspect ratio lock with Shift
       if (shiftHeld || me.shiftKey) {
         if (dir.includes('e') || dir.includes('w')) {
           newH = newW / aspectRatio;
@@ -214,15 +248,69 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
     document.addEventListener('mouseup', onUp);
   }, [isLocked, snapValue, updateComponentStyles, node.id]);
 
-  // Toggle visibility
   const toggleVisibility = useCallback(() => {
     updateComponent(node.id, { hidden: !isHidden });
   }, [node.id, isHidden, updateComponent]);
 
-  // Toggle lock
   const toggleLock = useCallback(() => {
     updateComponent(node.id, { locked: !isLocked });
   }, [node.id, isLocked, updateComponent]);
+
+  // ─── Inline editing ───────────────────────────────────
+
+  const handleDoubleClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isLocked || !isTextElement) return;
+    setIsInlineEditing(true);
+    // Focus the editable area after state update
+    setTimeout(() => {
+      if (editableRef.current) {
+        editableRef.current.focus();
+        // Place cursor at end
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(editableRef.current);
+        range.collapse(false);
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+      }
+    }, 0);
+  }, [isLocked, isTextElement]);
+
+  const handleInlineBlur = useCallback(() => {
+    if (editableRef.current) {
+      const newContent = editableRef.current.innerHTML;
+      updateComponent(node.id, { content: newContent });
+    }
+    setIsInlineEditing(false);
+  }, [node.id, updateComponent]);
+
+  const handleFormat = useCallback((cmd: string, value?: string) => {
+    document.execCommand(cmd, false, value);
+  }, []);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      handleInlineBlur();
+    }
+    // Formatting shortcuts
+    if (e.ctrlKey || e.metaKey) {
+      if (e.key === 'b') { e.preventDefault(); handleFormat('bold'); }
+      if (e.key === 'i') { e.preventDefault(); handleFormat('italic'); }
+      if (e.key === 'u') { e.preventDefault(); handleFormat('underline'); }
+    }
+    e.stopPropagation();
+  }, [handleInlineBlur, handleFormat]);
+
+  // Duplicate component
+  const handleDuplicate = useCallback(() => {
+    const clone: BuilderComponent = JSON.parse(JSON.stringify(node));
+    clone.id = `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    clone.label = `${node.label} (copy)`;
+    if (parentId) {
+      addComponentToContainer(parentId, clone);
+    }
+  }, [node, parentId, addComponentToContainer]);
 
   if (isHidden) {
     return (
@@ -254,6 +342,7 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
         isResizing ? 'resizing' : '',
         isDragging ? 'dragging' : '',
         isHovered && !isSelected ? 'hovered' : '',
+        isInlineEditing ? 'inline-editing' : '',
         customClasses || '',
       ].filter(Boolean).join(' ')}
       style={{
@@ -261,7 +350,11 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
         opacity: isDragging ? 0.3 : undefined,
         transition: isDragging ? 'opacity 0.15s' : undefined,
       }}
-      onClick={(e) => { e.stopPropagation(); if (!isLocked) selectComponent(node.id); }}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (!isLocked && !isInlineEditing) selectComponent(node.id);
+      }}
+      onDoubleClick={handleDoubleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -276,12 +369,15 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
       )}
 
       {/* Selection toolbar */}
-      {isSelected && !isResizing && !isDragging && (
+      {isSelected && !isResizing && !isDragging && !isInlineEditing && (
         <div className="component-toolbar">
           <div {...dragListeners} className="cursor-grab active:cursor-grabbing p-0.5">
             <GripVertical className="w-3 h-3" />
           </div>
           <span className="truncate max-w-[80px]">{node.label}</span>
+          <button onClick={(e) => { e.stopPropagation(); handleDuplicate(); }} className="hover:opacity-70" title="Duplicate">
+            <Copy className="w-3 h-3" />
+          </button>
           <button onClick={(e) => { e.stopPropagation(); toggleVisibility(); }} className="hover:opacity-70" title={isHidden ? "Show" : "Hide"}>
             {isHidden ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
           </button>
@@ -297,6 +393,11 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
         </div>
       )}
 
+      {/* Inline text formatting toolbar */}
+      {isInlineEditing && (
+        <InlineTextToolbar onFormat={handleFormat} />
+      )}
+
       {/* Hover label (when not selected) */}
       {isHovered && !isSelected && !isDragging && (
         <div className="component-hover-label">
@@ -305,7 +406,7 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
       )}
 
       {/* Resize handles when selected */}
-      {isSelected && !isLocked && !isDragging && (
+      {isSelected && !isLocked && !isDragging && !isInlineEditing && (
         <ResizeHandles onResizeStart={handleResizeStart} />
       )}
 
@@ -314,9 +415,23 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
         <DimensionBadge width={dimensions.width} height={dimensions.height} />
       )}
 
-      <Component {...componentProps}>
-        {renderedChildren}
-      </Component>
+      {/* Inline editable content OR normal render */}
+      {isInlineEditing && isTextElement ? (
+        <div
+          ref={editableRef}
+          contentEditable
+          suppressContentEditableWarning
+          className="inline-editable-content"
+          style={{ outline: 'none', minHeight: '1em', cursor: 'text' }}
+          dangerouslySetInnerHTML={{ __html: node.content || '' }}
+          onBlur={handleInlineBlur}
+          onKeyDown={handleKeyDown}
+        />
+      ) : (
+        <Component {...componentProps}>
+          {renderedChildren}
+        </Component>
+      )}
 
       {isContainer && (!node.children || node.children.length === 0) && (
         <div className="empty-container-placeholder">
