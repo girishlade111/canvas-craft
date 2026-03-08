@@ -1461,6 +1461,137 @@ const APP_CATALOG: AppDef[] = [
       { step: 3, title: 'Enter above', description: 'Paste API token and Site ID.' },
     ],
   },
+
+  // ── Social & Community ──
+  {
+    key: 'twitch', name: 'Twitch', description: 'Live streaming platform — embed streams, chat & webhooks',
+    category: 'Social', icon: TwitchIcon, rating: 4.5, installs: '40K+', free: true,
+    docsUrl: 'https://dev.twitch.tv/docs',
+    configFields: [
+      { key: 'twitch_client_id', label: 'Client ID', type: 'client_id' as const, placeholder: 'xxxxx', required: true },
+      { key: 'twitch_client_secret', label: 'Client Secret', type: 'client_secret' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Twitch app', description: 'Go to dev.twitch.tv/console → Register Your Application.' },
+      { step: 2, title: 'Get credentials', description: 'Copy Client ID and generate a Client Secret.' },
+      { step: 3, title: 'Enter above', description: 'Paste Client ID and Secret to connect.' },
+    ],
+  },
+  {
+    key: 'reddit', name: 'Reddit', description: 'Community platform — embed feeds, fetch posts & subreddit data',
+    category: 'Social', icon: RedditIcon, rating: 4.3, installs: '25K+', free: true,
+    docsUrl: 'https://www.reddit.com/dev/api/',
+    configFields: [
+      { key: 'reddit_client_id', label: 'Client ID', type: 'client_id' as const, placeholder: 'xxxxx', required: true },
+      { key: 'reddit_client_secret', label: 'Client Secret', type: 'client_secret' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Reddit app', description: 'Go to reddit.com/prefs/apps → Create Application (script type).' },
+      { step: 2, title: 'Copy credentials', description: 'Copy the app ID (under the name) and secret.' },
+      { step: 3, title: 'Enter above', description: 'Paste both values to connect Reddit.' },
+    ],
+  },
+  {
+    key: 'pinterest', name: 'Pinterest', description: 'Visual discovery engine — pins, boards & shopping integration',
+    category: 'Marketing', icon: PinterestIcon, rating: 4.4, installs: '30K+', free: true,
+    docsUrl: 'https://developers.pinterest.com/docs/',
+    configFields: [
+      { key: 'pinterest_app_id', label: 'App ID', type: 'client_id' as const, placeholder: 'xxxxx', required: true },
+      { key: 'pinterest_app_secret', label: 'App Secret', type: 'client_secret' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Pinterest app', description: 'Go to developers.pinterest.com → My Apps → Create.' },
+      { step: 2, title: 'Get API credentials', description: 'Copy App ID and App Secret from app settings.' },
+      { step: 3, title: 'Enter above', description: 'Paste credentials to integrate Pinterest.' },
+    ],
+  },
+
+  // ── Email & Marketing ──
+  {
+    key: 'mailgun', name: 'Mailgun', description: 'Transactional email API — sending, tracking & validation',
+    category: 'Marketing', icon: MailgunIcon, rating: 4.5, installs: '55K+', free: true,
+    docsUrl: 'https://documentation.mailgun.com/',
+    configFields: [
+      { key: 'mailgun_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'key-xxxxx', required: true, secret: true },
+      { key: 'mailgun_domain', label: 'Domain', type: 'custom' as const, placeholder: 'mg.yourdomain.com', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Mailgun', description: 'Go to mailgun.com and create an account.' },
+      { step: 2, title: 'Verify a domain', description: 'Add and verify your sending domain in the dashboard.' },
+      { step: 3, title: 'Get API key', description: 'Settings → API Keys → copy your private API key.' },
+    ],
+  },
+  {
+    key: 'convertkit', name: 'ConvertKit', description: 'Creator marketing platform — email sequences, forms & landing pages',
+    category: 'Marketing', icon: ConvertKitIcon, rating: 4.6, installs: '35K+', free: true,
+    docsUrl: 'https://developers.convertkit.com/',
+    configFields: [
+      { key: 'convertkit_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'xxxxx', required: true, secret: true },
+      { key: 'convertkit_api_secret', label: 'API Secret', type: 'client_secret' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at ConvertKit', description: 'Go to convertkit.com and create an account.' },
+      { step: 2, title: 'Get API credentials', description: 'Account Settings → Developer → copy API Key and Secret.' },
+      { step: 3, title: 'Enter above', description: 'Paste both values to connect ConvertKit.' },
+    ],
+  },
+
+  // ── AI Frameworks ──
+  {
+    key: 'supabase-edge-functions', name: 'Supabase Edge Functions', description: 'Serverless Deno functions at the edge — deploy globally with Supabase',
+    category: 'Backend', icon: SupabaseEdgeFnIcon, rating: 4.8, installs: '80K+', free: true,
+    docsUrl: 'https://supabase.com/docs/guides/functions',
+    configFields: [
+      { key: 'supabase_url', label: 'Project URL', type: 'custom' as const, placeholder: 'https://xxx.supabase.co', required: true },
+      { key: 'supabase_service_key', label: 'Service Role Key', type: 'api_key' as const, placeholder: 'eyJhbGciOiJIUz...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Open your Supabase project', description: 'Go to supabase.com and open an existing project.' },
+      { step: 2, title: 'Get service role key', description: 'Settings → API → copy Project URL and service_role key.' },
+      { step: 3, title: 'Deploy functions', description: 'Use supabase functions deploy to publish edge functions.' },
+    ],
+  },
+  {
+    key: 'vercel-ai-sdk', name: 'Vercel AI SDK', description: 'Unified API for building AI apps — streaming, tool-calling & multi-model',
+    category: 'AI', icon: VercelAIIcon, rating: 4.8, installs: '70K+', free: true,
+    docsUrl: 'https://sdk.vercel.ai/docs',
+    configFields: [
+      { key: 'openai_api_key', label: 'OpenAI API Key', type: 'api_key' as const, placeholder: 'sk-xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Install the SDK', description: 'npm install ai @ai-sdk/openai in your project.' },
+      { step: 2, title: 'Get an API key', description: 'Use an OpenAI, Anthropic, or other model provider key.' },
+      { step: 3, title: 'Enter above', description: 'Paste your model provider API key to start building.' },
+    ],
+  },
+  {
+    key: 'langchain', name: 'LangChain', description: 'AI application framework — chains, agents, retrieval & memory',
+    category: 'AI', icon: LangChainIcon, rating: 4.7, installs: '60K+', free: true,
+    docsUrl: 'https://js.langchain.com/docs/',
+    configFields: [
+      { key: 'langchain_api_key', label: 'LangSmith API Key', type: 'api_key' as const, placeholder: 'ls__xxxxx', required: true, secret: true },
+      { key: 'openai_api_key', label: 'LLM Provider Key', type: 'api_key' as const, placeholder: 'sk-xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Install LangChain', description: 'npm install langchain @langchain/openai in your project.' },
+      { step: 2, title: 'Get a LangSmith key', description: 'Go to smith.langchain.com → Settings → API Keys (optional for tracing).' },
+      { step: 3, title: 'Connect an LLM', description: 'Provide your OpenAI or other provider API key.' },
+    ],
+  },
+  {
+    key: 'crewai', name: 'CrewAI', description: 'Multi-agent AI framework — orchestrate autonomous agent teams',
+    category: 'AI', icon: CrewAIIcon, rating: 4.6, installs: '25K+', free: true,
+    docsUrl: 'https://docs.crewai.com/',
+    configFields: [
+      { key: 'crewai_api_key', label: 'CrewAI API Key', type: 'api_key' as const, placeholder: 'xxxxx', required: true, secret: true },
+      { key: 'openai_api_key', label: 'OpenAI API Key', type: 'api_key' as const, placeholder: 'sk-xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at CrewAI', description: 'Go to crewai.com and create an account.' },
+      { step: 2, title: 'Get API keys', description: 'Dashboard → API Keys → copy your CrewAI key.' },
+      { step: 3, title: 'Connect an LLM', description: 'Also provide your OpenAI key for the underlying model.' },
+    ],
+  },
 ];
 
 const CATEGORIES = [
