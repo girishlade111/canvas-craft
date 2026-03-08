@@ -39,6 +39,7 @@ const TemplatesPanel = lazy(() => import('@/components/builder/TemplatesPanel'))
 const MarketplacePanel = lazy(() => import('@/components/builder/MarketplacePanel'));
 const MemberAreaPanel = lazy(() => import('@/components/builder/MemberAreaPanel'));
 const InteractionsPanel = lazy(() => import('@/components/builder/InteractionsPanel'));
+const InteractiveElementsPanel = lazy(() => import('@/components/builder/InteractiveElementsPanel'));
 const MultiLanguagePanel = lazy(() => import('@/components/builder/MultiLanguagePanel'));
 const DomainPanel = lazy(() => import('@/components/builder/DomainPanel'));
 const AccessibilityPanel = lazy(() => import('@/components/builder/AccessibilityPanel'));
@@ -71,13 +72,13 @@ import {
   Loader2, Plus, Layers, Image, History, Search,
   Palette, Megaphone, FileText, Camera, ShoppingBag,
   CalendarDays, Store, Sparkles, BookOpen, LayoutTemplate, Package,
-  Users, Zap, Languages, Globe, Accessibility,
+  Users, Zap, Languages, Globe, Accessibility, Wand2,
 } from 'lucide-react';
 
 const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const generateSectionId = () => `section-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-type LeftPanel = 'elements' | 'templates' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | 'cms' | 'store' | 'marketing' | 'booking' | 'apps' | 'ai' | 'marketplace' | 'members' | 'interactions' | 'languages' | 'domain' | 'accessibility' | null;
+type LeftPanel = 'elements' | 'templates' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | 'cms' | 'store' | 'marketing' | 'booking' | 'apps' | 'ai' | 'marketplace' | 'members' | 'interactions' | 'interactive-elements' | 'languages' | 'domain' | 'accessibility' | null;
 
 const BuilderPage = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -424,6 +425,7 @@ const BuilderPage = () => {
     { id: 'layers', icon: Layers, label: 'Layers' },
     { id: 'design', icon: Palette, label: 'Design' },
     { id: 'interactions', icon: Zap, label: 'Effects' },
+    { id: 'interactive-elements', icon: Wand2, label: 'Animate' },
     { id: 'cms', icon: BookOpen, label: 'CMS' },
     { id: 'store', icon: ShoppingBag, label: 'Store' },
     { id: 'booking', icon: CalendarDays, label: 'Book' },
@@ -529,6 +531,7 @@ const BuilderPage = () => {
               {activePanel === 'marketplace' && <MarketplacePanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'members' && <MemberAreaPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'interactions' && <InteractionsPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'interactive-elements' && <InteractiveElementsPanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'languages' && <MultiLanguagePanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'domain' && <DomainPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'accessibility' && <AccessibilityPanel onClose={() => setActivePanel(null)} />}
