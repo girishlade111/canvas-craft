@@ -53,7 +53,7 @@ const TECH_STACKS = [
   },
 ];
 
-const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose, projectId, pages }) => {
+const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose, pages }) => {
   const schema = useBuilderStore((s) => s.schema);
   const [activeTab, setActiveTab] = useState<ExportTab>('vscode');
   const [techStack, setTechStack] = useState<TechStack>('react-vite');
