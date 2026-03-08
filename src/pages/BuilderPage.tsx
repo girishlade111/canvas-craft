@@ -45,6 +45,7 @@ const DomainPanel = lazy(() => import('@/components/builder/DomainPanel'));
 const AccessibilityPanel = lazy(() => import('@/components/builder/AccessibilityPanel'));
 const SaveTemplateDialog = lazy(() => import('@/components/builder/SaveTemplateDialog'));
 const VercelPanel = lazy(() => import('@/components/builder/VercelPanel'));
+const NetlifyPanel = lazy(() => import('@/components/builder/NetlifyPanel'));
 
 import {
   DndContext,
