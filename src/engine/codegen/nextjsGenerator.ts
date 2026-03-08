@@ -572,19 +572,27 @@ next-env.d.ts
     2
   );
 
-  // README.md
+  // README.md - Comprehensive documentation
+  const pageList = pages.map(p => `- **${p.name}** (\`/${p.slug === 'index' ? '' : p.slug}\`)`).join('\\n');
+  
   files['README.md'] = `# ${projectName}
 
-A modern web application built with Next.js 14, TypeScript, and Tailwind CSS.
+Built with [DevBuilder](https://ladestack.in) — Visual Website Builder.
 
-## Tech Stack
+## 🚀 Tech Stack
 
 - **Framework:** Next.js 14 (App Router)
 - **Language:** TypeScript (strict mode)
 - **Styling:** Tailwind CSS
+- **Components:** React Server Components
 - **Fonts:** Google Fonts (Inter, JetBrains Mono)
+- **SEO:** Metadata API, OpenGraph, sitemap.xml, robots.txt
 
-## Getting Started
+## 📄 Pages
+
+${pageList}
+
+## 🏁 Getting Started
 
 \`\`\`bash
 # Install dependencies
@@ -600,36 +608,71 @@ npm run build
 npm start
 \`\`\`
 
-## Project Structure
+## 📁 Project Structure
 
 \`\`\`
 ├── app/
-│   ├── layout.tsx      # Root layout
+│   ├── layout.tsx      # Root layout with fonts & metadata
 │   ├── page.tsx        # Home page
-│   ├── globals.css     # Global styles
-│   ├── not-found.tsx   # 404 page
-│   ├── loading.tsx     # Loading state
+│   ├── globals.css     # Global Tailwind styles
+│   ├── not-found.tsx   # Custom 404 page
+│   ├── loading.tsx     # Loading state UI
 │   └── error.tsx       # Error boundary
-├── public/             # Static assets
-├── components/         # React components
+├── public/
+│   ├── robots.txt      # SEO crawler rules
+│   ├── sitemap.xml     # Search engine sitemap
+│   └── favicon.svg     # Site favicon
+├── components/         # Reusable React components
 └── lib/               # Utility functions
 \`\`\`
 
-## Deployment
+## 🚀 Deployment
 
 ### Vercel (Recommended)
+
+1. Push to GitHub
+2. Go to [vercel.com/new](https://vercel.com/new)
+3. Import your repository
+4. Deploy automatically
+
+Or use CLI:
 \`\`\`bash
 npx vercel
 \`\`\`
 
-### Other Platforms
-- **Netlify:** Works out of the box
-- **Docker:** Build with \`npm run build\` and serve with Node.js
-- **Railway/Render:** Connect your repository
+### Netlify
 
-## License
+1. Push to GitHub
+2. Go to [app.netlify.com](https://app.netlify.com)
+3. Import your repository
+4. Build settings are auto-detected
 
-MIT
+### Docker
+
+\`\`\`bash
+docker build -t ${safeName} .
+docker run -p 3000:3000 ${safeName}
+\`\`\`
+
+### Railway / Render
+
+1. Connect your repository
+2. Auto-detects Next.js configuration
+3. Deploy!
+
+## 🔍 SEO
+
+This project includes:
+- **robots.txt** — Crawler rules for search engines
+- **sitemap.xml** — Auto-generated sitemap for all pages
+- **Metadata API** — SEO-optimized meta tags per page
+- **OpenGraph** — Social media sharing cards
+
+> **Note:** Update the domain in \`public/robots.txt\` and \`public/sitemap.xml\` with your actual domain.
+
+## 📄 License
+
+MIT License
 `;
 
   // Vercel config
