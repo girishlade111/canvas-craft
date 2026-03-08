@@ -455,26 +455,28 @@ const BuilderPage = () => {
               })}
             </div>
 
-            {/* Flyout panels */}
-            {activePanel === 'elements' && (
-              <ComponentSidebar onClose={() => setActivePanel(null)} />
-            )}
-            {activePanel === 'layers' && <LayersPanel />}
-            {activePanel === 'assets' && actualProjectId && <AssetPanel projectId={actualProjectId} />}
-            {activePanel === 'seo' && <AdvancedSEOPanel onClose={() => setActivePanel(null)} />}
-            {activePanel === 'versions' && currentPageId && <VersionHistoryPanel pageId={currentPageId} />}
-            {activePanel === 'design' && <GlobalDesignPanel onClose={() => setActivePanel(null)} />}
-            {activePanel === 'popups' && <PopupBuilderPanel onClose={() => setActivePanel(null)} />}
-            {activePanel === 'forms' && <FormBuilderPanel onClose={() => setActivePanel(null)} />}
-            {activePanel === 'photo-studio' && selectedComponentId && (
-              <PhotoStudioPanel componentId={selectedComponentId} onClose={() => setActivePanel(null)} />
-            )}
-            {activePanel === 'cms' && <CMSPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
-            {activePanel === 'store' && <EcommercePanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
-            {activePanel === 'marketing' && <MarketingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
-            {activePanel === 'booking' && <BookingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
-            {activePanel === 'apps' && <AppMarketPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
-            {activePanel === 'ai' && <AIToolsPanel onClose={() => setActivePanel(null)} />}
+            {/* Flyout panels — lazy loaded on demand */}
+            <Suspense fallback={<div className="builder-flyout-panel p-4 text-center text-muted-foreground text-sm">Loading...</div>}>
+              {activePanel === 'elements' && (
+                <ComponentSidebar onClose={() => setActivePanel(null)} />
+              )}
+              {activePanel === 'layers' && <LayersPanel />}
+              {activePanel === 'assets' && actualProjectId && <AssetPanel projectId={actualProjectId} />}
+              {activePanel === 'seo' && <AdvancedSEOPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'versions' && currentPageId && <VersionHistoryPanel pageId={currentPageId} />}
+              {activePanel === 'design' && <GlobalDesignPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'popups' && <PopupBuilderPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'forms' && <FormBuilderPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'photo-studio' && selectedComponentId && (
+                <PhotoStudioPanel componentId={selectedComponentId} onClose={() => setActivePanel(null)} />
+              )}
+              {activePanel === 'cms' && <CMSPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+              {activePanel === 'store' && <EcommercePanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+              {activePanel === 'marketing' && <MarketingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+              {activePanel === 'booking' && <BookingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+              {activePanel === 'apps' && <AppMarketPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+              {activePanel === 'ai' && <AIToolsPanel onClose={() => setActivePanel(null)} />}
+            </Suspense>
 
             {/* Main canvas */}
             <CanvasContextMenu>
@@ -482,10 +484,14 @@ const BuilderPage = () => {
             </CanvasContextMenu>
 
             {/* Right properties panel */}
-            {rightSidebarOpen && selectedComponentId && <PropertiesPanel />}
+            <Suspense fallback={null}>
+              {rightSidebarOpen && selectedComponentId && <PropertiesPanel />}
+            </Suspense>
           </div>
 
-          {codeEditorOpen && <CodeEditorPanel />}
+          <Suspense fallback={null}>
+            {codeEditorOpen && <CodeEditorPanel />}
+          </Suspense>
         </div>
 
         {/* Drag overlay — ghost preview */}
