@@ -46,6 +46,7 @@ const App = () => (
             <Route path="/builder/:projectId" element={<ProtectedRoute><BuilderPage /></ProtectedRoute>} />
             <Route path="/preview/:projectId" element={<ProtectedRoute><PreviewPage /></ProtectedRoute>} />
             <Route path="/project/:projectId/settings" element={<ProtectedRoute><ProjectSettingsPage /></ProtectedRoute>} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
