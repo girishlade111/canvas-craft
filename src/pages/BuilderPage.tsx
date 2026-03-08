@@ -37,6 +37,11 @@ const AIToolsPanel = lazy(() => import('@/components/builder/AIToolsPanel'));
 const ExportDialog = lazy(() => import('@/components/builder/ExportDialog'));
 const TemplatesPanel = lazy(() => import('@/components/builder/TemplatesPanel'));
 const MarketplacePanel = lazy(() => import('@/components/builder/MarketplacePanel'));
+const MemberAreaPanel = lazy(() => import('@/components/builder/MemberAreaPanel'));
+const InteractionsPanel = lazy(() => import('@/components/builder/InteractionsPanel'));
+const MultiLanguagePanel = lazy(() => import('@/components/builder/MultiLanguagePanel'));
+const DomainPanel = lazy(() => import('@/components/builder/DomainPanel'));
+const AccessibilityPanel = lazy(() => import('@/components/builder/AccessibilityPanel'));
 
 import {
   DndContext,
@@ -65,12 +70,13 @@ import {
   Loader2, Plus, Layers, Image, History, Search,
   Palette, Megaphone, FileText, Camera, ShoppingBag,
   CalendarDays, Store, Sparkles, BookOpen, LayoutTemplate, Package,
+  Users, Zap, Languages, Globe, Accessibility,
 } from 'lucide-react';
 
 const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const generateSectionId = () => `section-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-type LeftPanel = 'elements' | 'templates' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | 'cms' | 'store' | 'marketing' | 'booking' | 'apps' | 'ai' | 'marketplace' | null;
+type LeftPanel = 'elements' | 'templates' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | 'cms' | 'store' | 'marketing' | 'booking' | 'apps' | 'ai' | 'marketplace' | 'members' | 'interactions' | 'languages' | 'domain' | 'accessibility' | null;
 
 const BuilderPage = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -415,15 +421,20 @@ const BuilderPage = () => {
     { id: 'marketplace', icon: Package, label: 'Market' },
     { id: 'layers', icon: Layers, label: 'Layers' },
     { id: 'design', icon: Palette, label: 'Design' },
+    { id: 'interactions', icon: Zap, label: 'Effects' },
     { id: 'cms', icon: BookOpen, label: 'CMS' },
     { id: 'store', icon: ShoppingBag, label: 'Store' },
     { id: 'booking', icon: CalendarDays, label: 'Book' },
+    { id: 'members', icon: Users, label: 'Members' },
     { id: 'marketing', icon: Megaphone, label: 'Promo' },
     { id: 'ai', icon: Sparkles, label: 'AI' },
     { id: 'apps', icon: Store, label: 'Apps' },
     { id: 'assets', icon: Image, label: 'Media', show: !!actualProjectId },
     { id: 'forms', icon: FileText, label: 'Forms' },
     { id: 'popups', icon: Megaphone, label: 'Popups' },
+    { id: 'languages', icon: Languages, label: 'i18n' },
+    { id: 'domain', icon: Globe, label: 'Domain' },
+    { id: 'accessibility', icon: Accessibility, label: 'A11y' },
     { id: 'photo-studio', icon: Camera, label: 'Photo', show: isImageSelected },
     { id: 'seo', icon: Search, label: 'SEO' },
     { id: 'versions', icon: History, label: 'History', show: !!currentPageId },
@@ -513,6 +524,11 @@ const BuilderPage = () => {
               {activePanel === 'apps' && <AppMarketPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'ai' && <AIToolsPanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'marketplace' && <MarketplacePanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'members' && <MemberAreaPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+              {activePanel === 'interactions' && <InteractionsPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'languages' && <MultiLanguagePanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'domain' && <DomainPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+              {activePanel === 'accessibility' && <AccessibilityPanel onClose={() => setActivePanel(null)} />}
             </Suspense>
 
             {/* Main canvas */}
