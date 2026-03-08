@@ -448,11 +448,11 @@ const BuilderPage = () => {
             {activePanel === 'photo-studio' && selectedComponentId && (
               <PhotoStudioPanel componentId={selectedComponentId} onClose={() => setActivePanel(null)} />
             )}
-            {activePanel === 'cms' && <CMSPanel onClose={() => setActivePanel(null)} />}
-            {activePanel === 'store' && <EcommercePanel onClose={() => setActivePanel(null)} />}
-            {activePanel === 'marketing' && <MarketingPanel onClose={() => setActivePanel(null)} />}
-            {activePanel === 'booking' && <BookingPanel onClose={() => setActivePanel(null)} />}
-            {activePanel === 'apps' && <AppMarketPanel onClose={() => setActivePanel(null)} />}
+            {activePanel === 'cms' && <CMSPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+            {activePanel === 'store' && <EcommercePanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+            {activePanel === 'marketing' && <MarketingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+            {activePanel === 'booking' && <BookingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+            {activePanel === 'apps' && <AppMarketPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
             {activePanel === 'ai' && <AIToolsPanel onClose={() => setActivePanel(null)} />}
 
             {/* Main canvas */}
