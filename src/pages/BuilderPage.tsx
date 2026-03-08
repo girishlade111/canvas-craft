@@ -36,7 +36,6 @@ import {
 import type { BuilderComponent, PageSchema, ComponentCategory } from '@/types/builder';
 import { componentLibrary } from '@/data/componentLibrary';
 import { Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
 
 const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const generateSectionId = () => `section-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
