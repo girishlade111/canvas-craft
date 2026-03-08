@@ -527,6 +527,19 @@ const BuilderPage = () => {
               onClose={() => setShowPublish(false)}
             />
           )}
+
+          {showExportDialog && (
+            <ExportDialog
+              isOpen={showExportDialog}
+              onClose={() => setShowExportDialog(false)}
+              projectId={actualProjectId ?? undefined}
+              pages={pages?.map(p => ({
+                name: p.name,
+                slug: p.slug,
+                schema: p.schema as unknown as PageSchema,
+              }))}
+            />
+          )}
         </Suspense>
       </DndContext>
     </ClipboardProvider>
