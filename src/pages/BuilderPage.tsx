@@ -35,6 +35,7 @@ const BookingPanel = lazy(() => import('@/components/builder/BookingPanel'));
 const AppMarketPanel = lazy(() => import('@/components/builder/AppMarketPanel'));
 const AIToolsPanel = lazy(() => import('@/components/builder/AIToolsPanel'));
 const ExportDialog = lazy(() => import('@/components/builder/ExportDialog'));
+const TemplatesPanel = lazy(() => import('@/components/builder/TemplatesPanel'));
 
 import {
   DndContext,
@@ -62,13 +63,13 @@ const getComponentLibrary = async () => {
 import {
   Loader2, Plus, Layers, Image, History, Search,
   Palette, Megaphone, FileText, Camera, ShoppingBag,
-  CalendarDays, Store, Sparkles, BookOpen,
+  CalendarDays, Store, Sparkles, BookOpen, LayoutTemplate,
 } from 'lucide-react';
 
 const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const generateSectionId = () => `section-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-type LeftPanel = 'elements' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | 'cms' | 'store' | 'marketing' | 'booking' | 'apps' | 'ai' | null;
+type LeftPanel = 'elements' | 'templates' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | 'cms' | 'store' | 'marketing' | 'booking' | 'apps' | 'ai' | null;
 
 const BuilderPage = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -383,6 +384,7 @@ const BuilderPage = () => {
 
   const iconBarItems: { id: LeftPanel; icon: typeof Plus; label: string; show?: boolean }[] = [
     { id: 'elements', icon: Plus, label: 'Add' },
+    { id: 'templates', icon: LayoutTemplate, label: 'Templates' },
     { id: 'layers', icon: Layers, label: 'Layers' },
     { id: 'design', icon: Palette, label: 'Design' },
     { id: 'cms', icon: BookOpen, label: 'CMS' },
@@ -464,7 +466,8 @@ const BuilderPage = () => {
             <Suspense fallback={<div className="builder-flyout-panel p-4 text-center text-muted-foreground text-sm">Loading...</div>}>
               {activePanel === 'elements' && (
                 <ComponentSidebar onClose={() => setActivePanel(null)} />
-              )}
+               )}
+              {activePanel === 'templates' && <TemplatesPanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'layers' && <LayersPanel />}
               {activePanel === 'assets' && actualProjectId && <AssetPanel projectId={actualProjectId} />}
               {activePanel === 'seo' && <AdvancedSEOPanel onClose={() => setActivePanel(null)} />}
