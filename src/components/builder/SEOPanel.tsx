@@ -10,49 +10,104 @@ import {
 import { toast } from 'sonner';
 
 interface SEOData {
+  // Basic Meta
   title: string;
   description: string;
+  keywords: string;
+  author: string;
+  // Open Graph
   ogTitle: string;
   ogDescription: string;
   ogImage: string;
+  ogType: 'website' | 'article' | 'product' | 'video' | 'music' | 'book' | 'profile';
+  ogSiteName: string;
+  ogLocale: string;
+  // Twitter Cards
   twitterCard: 'summary' | 'summary_large_image' | 'app' | 'player';
   twitterSite: string;
+  twitterCreator: string;
+  twitterImage: string;
+  // LinkedIn
+  linkedinImage: string;
+  // Pinterest
+  pinterestVerification: string;
+  // Technical SEO
   canonicalUrl: string;
   noIndex: boolean;
   noFollow: boolean;
+  noArchive: boolean;
+  noSnippet: boolean;
+  maxSnippet: string;
+  maxImagePreview: 'none' | 'standard' | 'large';
+  maxVideoPreview: string;
   customHead: string;
+  // Keywords & Content
   focusKeyword: string;
   secondaryKeywords: string;
+  keywordDensityTarget: number;
+  // Robots & Crawling
   robotsTxt: string;
+  crawlDelay: string;
+  // Schema / Structured Data
   schemaType: string;
   schemaData: string;
+  // Navigation & Structure
   breadcrumbs: string[];
-  redirects: { from: string; to: string; type: '301' | '302' }[];
+  redirects: { from: string; to: string; type: '301' | '302' | '307' | '308' }[];
   hreflang: { lang: string; url: string }[];
   // Performance
   lazyLoadImages: boolean;
   minifyCSS: boolean;
   minifyJS: boolean;
   preloadFonts: boolean;
+  preconnectDomains: string;
+  prefetchPages: string;
+  criticalCSS: boolean;
   // Accessibility
   altTagsRequired: boolean;
   ariaLabels: boolean;
   skipLinks: boolean;
-  // Analytics
+  focusIndicators: boolean;
+  colorContrast: boolean;
+  // Analytics & Tracking
   googleAnalyticsId: string;
   googleTagManagerId: string;
   facebookPixelId: string;
+  hotjarId: string;
+  clarityId: string;
+  plausibleDomain: string;
+  umamiWebsiteId: string;
   // Sitemap
   sitemapEnabled: boolean;
-  sitemapFrequency: string;
+  sitemapFrequency: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
   sitemapPriority: string;
+  sitemapLastmod: boolean;
+  // Local SEO
+  localBusinessName: string;
+  localBusinessAddress: string;
+  localBusinessPhone: string;
+  localBusinessHours: string;
+  googleMyBusinessId: string;
+  // E-commerce SEO
+  productPrice: string;
+  productCurrency: string;
+  productAvailability: 'InStock' | 'OutOfStock' | 'PreOrder' | 'Discontinued';
+  productBrand: string;
+  productSku: string;
+  // Advanced
+  jsonLdCustom: string;
+  verificationGoogle: string;
+  verificationBing: string;
+  verificationYandex: string;
+  dnsPrefetch: string;
 }
 
 const SCHEMA_TYPES = [
-  'WebSite', 'WebPage', 'Article', 'BlogPosting', 'Product', 'LocalBusiness',
-  'Organization', 'Person', 'Event', 'FAQPage', 'HowTo', 'Recipe',
-  'Review', 'Course', 'BreadcrumbList', 'VideoObject', 'SoftwareApplication',
-  'Service', 'Restaurant', 'MedicalOrganization', 'EducationalOrganization',
+  'WebSite', 'WebPage', 'Article', 'BlogPosting', 'NewsArticle', 'Product', 'LocalBusiness',
+  'Organization', 'Person', 'Event', 'FAQPage', 'HowTo', 'Recipe', 'JobPosting',
+  'Review', 'Course', 'BreadcrumbList', 'VideoObject', 'SoftwareApplication', 'MobileApplication',
+  'Service', 'Restaurant', 'MedicalOrganization', 'EducationalOrganization', 'RealEstateListing',
+  'Book', 'Movie', 'MusicAlbum', 'Podcast', 'PodcastEpisode', 'CollectionPage', 'SearchResultsPage',
 ];
 
 const generateSchema = (type: string, title: string, description: string, url: string): string => {
