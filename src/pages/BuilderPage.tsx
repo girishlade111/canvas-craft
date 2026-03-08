@@ -536,6 +536,7 @@ const BuilderPage = () => {
               {activePanel === 'languages' && <MultiLanguagePanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'domain' && <DomainPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'accessibility' && <AccessibilityPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'vercel' && <VercelPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} onBack={() => setActivePanel('apps')} />}
             </Suspense>
 
             {/* Main canvas */}
