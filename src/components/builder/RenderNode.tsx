@@ -3,7 +3,7 @@ import { getComponent } from '@/engine/registry';
 import { useBuilderStore } from '@/store/builderStore';
 import { useDroppable, useDraggable } from '@dnd-kit/core';
 import { isContainerType, type BuilderComponent } from '@/types/builder';
-import { Trash2, Code2, GripVertical, Copy, Eye, EyeOff, Lock, Unlock } from 'lucide-react';
+import { Trash2, Code2, GripVertical, Eye, EyeOff, Lock, Unlock } from 'lucide-react';
 
 interface RenderNodeProps {
   node: BuilderComponent;

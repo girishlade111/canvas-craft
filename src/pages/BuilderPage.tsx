@@ -36,7 +36,7 @@ import {
 } from '@dnd-kit/core';
 import type { BuilderComponent, PageSchema, ComponentCategory } from '@/types/builder';
 import { componentLibrary } from '@/data/componentLibrary';
-import { isContainerType } from '@/types/builder';
+
 import {
   Loader2, Plus, Layers, Image, History, Search,
 } from 'lucide-react';
