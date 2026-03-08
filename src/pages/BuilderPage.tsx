@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useBuilderStore } from '@/store/builderStore';
 import { usePages, useSavePage, type Page } from '@/hooks/usePages';
@@ -6,33 +6,35 @@ import { useAutosave } from '@/hooks/useAutosave';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useAuth } from '@/hooks/useAuth';
 import { useCreateProject } from '@/hooks/useProjects';
-import { exportToStaticHTML, exportToReact, downloadFile } from '@/lib/exportProject';
-import { downloadZip } from '@/engine/codegen/zipExporter';
-import { generateProjectFiles } from '@/engine/deploy/vercelDeploy';
 import { toast } from 'sonner';
+
+// Core builder components — always needed
 import BuilderToolbar from '@/components/builder/BuilderToolbar';
-import ComponentSidebar from '@/components/builder/ComponentSidebar';
-import PropertiesPanel from '@/components/builder/PropertiesPanel';
 import BuilderCanvas from '@/components/builder/BuilderCanvas';
-import CodeEditorPanel from '@/components/builder/CodeEditorPanel';
-import AssetPanel from '@/components/builder/AssetPanel';
-import VersionHistoryPanel from '@/components/builder/VersionHistoryPanel';
-import PageManager from '@/components/builder/PageManager';
-import PublishDialog from '@/components/builder/PublishDialog';
-import AuthGateDialog from '@/components/builder/AuthGateDialog';
-import LayersPanel from '@/components/builder/LayersPanel';
-import AdvancedSEOPanel from '@/components/builder/AdvancedSEOPanel';
-import GlobalDesignPanel from '@/components/builder/GlobalDesignPanel';
-import PopupBuilderPanel from '@/components/builder/PopupBuilderPanel';
-import FormBuilderPanel from '@/components/builder/FormBuilderPanel';
-import PhotoStudioPanel from '@/components/builder/PhotoStudioPanel';
-import CMSPanel from '@/components/builder/CMSPanel';
-import EcommercePanel from '@/components/builder/EcommercePanel';
-import MarketingPanel from '@/components/builder/MarketingPanel';
-import BookingPanel from '@/components/builder/BookingPanel';
-import AppMarketPanel from '@/components/builder/AppMarketPanel';
-import AIToolsPanel from '@/components/builder/AIToolsPanel';
 import { CanvasContextMenu, ClipboardProvider } from '@/components/builder/CanvasContextMenu';
+
+// Lazy-loaded panels — only loaded when user opens them
+const ComponentSidebar = lazy(() => import('@/components/builder/ComponentSidebar'));
+const PropertiesPanel = lazy(() => import('@/components/builder/PropertiesPanel'));
+const CodeEditorPanel = lazy(() => import('@/components/builder/CodeEditorPanel'));
+const AssetPanel = lazy(() => import('@/components/builder/AssetPanel'));
+const VersionHistoryPanel = lazy(() => import('@/components/builder/VersionHistoryPanel'));
+const PageManager = lazy(() => import('@/components/builder/PageManager'));
+const PublishDialog = lazy(() => import('@/components/builder/PublishDialog'));
+const AuthGateDialog = lazy(() => import('@/components/builder/AuthGateDialog'));
+const LayersPanel = lazy(() => import('@/components/builder/LayersPanel'));
+const AdvancedSEOPanel = lazy(() => import('@/components/builder/AdvancedSEOPanel'));
+const GlobalDesignPanel = lazy(() => import('@/components/builder/GlobalDesignPanel'));
+const PopupBuilderPanel = lazy(() => import('@/components/builder/PopupBuilderPanel'));
+const FormBuilderPanel = lazy(() => import('@/components/builder/FormBuilderPanel'));
+const PhotoStudioPanel = lazy(() => import('@/components/builder/PhotoStudioPanel'));
+const CMSPanel = lazy(() => import('@/components/builder/CMSPanel'));
+const EcommercePanel = lazy(() => import('@/components/builder/EcommercePanel'));
+const MarketingPanel = lazy(() => import('@/components/builder/MarketingPanel'));
+const BookingPanel = lazy(() => import('@/components/builder/BookingPanel'));
+const AppMarketPanel = lazy(() => import('@/components/builder/AppMarketPanel'));
+const AIToolsPanel = lazy(() => import('@/components/builder/AIToolsPanel'));
+
 import {
   DndContext,
   DragOverlay,
@@ -45,7 +47,14 @@ import {
   type DragOverEvent,
 } from '@dnd-kit/core';
 import type { BuilderComponent, PageSchema, ComponentCategory } from '@/types/builder';
-import { componentLibrary } from '@/data/componentLibrary';
+
+// Lazy import for exports — only loaded when user exports
+const loadExportUtils = () => Promise.all([
+  import('@/lib/exportProject'),
+  import('@/engine/codegen/zipExporter'),
+  import('@/engine/deploy/vercelDeploy'),
+]);
+const loadComponentLibrary = () => import('@/data/componentLibrary');
 
 import {
   Loader2, Plus, Layers, Image, History, Search,
