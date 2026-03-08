@@ -63,7 +63,7 @@ const getComponentLibrary = async () => {
 import {
   Loader2, Plus, Layers, Image, History, Search,
   Palette, Megaphone, FileText, Camera, ShoppingBag,
-  CalendarDays, Store, Sparkles, BookOpen,
+  CalendarDays, Store, Sparkles, BookOpen, LayoutTemplate,
 } from 'lucide-react';
 
 const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
