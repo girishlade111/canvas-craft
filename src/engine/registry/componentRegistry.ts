@@ -122,6 +122,7 @@ const loadExtendedComponents = async () => {
       badge: widgets.BadgeComponent,
       alert: widgets.AlertComponent,
       icon: widgets.IconComponent,
+      'lucide-icon': widgets.LucideIconComponent,
       avatar: widgets.AvatarComponent,
       tooltip: widgets.TooltipComponent,
       'cta-banner': widgets.CTABannerComponent,
