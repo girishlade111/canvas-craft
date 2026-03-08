@@ -1,3 +1,11 @@
+# robots.txt — DevBuilder
+# Allow all crawlers full access
+
+User-agent: *
+Allow: /
+Disallow:
+
+# Specific crawlers
 User-agent: Googlebot
 Allow: /
 
@@ -10,5 +18,29 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
+User-agent: LinkedInBot
 Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Sitemap
+Sitemap: https://devbuilder.app/sitemap.xml
+
+# Crawl-delay (optional, polite)
+# Crawl-delay: 1
+
+# Host
+Host: https://devbuilder.app
