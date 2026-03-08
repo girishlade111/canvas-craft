@@ -103,7 +103,6 @@ const App = () => (
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>
-));
+);
 
-App.displayName = "App";
 export default App;
