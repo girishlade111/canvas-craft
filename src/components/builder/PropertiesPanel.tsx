@@ -411,8 +411,18 @@ const PageSettingsPanel = () => {
 // ─── Link Tab ──────────────────────────────────────────────
 
 const LinkPanel: React.FC<{ componentId: string }> = ({ componentId }) => {
-  const { updateComponent } = useBuilderStore();
-  const component = useBuilderStore.getState().getSelectedComponent();
+  const { updateComponent, schema } = useBuilderStore();
+  const component = useMemo(() => {
+    const findRecursive = (components: any[]): any => {
+      for (const comp of components) {
+        if (comp.id === componentId) return comp;
+        if (comp.children) { const f = findRecursive(comp.children); if (f) return f; }
+      }
+      return null;
+    };
+    for (const section of schema.sections) { const f = findRecursive(section.components); if (f) return f; }
+    return null;
+  }, [componentId, schema]);
   if (!component) return null;
 
   const link = component.props?.link || { type: 'none', url: '', target: '_self' };
