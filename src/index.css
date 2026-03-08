@@ -152,12 +152,26 @@
   .canvas-component {
     @apply relative transition-all;
     outline: 1px dashed transparent;
+    min-height: 4px;
   }
   .canvas-component:hover {
     outline-color: hsl(var(--builder-hover) / 0.5);
   }
   .canvas-component.selected {
     outline: 2px solid hsl(var(--builder-selected));
+  }
+  .canvas-component.drop-target {
+    outline: 2px dashed hsl(var(--primary));
+    background: hsl(var(--primary) / 0.05);
+  }
+  .component-toolbar {
+    @apply absolute -top-7 left-0 flex items-center gap-1 text-xs px-2 py-0.5 rounded-t z-10;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+  .empty-container-placeholder {
+    @apply text-center py-6 text-xs opacity-30 border-2 border-dashed rounded-lg m-2;
+    border-color: hsl(var(--builder-panel-border));
   }
   .template-card {
     @apply rounded-xl border-2 overflow-hidden cursor-pointer transition-all;
