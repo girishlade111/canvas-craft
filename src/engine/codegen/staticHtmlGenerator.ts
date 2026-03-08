@@ -1,6 +1,7 @@
 /**
  * Layer 5 — Code Generation Engine: Static HTML
  * Converts builder schema into a standalone HTML file.
+ * Supports multi-page static sites.
  */
 
 import type { PageSchema, BuilderComponent } from '@/types/builder';
@@ -21,6 +22,8 @@ const HTML_TAG_MAP: Record<string, string> = {
   video: 'video',
   grid: 'div',
   columns: 'div',
+  divider: 'hr',
+  spacer: 'div',
 };
 
 const stylesToCss = (styles: Record<string, string | undefined>): string => {
@@ -39,6 +42,10 @@ const renderNode = (node: BuilderComponent): string => {
 
   if (tag === 'img') {
     return `<img class="${classes}" style="${style}" src="${node.props?.src || ''}" alt="${node.props?.alt || ''}" />`;
+  }
+
+  if (tag === 'hr') {
+    return `<hr style="${style}" />`;
   }
 
   return `<${tag} class="${classes}" style="${style}">${content}${childrenHtml}</${tag}>`;
@@ -62,10 +69,26 @@ export const generateStaticHTML = (schema: PageSchema): string => {
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: system-ui, -apple-system, sans-serif; }
+    @media (max-width: 768px) { .responsive-container { padding: 0 16px; } }
+    @media (max-width: 480px) { .responsive-container { padding: 0 12px; } }
   </style>
 </head>
 <body>
 ${body}
 </body>
 </html>`;
+};
+
+/**
+ * Generate a multi-page static site as a zip-ready file map.
+ */
+export const generateMultiPageHTML = (
+  pages: { name: string; slug: string; schema: PageSchema }[]
+): Record<string, string> => {
+  const files: Record<string, string> = {};
+  pages.forEach(({ slug, schema }) => {
+    const filename = slug === 'index' ? 'index.html' : `${slug}.html`;
+    files[filename] = generateStaticHTML(schema);
+  });
+  return files;
 };
