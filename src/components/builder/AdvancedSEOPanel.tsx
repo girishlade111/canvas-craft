@@ -1,20 +1,15 @@
 import { useState } from 'react';
 import {
-  Search, X, Globe, Share2, Code2, FileText, Map, Shield, Zap, CheckCircle2, AlertCircle,
-  ChevronDown, Copy, ChevronRight, Eye, TrendingUp, BarChart3, Target, Link2, Image, Type, Hash,
-  Monitor, Clock, Users, ExternalLink, RefreshCw, Plus, Trash2, Settings, Sparkles,
-  Layers, PieChart, Activity, Bot, FileCode, Heading1, AlignLeft, List,
-  CircleDot, Languages, ArrowUp, ArrowDown, Minus, Gauge, Award, Lightbulb, MousePointerClick,
-  Twitter, Facebook, Linkedin, Instagram, Youtube, MapPin, Phone, Mail, Building2, Star,
-  Smartphone, Laptop, Database, BarChart2, LineChart, PenTool, Tag, BookOpen, Rss,
-  Bell, Lock, Unlock, Radio, Wifi, CloudOff, Download, Upload,
+  Search, X, Globe, Share2, Code2, FileText, Map, Zap, CheckCircle2, AlertCircle,
+  Copy, ChevronRight, Eye, BarChart3, Target, Link2, Image, Type, Hash,
+  Monitor, Clock, Users, RefreshCw, Plus, Trash2, Settings, Sparkles,
+  Layers, Bot, FileCode, AlignLeft, Languages, Gauge, MousePointerClick,
+  Twitter, Facebook, Linkedin, MapPin, Star, Smartphone, Database, Tag, BookOpen,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Slider } from '@/components/ui/slider';
 
 // ─── Types ─────────────────────────────────────────────────
 
