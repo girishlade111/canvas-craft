@@ -22,13 +22,18 @@ export interface TemplateRow {
 }
 
 // Convert DB row → app Template type
-const toTemplate = (row: TemplateRow): Template => ({
+const toTemplate = (row: TemplateRow): Template & { is_premium: boolean; is_featured: boolean; is_new: boolean; installs: number; tags: string[] } => ({
   id: row.id,
   name: row.name,
   description: row.description,
   category: row.category,
   thumbnail: row.thumbnail,
   schema: row.schema as PageSchema,
+  is_premium: row.is_premium,
+  is_featured: row.installs >= 200,
+  is_new: (Date.now() - new Date(row.created_at).getTime()) < 7 * 24 * 60 * 60 * 1000, // 7 days
+  installs: row.installs,
+  tags: row.tags,
 });
 
 // ─── Fetch all public templates ────────────────────────────
