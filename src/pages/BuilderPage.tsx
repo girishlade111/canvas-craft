@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, lazy } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useBuilderStore } from '@/store/builderStore';
 import { usePages, useSavePage, type Page } from '@/hooks/usePages';
