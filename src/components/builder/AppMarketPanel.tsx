@@ -1744,6 +1744,8 @@ const APP_CATALOG: AppDef[] = [
     ],
   },
 ];
+
+const CATEGORIES = [
   'All', 'AI', 'Backend', 'eCommerce', 'Developer', 'Design', 'Productivity',
   'Communication', 'Analytics', 'Marketing', 'Media', 'CMS', 'Automation',
   'Project Management', 'Social', 'Travel', 'Security', 'Scheduling', 'Utilities',
