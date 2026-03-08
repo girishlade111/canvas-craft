@@ -669,7 +669,9 @@ const LandingPage = () => {
           </div>
           <div className="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
             <span>© {new Date().getFullYear()} DevBuilder. All rights reserved.</span>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
+              <span className="cursor-pointer hover:text-foreground transition-colors" onClick={() => navigate('/privacy')}>Privacy Policy</span>
+              <span className="cursor-pointer hover:text-foreground transition-colors" onClick={() => navigate('/terms')}>Terms of Service</span>
               <span>Made with ❤️ by <a href="https://ladestack.in" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors font-medium">LadeStack</a></span>
             </div>
           </div>

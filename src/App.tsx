@@ -51,6 +51,11 @@ const App = () => (
             <Route path="/builder/:projectId" element={<BuilderPage />} />
             <Route path="/auth" element={<PublicRoute><AuthPage /></PublicRoute>} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
+            <Route path="/docs" element={<DocumentationPage />} />
+            <Route path="/changelog" element={<ChangelogPage />} />
+            <Route path="/api-reference" element={<ApiReferencePage />} />
+            <Route path="/privacy" element={<PrivacyPolicyPage />} />
+            <Route path="/terms" element={<TermsOfServicePage />} />
 
             {/* Protected routes */}
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
