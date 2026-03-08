@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useBuilderStore } from '@/store/builderStore';
 import { usePages, useSavePage, type Page } from '@/hooks/usePages';
+import { useAutosave } from '@/hooks/useAutosave';
 import BuilderToolbar from '@/components/builder/BuilderToolbar';
 import ComponentSidebar from '@/components/builder/ComponentSidebar';
 import PropertiesPanel from '@/components/builder/PropertiesPanel';
@@ -10,6 +11,7 @@ import CodeEditorPanel from '@/components/builder/CodeEditorPanel';
 import AssetPanel from '@/components/builder/AssetPanel';
 import VersionHistoryPanel from '@/components/builder/VersionHistoryPanel';
 import PageManager from '@/components/builder/PageManager';
+import PublishDialog from '@/components/builder/PublishDialog';
 import {
   DndContext,
   DragOverlay,
@@ -47,7 +49,11 @@ const BuilderPage = () => {
   const [currentPageId, setCurrentPageId] = useState<string | null>(null);
   const [showAssets, setShowAssets] = useState(false);
   const [showVersions, setShowVersions] = useState(false);
+  const [showPublish, setShowPublish] = useState(false);
   const [activeDrag, setActiveDrag] = useState<{ type: string; label: string } | null>(null);
+
+  // Autosave
+  const { isSaving: isAutosaving } = useAutosave(currentPageId);
 
   useEffect(() => {
     if (pages?.length && !currentPageId) {
