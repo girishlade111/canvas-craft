@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBuilderStore } from '@/store/builderStore';
-import { Code2, ArrowLeft, Search, Layers, Grid3X3, LayoutGrid, Loader2 } from 'lucide-react';
+import { Code2, ArrowLeft, Search, LayoutGrid, Loader2 } from 'lucide-react';
 
-import type { Template } from '@/data/templates';
+import type { Template } from '@/types/builder';
 
 const categories = [
   { id: 'all', label: 'All Templates' },
