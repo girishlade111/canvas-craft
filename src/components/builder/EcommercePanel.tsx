@@ -224,8 +224,11 @@ const EcommercePanel = ({ projectId, onClose }: EcommercePanelProps) => {
       addComponent(bodySection.id, {
         id: `${component.id}-${Date.now()}`,
         type: component.id,
-        props: { label: component.name },
+        category: 'ecommerce',
+        label: component.name,
+        props: {},
         children: [],
+        styles: {},
       });
       toast.success(`Added ${component.name}`);
     } else {
