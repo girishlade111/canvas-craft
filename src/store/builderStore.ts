@@ -1,8 +1,5 @@
 /**
  * Builder Store — Layer 1 (UI State) + Layer 2 (Runtime Engine)
- * 
- * The store delegates tree operations to the runtime engine
- * and history management to the history module.
  */
 
 import { create } from 'zustand';
@@ -24,10 +21,9 @@ import {
 } from '@/engine/runtime/history';
 
 interface BuilderState {
-  // Schema (single source of truth)
   schema: PageSchema;
 
-  // UI state (Layer 1)
+  // UI state
   selectedComponentId: string | null;
   deviceView: DeviceView;
   leftSidebarOpen: boolean;
@@ -35,14 +31,20 @@ interface BuilderState {
   codeEditorOpen: boolean;
   codeEditorComponentId: string | null;
 
-  // History (Layer 2 — runtime)
-  historyState: HistoryState;
+  // Layout engine state
+  showGrid: boolean;
+  gridSize: number;
+  snapToGrid: boolean;
+  snapToComponent: boolean;
+  showGuides: boolean;
+  canvasZoom: number;
 
-  // Convenience accessors for toolbar
+  // History
+  historyState: HistoryState;
   historyIndex: number;
   history: { schema: PageSchema }[];
 
-  // Actions — UI
+  // UI Actions
   selectComponent: (id: string | null) => void;
   setDeviceView: (view: DeviceView) => void;
   toggleLeftSidebar: () => void;
@@ -50,12 +52,21 @@ interface BuilderState {
   openCodeEditor: (componentId: string) => void;
   closeCodeEditor: () => void;
 
-  // Actions — Runtime
+  // Layout engine actions
+  toggleGrid: () => void;
+  setGridSize: (size: number) => void;
+  toggleSnapToGrid: () => void;
+  toggleSnapToComponent: () => void;
+  toggleGuides: () => void;
+  setCanvasZoom: (zoom: number) => void;
+
+  // Runtime Actions
   setSchema: (schema: PageSchema) => void;
   addComponent: (sectionId: string, component: BuilderComponent, index?: number) => void;
   addComponentToContainer: (containerId: string, component: BuilderComponent, index?: number) => void;
   updateComponent: (componentId: string, updates: Partial<BuilderComponent>) => void;
   updateComponentStyles: (componentId: string, styles: Partial<ComponentStyles>) => void;
+  updateResponsiveStyles: (componentId: string, device: DeviceView, styles: Partial<ComponentStyles>) => void;
   removeComponent: (componentId: string) => void;
   moveComponent: (componentId: string, targetParentId: string, targetIndex: number) => void;
   undo: () => void;
@@ -94,25 +105,38 @@ export const useBuilderStore = create<BuilderState>((set, get) => {
     rightSidebarOpen: true,
     codeEditorOpen: false,
     codeEditorComponentId: null,
+
+    // Layout engine defaults
+    showGrid: false,
+    gridSize: 8,
+    snapToGrid: false,
+    snapToComponent: true,
+    showGuides: true,
+    canvasZoom: 1,
+
     historyState: initialHistory,
     historyIndex: initialHistory.currentIndex,
     history: initialHistory.entries,
 
-    // ─── UI Actions (Layer 1) ──────────────────────────────
+    // ─── UI Actions ────────────────────────────────────────
 
     selectComponent: (id) => set({ selectedComponentId: id, rightSidebarOpen: id !== null }),
-
     setDeviceView: (view) => set({ deviceView: view }),
-
-    toggleLeftSidebar: () => set(state => ({ leftSidebarOpen: !state.leftSidebarOpen })),
-
-    toggleRightSidebar: () => set(state => ({ rightSidebarOpen: !state.rightSidebarOpen })),
-
+    toggleLeftSidebar: () => set(s => ({ leftSidebarOpen: !s.leftSidebarOpen })),
+    toggleRightSidebar: () => set(s => ({ rightSidebarOpen: !s.rightSidebarOpen })),
     openCodeEditor: (componentId) => set({ codeEditorOpen: true, codeEditorComponentId: componentId }),
-
     closeCodeEditor: () => set({ codeEditorOpen: false, codeEditorComponentId: null }),
 
-    // ─── Runtime Actions (Layer 2) ─────────────────────────
+    // ─── Layout Engine Actions ─────────────────────────────
+
+    toggleGrid: () => set(s => ({ showGrid: !s.showGrid })),
+    setGridSize: (size) => set({ gridSize: size }),
+    toggleSnapToGrid: () => set(s => ({ snapToGrid: !s.snapToGrid })),
+    toggleSnapToComponent: () => set(s => ({ snapToComponent: !s.snapToComponent })),
+    toggleGuides: () => set(s => ({ showGuides: !s.showGuides })),
+    setCanvasZoom: (zoom) => set({ canvasZoom: Math.max(0.25, Math.min(3, zoom)) }),
+
+    // ─── Runtime Actions ───────────────────────────────────
 
     setSchema: (schema) =>
       set(state => ({ schema, ...applySchemaChange(state, schema, 'Set schema') })),
@@ -156,6 +180,21 @@ export const useBuilderStore = create<BuilderState>((set, get) => {
         return applySchemaChange(state, newSchema, 'Update styles');
       }),
 
+    updateResponsiveStyles: (componentId, device, styles) =>
+      set(state => {
+        const newSchema = {
+          ...state.schema,
+          sections: updateInSections(state.schema.sections, componentId, comp => ({
+            ...comp,
+            responsiveStyles: {
+              ...comp.responsiveStyles,
+              [device]: { ...comp.responsiveStyles?.[device], ...styles },
+            },
+          })),
+        };
+        return applySchemaChange(state, newSchema, `Update ${device} styles`);
+      }),
+
     removeComponent: (componentId) =>
       set(state => {
         const newSchema = {
@@ -171,10 +210,7 @@ export const useBuilderStore = create<BuilderState>((set, get) => {
     moveComponent: (componentId, targetParentId, targetIndex) =>
       set(state => {
         const newSections = moveComponentInTree(
-          state.schema.sections,
-          componentId,
-          targetParentId,
-          targetIndex
+          state.schema.sections, componentId, targetParentId, targetIndex
         );
         const newSchema = { ...state.schema, sections: newSections };
         return applySchemaChange(state, newSchema, 'Move component');
