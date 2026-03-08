@@ -48,13 +48,15 @@ import {
 } from '@dnd-kit/core';
 import type { BuilderComponent, PageSchema, ComponentCategory } from '@/types/builder';
 
-// Lazy import for exports — only loaded when user exports
-const loadExportUtils = () => Promise.all([
-  import('@/lib/exportProject'),
-  import('@/engine/codegen/zipExporter'),
-  import('@/engine/deploy/vercelDeploy'),
-]);
-const loadComponentLibrary = () => import('@/data/componentLibrary');
+// Lazy-loaded component library — cached after first load
+let _componentLibraryCache: typeof import('@/data/componentLibrary')['componentLibrary'] | null = null;
+const getComponentLibrary = async () => {
+  if (!_componentLibraryCache) {
+    const mod = await import('@/data/componentLibrary');
+    _componentLibraryCache = mod.componentLibrary;
+  }
+  return _componentLibraryCache;
+};
 
 import {
   Loader2, Plus, Layers, Image, History, Search,
