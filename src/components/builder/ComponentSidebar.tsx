@@ -40,9 +40,9 @@ const iconMap: Record<string, any> = {
   Facebook, Instagram, Github, Figma, Twitter, Youtube, Linkedin,
 };
 
-const DraggableItem = ({ type, label, icon, isContainer }: { type: string; label: string; icon: string; isContainer?: boolean }) => {
+const DraggableItem = ({ type, label, icon, isContainer, uniqueId }: { type: string; label: string; icon: string; isContainer?: boolean; uniqueId: string }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
-    id: `library-${type}`,
+    id: uniqueId,
     data: { type, label, fromLibrary: true, isContainer },
   });
 
