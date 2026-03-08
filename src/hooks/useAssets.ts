@@ -2,28 +2,21 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 
-export interface Asset {
-  id: string;
-  project_id: string;
-  name: string;
-  file_path: string;
-  file_url: string;
-  file_type: string;
-  file_size: number | null;
-  created_at: string;
-}
+import type { Tables } from '@/integrations/supabase/types';
+
+export type Asset = Tables<'assets'>;
 
 export const useAssets = (projectId: string | null) => {
   return useQuery({
     queryKey: ['assets', projectId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('assets' as any)
+        .from('assets')
         .select('*')
         .eq('project_id', projectId!)
         .order('created_at', { ascending: false });
       if (error) throw error;
-      return data as unknown as Asset[];
+      return data;
     },
     enabled: !!projectId,
   });
@@ -47,14 +40,14 @@ export const useUploadAsset = () => {
         .from('project-assets')
         .getPublicUrl(filePath);
 
-      const { error } = await supabase.from('assets' as any).insert({
+      const { error } = await supabase.from('assets').insert({
         project_id: projectId,
         name: file.name,
         file_path: filePath,
         file_url: publicUrl,
         file_type: file.type,
         file_size: file.size,
-      } as any);
+      });
       if (error) throw error;
 
       return publicUrl;
@@ -69,7 +62,7 @@ export const useDeleteAsset = () => {
   return useMutation({
     mutationFn: async ({ assetId, filePath }: { assetId: string; filePath: string }) => {
       await supabase.storage.from('project-assets').remove([filePath]);
-      const { error } = await supabase.from('assets' as any).delete().eq('id', assetId);
+      const { error } = await supabase.from('assets').delete().eq('id', assetId);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['assets'] }),
