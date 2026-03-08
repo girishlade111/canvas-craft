@@ -35,7 +35,13 @@ interface Template {
 }
 
 // Template categories with pre-built sections
-const TEMPLATE_CATEGORIES = {
+interface CategoryData {
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  templates: Template[];
+}
+
+const TEMPLATE_CATEGORIES: Record<string, CategoryData> = {
   'Hero Sections': {
     icon: PanelTop,
     color: 'hsl(var(--primary))',
