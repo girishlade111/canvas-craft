@@ -296,26 +296,41 @@ const BuilderPage = () => {
     // ── CASE 2: Library to canvas (add new component) ──
     if (!activeData?.fromLibrary) return;
 
-    if (!_componentLibraryCache) return;
-    const compType = activeData.type as string;
-    let compDef = null;
-    for (const cat of Object.keys(_componentLibraryCache) as ComponentCategory[]) {
-      compDef = _componentLibraryCache[cat].find(c => c.type === compType);
-      if (compDef) break;
-    }
-    if (!compDef) return;
+    let newComp: BuilderComponent;
 
-    const newComp: BuilderComponent = {
-      id: generateId(),
-      type: compDef.type,
-      category: compDef.category,
-      label: compDef.label,
-      content: compDef.defaultContent,
-      styles: compDef.defaultStyles || {},
-      props: compDef.defaultProps,
-      isContainer: compDef.isContainer,
-      children: compDef.isContainer ? [] : undefined,
-    };
+    // Handle icon drops from IconsPanel
+    if (activeData.type === 'icon' && activeData.iconName) {
+      newComp = {
+        id: generateId(),
+        type: 'lucide-icon',
+        category: 'Icons' as ComponentCategory,
+        label: activeData.iconName,
+        styles: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center' },
+        props: { name: activeData.iconName, size: 24, color: 'currentColor', strokeWidth: 2 },
+      };
+    } else {
+      // Standard component from library
+      if (!_componentLibraryCache) return;
+      const compType = activeData.type as string;
+      let compDef = null;
+      for (const cat of Object.keys(_componentLibraryCache) as ComponentCategory[]) {
+        compDef = _componentLibraryCache[cat].find(c => c.type === compType);
+        if (compDef) break;
+      }
+      if (!compDef) return;
+
+      newComp = {
+        id: generateId(),
+        type: compDef.type,
+        category: compDef.category,
+        label: compDef.label,
+        content: compDef.defaultContent,
+        styles: compDef.defaultStyles || {},
+        props: compDef.defaultProps,
+        isContainer: compDef.isContainer,
+        children: compDef.isContainer ? [] : undefined,
+      };
+    }
 
     const overData = over.data.current;
 

@@ -379,9 +379,18 @@ propertySchemas.set('alert', [
   ...allStyleProps,
 ]);
 propertySchemas.set('icon', [
-  { key: 'icon', label: 'Icon', type: 'string', group: 'Component', placeholder: '⭐', defaultValue: '⭐' },
-  { key: 'size', label: 'Size', type: 'string', group: 'Component', placeholder: '32', defaultValue: '32' },
+  { key: 'icon', label: 'Icon (emoji)', type: 'string', group: 'Component', placeholder: '⭐', defaultValue: '⭐' },
+  { key: 'iconName', label: 'Icon Name (Lucide)', type: 'string', group: 'Component', placeholder: 'Star' },
+  { key: 'size', label: 'Size', type: 'number', group: 'Component', placeholder: '24', defaultValue: 24 },
   { key: 'color', label: 'Color', type: 'color', group: 'Component' },
+  { key: 'strokeWidth', label: 'Stroke Width', type: 'number', group: 'Component', defaultValue: 2, min: 1, max: 4 },
+  ...allStyleProps,
+]);
+propertySchemas.set('lucide-icon', [
+  { key: 'name', label: 'Icon Name', type: 'string', group: 'Component', placeholder: 'Star', defaultValue: 'Star' },
+  { key: 'size', label: 'Size (px)', type: 'number', group: 'Component', defaultValue: 24, min: 12, max: 128 },
+  { key: 'color', label: 'Color', type: 'color', group: 'Component' },
+  { key: 'strokeWidth', label: 'Stroke Width', type: 'number', group: 'Component', defaultValue: 2, min: 0.5, max: 4, step: 0.5 },
   ...allStyleProps,
 ]);
 propertySchemas.set('avatar', [
