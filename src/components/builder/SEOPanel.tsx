@@ -273,6 +273,8 @@ const SEOPanel = ({ onClose }: { onClose: () => void }) => {
     { id: 'technical' as const, label: 'Technical', icon: Settings },
     { id: 'performance' as const, label: 'Speed', icon: Zap },
     { id: 'analytics' as const, label: 'Tracking', icon: BarChart3 },
+    { id: 'local' as const, label: 'Local', icon: Map },
+    { id: 'ecommerce' as const, label: 'E-com', icon: Globe },
   ];
 
   const toggleSection = (id: string) => setExpandedSection(expandedSection === id ? null : id);
