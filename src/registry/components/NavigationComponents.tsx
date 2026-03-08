@@ -14,14 +14,40 @@ export const NavbarComponent: React.FC<{
       position: sticky ? 'sticky' : undefined,
       top: sticky ? 0 : undefined,
       zIndex: sticky ? 50 : undefined,
+      padding: '12px 24px',
+      background: 'hsl(var(--background))',
     }}
   >
     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
       {logoUrl ? (
-        <img src={logoUrl} alt={brandName} style={{ height: '28px' }} />
+        <img 
+          src={logoUrl} 
+          alt={brandName} 
+          style={{ height: '32px', width: 'auto', objectFit: 'contain' }}
+          onError={(e) => {
+            // Hide broken image and show brand name instead
+            (e.target as HTMLImageElement).style.display = 'none';
+          }}
+        />
       ) : (
-        <span style={{ fontWeight: 700, fontSize: '18px' }}>{brandName}</span>
+        <div
+          style={{
+            width: '32px',
+            height: '32px',
+            background: 'hsl(var(--primary))',
+            borderRadius: '6px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'hsl(var(--primary-foreground))',
+            fontWeight: 700,
+            fontSize: '12px',
+          }}
+        >
+          {brandName?.charAt(0) || 'B'}
+        </div>
       )}
+      <span style={{ fontWeight: 700, fontSize: '18px' }}>{brandName}</span>
     </div>
     <div style={{ display: 'flex', gap: '28px', fontSize: '14px', fontWeight: 500 }}>
       {['Home', 'About', 'Services', 'Contact'].map((item) => (

@@ -5,30 +5,51 @@ import React from 'react';
 export const SiteLogoComponent: React.FC<{
   src?: string;
   width?: string;
-}> = ({ src, width = '120px' }) => (
-  <div style={{ display: 'inline-block' }}>
-    {src ? (
-      <img src={src} alt="Site Logo" style={{ width, height: 'auto' }} />
-    ) : (
-      <div
-        style={{
-          width,
-          height: '40px',
-          background: 'hsl(var(--primary))',
-          borderRadius: '6px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'hsl(var(--primary-foreground))',
-          fontWeight: 700,
-          fontSize: '14px',
-        }}
-      >
-        LOGO
-      </div>
-    )}
-  </div>
-);
+  alt?: string;
+  linkUrl?: string;
+}> = ({ src, width = '120px', alt = 'Site Logo', linkUrl = '/' }) => {
+  const logo = src ? (
+    <img 
+      src={src} 
+      alt={alt} 
+      style={{ width, height: 'auto', maxHeight: '60px', objectFit: 'contain' }} 
+      onError={(e) => {
+        // Fallback to placeholder if image fails to load
+        (e.target as HTMLImageElement).style.display = 'none';
+      }}
+    />
+  ) : (
+    <div
+      style={{
+        width,
+        height: '40px',
+        background: 'hsl(var(--primary))',
+        borderRadius: '6px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'hsl(var(--primary-foreground))',
+        fontWeight: 700,
+        fontSize: '14px',
+        cursor: 'pointer',
+      }}
+    >
+      + Add Logo
+    </div>
+  );
+
+  return (
+    <div style={{ display: 'inline-block' }}>
+      {linkUrl ? (
+        <a href={linkUrl} style={{ display: 'inline-block', textDecoration: 'none' }}>
+          {logo}
+        </a>
+      ) : (
+        logo
+      )}
+    </div>
+  );
+};
 
 export const SiteTitleComponent: React.FC<{ content?: string }> = ({ content }) => (
   <h1 style={{ fontSize: '28px', fontWeight: 800, margin: 0 }}>{content || 'My Website'}</h1>
