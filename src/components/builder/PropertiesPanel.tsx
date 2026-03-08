@@ -6,7 +6,7 @@ import {
   X, ChevronDown, ChevronRight, Layers, LayoutDashboard, Smartphone,
   Sparkles, Link2, Accessibility, Palette, Upload, Image as ImageIcon, Trash2, ExternalLink,
 } from 'lucide-react';
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import AutoLayoutPanel from './AutoLayoutPanel';
 import ResponsivePanel from './ResponsivePanel';
 import AnimationPanel from './AnimationPanel';
