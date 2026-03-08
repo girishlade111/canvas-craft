@@ -311,7 +311,9 @@ const TemplateSelection = () => {
                   </button>
                 )}
               </div>
-            ))}
+              );
+            })}
+
           </div>
         )}
       </div>
