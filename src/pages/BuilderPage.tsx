@@ -44,6 +44,7 @@ const MultiLanguagePanel = lazy(() => import('@/components/builder/MultiLanguage
 const DomainPanel = lazy(() => import('@/components/builder/DomainPanel'));
 const AccessibilityPanel = lazy(() => import('@/components/builder/AccessibilityPanel'));
 const SaveTemplateDialog = lazy(() => import('@/components/builder/SaveTemplateDialog'));
+const VercelPanel = lazy(() => import('@/components/builder/VercelPanel'));
 
 import {
   DndContext,
@@ -78,7 +79,7 @@ import {
 const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const generateSectionId = () => `section-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-type LeftPanel = 'elements' | 'templates' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | 'cms' | 'store' | 'marketing' | 'booking' | 'apps' | 'ai' | 'marketplace' | 'members' | 'interactions' | 'interactive-elements' | 'languages' | 'domain' | 'accessibility' | null;
+type LeftPanel = 'elements' | 'templates' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | 'cms' | 'store' | 'marketing' | 'booking' | 'apps' | 'ai' | 'marketplace' | 'members' | 'interactions' | 'interactive-elements' | 'languages' | 'domain' | 'accessibility' | 'vercel' | null;
 
 const BuilderPage = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -526,7 +527,7 @@ const BuilderPage = () => {
               {activePanel === 'store' && <EcommercePanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'marketing' && <MarketingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'booking' && <BookingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
-              {activePanel === 'apps' && <AppMarketPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+              {activePanel === 'apps' && <AppMarketPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} onOpenVercel={() => setActivePanel('vercel')} />}
               {activePanel === 'ai' && <AIToolsPanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'marketplace' && <MarketplacePanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'members' && <MemberAreaPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
@@ -535,6 +536,7 @@ const BuilderPage = () => {
               {activePanel === 'languages' && <MultiLanguagePanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'domain' && <DomainPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'accessibility' && <AccessibilityPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'vercel' && <VercelPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} onBack={() => setActivePanel('apps')} />}
             </Suspense>
 
             {/* Main canvas */}

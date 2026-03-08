@@ -1923,13 +1923,14 @@ const AppDetailView = ({ app, installed, onBack, onToggle, isPending, projectId 
 interface AppMarketPanelProps {
   projectId?: string | null;
   onClose?: () => void;
+  onOpenVercel?: () => void;
 }
 
 /* ── Badge helpers ── */
 const FEATURED_APPS = new Set(['supabase', 'stripe', 'chatgpt', 'vercel', 'github', 'slack', 'figma', 'notion', 'auth0', 'clerk']);
 const NEW_APPS = new Set(['twitch', 'reddit', 'pinterest', 'mailgun', 'convertkit', 'supabase-edge-functions', 'vercel-ai-sdk', 'langchain', 'crewai']);
 
-const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
+const AppMarketPanel = ({ projectId, onClose, onOpenVercel }: AppMarketPanelProps) => {
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState('All');
   const [activeView, setActiveView] = useState<'browse' | 'installed'>('browse');
@@ -1966,20 +1967,33 @@ const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
     }
   };
 
+  // Special handling: Vercel opens its dedicated panel
+  if (selectedApp === 'vercel' && onOpenVercel) {
+    onOpenVercel();
+    setSelectedApp(null);
+    return null;
+  }
+
   const detailApp = selectedApp ? APP_CATALOG.find(a => a.key === selectedApp) : null;
   if (detailApp) {
-    return (
-      <div className="builder-flyout overflow-hidden flex flex-col">
-        <AppDetailView
-          app={detailApp}
-          installed={installedKeys.has(detailApp.key)}
-          onBack={() => setSelectedApp(null)}
-          onToggle={() => handleToggle(detailApp.key)}
-          isPending={installApp.isPending || uninstallApp.isPending}
-          projectId={projectId}
-        />
-      </div>
-    );
+    // Vercel fallback if no onOpenVercel callback
+    if (detailApp.key === 'vercel' && onOpenVercel) {
+      onOpenVercel();
+      setSelectedApp(null);
+    } else {
+      return (
+        <div className="builder-flyout overflow-hidden flex flex-col">
+          <AppDetailView
+            app={detailApp}
+            installed={installedKeys.has(detailApp.key)}
+            onBack={() => setSelectedApp(null)}
+            onToggle={() => handleToggle(detailApp.key)}
+            isPending={installApp.isPending || uninstallApp.isPending}
+            projectId={projectId}
+          />
+        </div>
+      );
+    }
   }
 
   if (!projectId) {
