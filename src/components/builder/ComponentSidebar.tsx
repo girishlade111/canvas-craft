@@ -40,9 +40,9 @@ const iconMap: Record<string, any> = {
   Facebook, Instagram, Github, Figma, Twitter, Youtube, Linkedin,
 };
 
-const DraggableItem = ({ type, label, icon, isContainer }: { type: string; label: string; icon: string; isContainer?: boolean }) => {
+const DraggableItem = ({ type, label, icon, isContainer, uniqueId }: { type: string; label: string; icon: string; isContainer?: boolean; uniqueId: string }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
-    id: `library-${type}`,
+    id: uniqueId,
     data: { type, label, fromLibrary: true, isContainer },
   });
 
@@ -126,8 +126,8 @@ const ComponentSidebar = ({ onClose }: ComponentSidebarProps) => {
                   {cat}
                 </div>
                 <div className="px-2 pb-2 space-y-0.5">
-                  {items.map((comp) => (
-                    <DraggableItem key={comp.type} type={comp.type} label={comp.label} icon={comp.icon} isContainer={comp.isContainer} />
+                  {items.map((comp, idx) => (
+                    <DraggableItem key={`${cat}-${comp.type}-${idx}`} uniqueId={`library-${cat}-${comp.type}-${idx}`} type={comp.type} label={comp.label} icon={comp.icon} isContainer={comp.isContainer} />
                   ))}
                 </div>
               </div>
@@ -153,9 +153,9 @@ const ComponentSidebar = ({ onClose }: ComponentSidebarProps) => {
                   </button>
                   {isOpen && (
                     <div className="px-2 pb-2 space-y-0.5">
-                      {componentLibrary[cat].map((comp) => (
-                        <DraggableItem key={comp.type} type={comp.type} label={comp.label} icon={comp.icon} isContainer={comp.isContainer} />
-                      ))}
+                    {componentLibrary[cat].map((comp, idx) => (
+                      <DraggableItem key={`${cat}-${comp.type}-${idx}`} uniqueId={`library-${cat}-${comp.type}-${idx}`} type={comp.type} label={comp.label} icon={comp.icon} isContainer={comp.isContainer} />
+                    ))}
                     </div>
                   )}
                 </div>

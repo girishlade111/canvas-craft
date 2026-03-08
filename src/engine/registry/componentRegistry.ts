@@ -759,7 +759,7 @@ const fallbackCache: Map<string, React.FC<any>> = new Map();
 const getFallback = (type: string): React.FC<any> => {
   let cached = fallbackCache.get(type);
   if (!cached) {
-    cached = (props: any) => React.createElement(FallbackComponent, { type }, props.children);
+    cached = (props: any) => React.createElement(FallbackComponent, { type, content: props.content }, props.children);
     cached.displayName = `Fallback(${type})`;
     fallbackCache.set(type, cached);
   }

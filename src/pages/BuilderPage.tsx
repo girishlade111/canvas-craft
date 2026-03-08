@@ -334,7 +334,7 @@ const BuilderPage = () => {
       const compLabel = activeData.label as string | undefined;
       let compDef = null;
       
-      // Find component - match by type and label for better specificity (handles Icons with same type)
+      // Find component definition - search all categories
       for (const cat of Object.keys(_componentLibraryCache) as ComponentCategory[]) {
         // First try exact match with label
         if (compLabel) {
@@ -347,7 +347,18 @@ const BuilderPage = () => {
           if (compDef) break;
         }
       }
-      if (!compDef) return;
+      
+      // If no definition found, create a basic one so the component still renders
+      if (!compDef) {
+        compDef = {
+          type: compType,
+          label: compLabel || compType,
+          category: 'Basic',
+          icon: 'Square',
+          defaultContent: compLabel || compType,
+          defaultStyles: { padding: '16px' },
+        };
+      }
 
       newComp = {
         id: generateId(),

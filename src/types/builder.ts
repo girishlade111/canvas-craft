@@ -223,6 +223,13 @@ export const CONTAINER_TYPES = [
   'column', 'tab-panel', 'accordion-item',
   'background-video', 'group', 'row', 'stack', 'cover',
   'media-text', 'template-part', 'query-loop',
+  'flex-box', 'masonry', 'carousel-container', 'button-group',
+  'header', 'footer', 'sidebar', 'split-content', 'offset-columns',
+  'bento-grid', 'asymmetric-grid', 'form-group', 'fieldset',
+  'checkbox-group', 'radio-group', 'switch-group',
+  'parallax-section', 'scroll-reveal', 'fade-in', 'slide-in', 'zoom-in',
+  'glow-effect', 'glassmorphism', 'neumorphism', 'gradient-border',
+  'animated-gradient', 'sticky-element', 'intersection-observer', 'focus-trap',
 ];
 
 export const isContainerType = (type: string): boolean => CONTAINER_TYPES.includes(type);
