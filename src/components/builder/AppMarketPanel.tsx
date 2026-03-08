@@ -29,6 +29,7 @@ import {
   SupabaseEdgeFnIcon, VercelAIIcon, LangChainIcon, CrewAIIcon,
 } from './BrandIcons';
 import { useInstalledApps, useInstallApp, useUninstallApp } from '@/hooks/useInstalledApps';
+import { useAppConfig } from '@/hooks/useAppConfig';
 import { toast } from 'sonner';
 
 /* ── Config field types ── */
@@ -1614,12 +1615,19 @@ const getFieldIcon = (type: ConfigField['type']) => {
 };
 
 /* ── App Detail / Guide view ── */
-const AppDetailView = ({ app, installed, onBack, onToggle, isPending }: {
-  app: AppDef; installed: boolean; onBack: () => void; onToggle: () => void; isPending: boolean;
+const AppDetailView = ({ app, installed, onBack, onToggle, isPending, projectId }: {
+  app: AppDef; installed: boolean; onBack: () => void; onToggle: () => void; isPending: boolean; projectId?: string | null;
 }) => {
-  const [configValues, setConfigValues] = useState<Record<string, string>>({});
+  const { getConfig, saveConfig, disconnectApp, generateEnvContent } = useAppConfig(projectId ?? null);
+  const existingConfig = getConfig(app.key);
+  const [configValues, setConfigValues] = useState<Record<string, string>>(existingConfig?.values || {});
   const [showSecrets, setShowSecrets] = useState<Record<string, boolean>>({});
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState(!!existingConfig?.isConnected);
+  const [showEnvPreview, setShowEnvPreview] = useState(false);
+  const [currentStep, setCurrentStep] = useState(existingConfig?.isConnected ? app.setupSteps.length : 0);
+  const [copiedEnv, setCopiedEnv] = useState(false);
+
+  const isConnected = existingConfig?.isConnected || false;
 
   const handleSave = () => {
     const missing = app.configFields.filter(f => f.required && !configValues[f.key]?.trim());
@@ -1627,9 +1635,29 @@ const AppDetailView = ({ app, installed, onBack, onToggle, isPending }: {
       toast.error(`Please fill in: ${missing.map(f => f.label).join(', ')}`);
       return;
     }
+    saveConfig(app.key, configValues);
     setSaved(true);
-    toast.success(`${app.name} configuration saved!`);
+    setCurrentStep(app.setupSteps.length);
+    toast.success(`${app.name} connected successfully! Credentials stored securely.`);
   };
+
+  const handleDisconnect = () => {
+    disconnectApp(app.key);
+    setConfigValues({});
+    setSaved(false);
+    setCurrentStep(0);
+    toast.info(`${app.name} disconnected.`);
+  };
+
+  const handleCopyEnv = () => {
+    const envContent = generateEnvContent(app.key, app.configFields);
+    navigator.clipboard.writeText(envContent);
+    setCopiedEnv(true);
+    toast.success('.env variables copied to clipboard!');
+    setTimeout(() => setCopiedEnv(false), 2000);
+  };
+
+  const getEnvKeyName = (fieldKey: string) => fieldKey.toUpperCase();
 
   const AppIcon = app.icon;
 
@@ -1646,9 +1674,16 @@ const AppDetailView = ({ app, installed, onBack, onToggle, isPending }: {
           <h3 className="text-xs font-semibold truncate">{app.name}</h3>
           <p className="text-[10px] opacity-50">{app.category}</p>
         </div>
+        {isConnected && (
+          <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold"
+            style={{ background: 'hsl(var(--success) / 0.15)', color: 'hsl(var(--success))' }}>
+            <Check className="w-3 h-3" /> Connected
+          </span>
+        )}
       </div>
 
       <div className="flex-1 overflow-y-auto">
+        {/* App Info */}
         <div className="p-3 mx-3 mt-3 rounded-lg" style={{ background: 'hsl(var(--muted) / 0.3)' }}>
           <p className="text-[11px] leading-relaxed opacity-70">{app.description}</p>
           <div className="flex items-center gap-3 mt-2">
@@ -1663,24 +1698,52 @@ const AppDetailView = ({ app, installed, onBack, onToggle, isPending }: {
           </div>
         </div>
 
+        {/* Connection Status Banner */}
+        {isConnected && (
+          <div className="mx-3 mt-3 p-3 rounded-lg" style={{ background: 'hsl(var(--success) / 0.08)', border: '1px solid hsl(var(--success) / 0.2)' }}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'hsl(var(--success))' }} />
+                <span className="text-[11px] font-semibold" style={{ color: 'hsl(var(--success))' }}>App Connected</span>
+              </div>
+              <span className="text-[9px] opacity-50">
+                {existingConfig?.connectedAt ? new Date(existingConfig.connectedAt).toLocaleDateString() : ''}
+              </span>
+            </div>
+            <p className="text-[10px] opacity-60 mt-1">Credentials saved. Use the .env variables below in your project code.</p>
+          </div>
+        )}
+
+        {/* Setup Guide */}
         <div className="px-3 mt-4">
           <div className="flex items-center gap-1.5 mb-2">
             <BookOpen className="w-3.5 h-3.5" style={{ color: 'hsl(var(--primary))' }} />
             <h4 className="text-[11px] font-semibold">Setup Guide</h4>
           </div>
           <div className="space-y-2">
-            {app.setupSteps.map(({ step, title, description }) => (
-              <div key={step} className="flex gap-2.5 p-2 rounded-lg" style={{ background: 'hsl(var(--builder-component-bg))' }}>
-                <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[9px] font-bold"
-                  style={{ background: 'hsl(var(--primary) / 0.15)', color: 'hsl(var(--primary))' }}>
-                  {step}
+            {app.setupSteps.map(({ step, title, description }) => {
+              const isComplete = step <= currentStep;
+              const isCurrent = step === currentStep + 1;
+              return (
+                <div key={step} className={`flex gap-2.5 p-2 rounded-lg transition-all ${isCurrent ? 'ring-1' : ''}`}
+                  style={{
+                    background: isComplete ? 'hsl(var(--success) / 0.05)' : 'hsl(var(--builder-component-bg))',
+                    ...(isCurrent ? { ringColor: 'hsl(var(--primary) / 0.3)' } : {}),
+                  }}>
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[9px] font-bold"
+                    style={isComplete
+                      ? { background: 'hsl(var(--success) / 0.15)', color: 'hsl(var(--success))' }
+                      : { background: 'hsl(var(--primary) / 0.15)', color: 'hsl(var(--primary))' }
+                    }>
+                    {isComplete ? <Check className="w-3 h-3" /> : step}
+                  </div>
+                  <div>
+                    <p className={`text-[11px] font-medium ${isComplete ? 'line-through opacity-50' : ''}`}>{title}</p>
+                    <p className="text-[10px] opacity-50 leading-relaxed">{description}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-[11px] font-medium">{title}</p>
-                  <p className="text-[10px] opacity-50 leading-relaxed">{description}</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {app.docsUrl && (
@@ -1692,10 +1755,11 @@ const AppDetailView = ({ app, installed, onBack, onToggle, isPending }: {
           )}
         </div>
 
-        <div className="px-3 mt-4 pb-4">
+        {/* Configuration Fields */}
+        <div className="px-3 mt-4">
           <div className="flex items-center gap-1.5 mb-2">
-            <Settings className="w-3.5 h-3.5" style={{ color: 'hsl(var(--primary))' }} />
-            <h4 className="text-[11px] font-semibold">Configuration</h4>
+            <Key className="w-3.5 h-3.5" style={{ color: 'hsl(var(--primary))' }} />
+            <h4 className="text-[11px] font-semibold">Credentials & Configuration</h4>
           </div>
 
           <div className="space-y-2.5">
@@ -1703,6 +1767,7 @@ const AppDetailView = ({ app, installed, onBack, onToggle, isPending }: {
               const FieldIcon = getFieldIcon(field.type);
               const isSecret = field.secret;
               const showValue = showSecrets[field.key];
+              const envKey = getEnvKeyName(field.key);
 
               return (
                 <div key={field.key}>
@@ -1735,37 +1800,120 @@ const AppDetailView = ({ app, installed, onBack, onToggle, isPending }: {
                       </button>
                     )}
                   </div>
+                  <p className="text-[8px] mt-0.5 font-mono opacity-30">→ {isSecret ? `[SERVER] ${envKey}` : `${envKey}`}</p>
                 </div>
               );
             })}
           </div>
 
+          {/* Security Notice */}
           <div className="flex items-start gap-2 mt-3 p-2 rounded-lg" style={{ background: 'hsl(var(--primary) / 0.05)', border: '1px solid hsl(var(--primary) / 0.1)' }}>
-            <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: 'hsl(var(--primary))' }} />
-            <p className="text-[9px] leading-relaxed opacity-60">
-              Secret keys are stored securely and never exposed in client-side code.
-            </p>
+            <Shield className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: 'hsl(var(--primary))' }} />
+            <div>
+              <p className="text-[9px] font-semibold opacity-70">Security Notice</p>
+              <p className="text-[9px] leading-relaxed opacity-50">
+                Secret keys are stored in <code className="px-1 py-0.5 rounded text-[8px]" style={{ background: 'hsl(var(--muted))' }}>.env</code> file and never exposed in client-side code. Server-only variables should be accessed through edge functions or server-side routes.
+              </p>
+            </div>
           </div>
 
+          {/* Action Buttons */}
           <div className="flex gap-2 mt-3">
-            <button onClick={handleSave}
-              className="flex-1 py-2 rounded-lg text-[11px] font-semibold transition-colors"
-              style={saved
-                ? { background: 'hsl(var(--success) / 0.15)', color: 'hsl(var(--success))' }
-                : { background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }
-              }>
-              {saved ? '✓ Saved' : 'Save Configuration'}
-            </button>
-            <button onClick={onToggle} disabled={isPending}
-              className="px-3 py-2 rounded-lg text-[11px] font-medium transition-colors"
-              style={installed
-                ? { background: 'hsl(var(--destructive) / 0.1)', color: 'hsl(var(--destructive))' }
-                : { background: 'hsl(var(--muted))', color: 'hsl(var(--muted-foreground))' }
-              }>
-              {installed ? 'Remove' : 'Install'}
-            </button>
+            {!isConnected ? (
+              <>
+                <button onClick={handleSave}
+                  className="flex-1 py-2 rounded-lg text-[11px] font-semibold transition-all flex items-center justify-center gap-1.5"
+                  style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}>
+                  <Zap className="w-3.5 h-3.5" /> Connect {app.name}
+                </button>
+                <button onClick={onToggle} disabled={isPending}
+                  className="px-3 py-2 rounded-lg text-[11px] font-medium transition-colors"
+                  style={installed
+                    ? { background: 'hsl(var(--destructive) / 0.1)', color: 'hsl(var(--destructive))' }
+                    : { background: 'hsl(var(--muted))', color: 'hsl(var(--muted-foreground))' }
+                  }>
+                  {installed ? 'Remove' : 'Install'}
+                </button>
+              </>
+            ) : (
+              <>
+                <button onClick={handleSave}
+                  className="flex-1 py-2 rounded-lg text-[11px] font-semibold transition-all flex items-center justify-center gap-1.5"
+                  style={{ background: 'hsl(var(--success) / 0.15)', color: 'hsl(var(--success))' }}>
+                  <Check className="w-3.5 h-3.5" /> Update Configuration
+                </button>
+                <button onClick={handleDisconnect}
+                  className="px-3 py-2 rounded-lg text-[11px] font-medium transition-colors"
+                  style={{ background: 'hsl(var(--destructive) / 0.1)', color: 'hsl(var(--destructive))' }}>
+                  Disconnect
+                </button>
+              </>
+            )}
           </div>
         </div>
+
+        {/* .env Preview Section */}
+        {isConnected && (
+          <div className="px-3 mt-4 pb-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-1.5">
+                <FileText className="w-3.5 h-3.5" style={{ color: 'hsl(var(--primary))' }} />
+                <h4 className="text-[11px] font-semibold">.env Variables</h4>
+              </div>
+              <div className="flex items-center gap-1">
+                <button onClick={() => setShowEnvPreview(!showEnvPreview)}
+                  className="px-2 py-0.5 rounded text-[9px] font-medium transition-colors"
+                  style={{ background: 'hsl(var(--muted) / 0.5)' }}>
+                  {showEnvPreview ? 'Hide' : 'Show'}
+                </button>
+                <button onClick={handleCopyEnv}
+                  className="px-2 py-0.5 rounded text-[9px] font-medium transition-colors flex items-center gap-0.5"
+                  style={{ background: 'hsl(var(--primary) / 0.1)', color: 'hsl(var(--primary))' }}>
+                  <Copy className="w-2.5 h-2.5" /> {copiedEnv ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
+            </div>
+
+            {showEnvPreview && (
+              <div className="rounded-lg p-3 font-mono text-[9px] leading-relaxed overflow-x-auto"
+                style={{ background: 'hsl(var(--muted) / 0.5)', border: '1px solid hsl(var(--builder-panel-border))' }}>
+                {app.configFields.map(field => {
+                  const envKey = getEnvKeyName(field.key);
+                  const val = configValues[field.key] || '';
+                  const masked = field.secret ? val.slice(0, 6) + '••••••' : val;
+                  return (
+                    <div key={field.key} className="flex">
+                      <span style={{ color: 'hsl(var(--primary))' }}>{envKey}</span>
+                      <span className="opacity-40">=</span>
+                      <span className="opacity-60">{masked || '(empty)'}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <div className="mt-2 p-2 rounded-lg" style={{ background: 'hsl(var(--muted) / 0.3)' }}>
+              <p className="text-[9px] opacity-50 leading-relaxed">
+                <strong>How to use:</strong> Copy these variables to your project's <code className="px-1 py-0.5 rounded text-[8px]" style={{ background: 'hsl(var(--muted))' }}>.env</code> file. 
+                Secret keys (marked 🔒) should only be used in server-side code or edge functions. 
+                Publishable keys can be used in client-side code with the <code className="px-1 py-0.5 rounded text-[8px]" style={{ background: 'hsl(var(--muted))' }}>VITE_</code> prefix.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Not connected yet - guidance */}
+        {!isConnected && (
+          <div className="px-3 mt-4 pb-4">
+            <div className="p-3 rounded-lg text-center" style={{ background: 'hsl(var(--muted) / 0.2)', border: '1px dashed hsl(var(--muted-foreground) / 0.2)' }}>
+              <Key className="w-6 h-6 mx-auto mb-2 opacity-20" />
+              <p className="text-[10px] font-medium opacity-50">Enter your credentials above to connect</p>
+              <p className="text-[9px] opacity-30 mt-1">
+                Follow the setup guide steps, then paste your API key / token to establish the connection.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -1828,6 +1976,7 @@ const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
           onBack={() => setSelectedApp(null)}
           onToggle={() => handleToggle(detailApp.key)}
           isPending={installApp.isPending || uninstallApp.isPending}
+          projectId={projectId}
         />
       </div>
     );
