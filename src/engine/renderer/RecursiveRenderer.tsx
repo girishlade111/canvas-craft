@@ -1,12 +1,11 @@
 /**
  * Layer 3 — Rendering Engine
  * Converts the component tree JSON into actual React components.
- * This is a pure rendering layer — no editing UI, no DnD, no selection.
- * Used for preview mode and export rendering.
+ * Pure rendering layer — no editing UI, no DnD, no selection.
  */
 
-import React, { memo } from 'react';
-import { getComponent } from '@/engine/registry';
+import React, { memo, useState, useEffect } from 'react';
+import { getComponent, onRegistryUpdate } from '@/engine/registry';
 import type { BuilderComponent, DeviceView } from '@/types/builder';
 
 interface RecursiveRendererProps {
@@ -15,15 +14,17 @@ interface RecursiveRendererProps {
 }
 
 const RecursiveRenderer: React.FC<RecursiveRendererProps> = memo(({ node, deviceView = 'desktop' }) => {
+  // Re-render when extended components finish loading
+  const [, forceUpdate] = useState(0);
+  useEffect(() => onRegistryUpdate(() => forceUpdate(n => n + 1)), []);
+
   const Component = getComponent(node.type);
 
-  // Merge base styles with responsive overrides
   const resolvedStyles = {
     ...node.styles,
     ...node.responsiveStyles?.[deviceView],
   };
 
-  // Strip builder-internal style keys
   const { customCSS: _css, customClasses, ...cssStyles } = resolvedStyles;
 
   const componentProps: Record<string, any> = {
