@@ -1598,9 +1598,152 @@ const APP_CATALOG: AppDef[] = [
       { step: 3, title: 'Connect an LLM', description: 'Also provide your OpenAI key for the underlying model.' },
     ],
   },
-];
 
-const CATEGORIES = [
+  // ── More AI & ML Tools ──
+  {
+    key: 'cohere', name: 'Cohere', description: 'Enterprise AI — embeddings, reranking, RAG & text generation',
+    category: 'AI', icon: CohereIcon, rating: 4.7, installs: '35K+', free: false, price: 0, isNew: true,
+    docsUrl: 'https://docs.cohere.com/',
+    configFields: [
+      { key: 'cohere_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'co-...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Cohere account', description: 'Go to dashboard.cohere.com and sign up.' },
+      { step: 2, title: 'Generate an API key', description: 'Go to API Keys → Create Trial/Production Key.' },
+      { step: 3, title: 'Paste above', description: 'Enter your key to enable embeddings, RAG & generation.' },
+    ],
+  },
+  {
+    key: 'together-ai', name: 'Together AI', description: 'Run open-source LLMs — Llama, Mixtral, Code Llama at scale',
+    category: 'AI', icon: TogetherAIIcon, rating: 4.7, installs: '40K+', free: false, price: 0, isNew: true,
+    docsUrl: 'https://docs.together.ai/',
+    configFields: [
+      { key: 'together_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Together AI', description: 'Go to api.together.ai and create an account.' },
+      { step: 2, title: 'Get your API key', description: 'Dashboard → Settings → API Keys.' },
+      { step: 3, title: 'Enter above', description: 'Paste key to run Llama, Mixtral & other open models.' },
+    ],
+  },
+  {
+    key: 'groq', name: 'Groq', description: 'Ultra-fast LLM inference — Llama, Mixtral & Gemma at lightning speed',
+    category: 'AI', icon: GroqIcon, rating: 4.8, installs: '55K+', free: true, isNew: true,
+    docsUrl: 'https://console.groq.com/docs',
+    configFields: [
+      { key: 'groq_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'gsk_...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to Groq Console', description: 'Visit console.groq.com and sign up.' },
+      { step: 2, title: 'Create an API key', description: 'Go to API Keys → Create API Key.' },
+      { step: 3, title: 'Paste above', description: 'Enter key for ultra-fast inference.' },
+    ],
+  },
+  {
+    key: 'xai-grok', name: 'xAI Grok', description: 'Grok AI by xAI — real-time knowledge, reasoning & code',
+    category: 'AI', icon: XAIIcon, rating: 4.6, installs: '30K+', free: false, price: 0, isNew: true,
+    docsUrl: 'https://docs.x.ai/',
+    configFields: [
+      { key: 'xai_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'xai-...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to xAI Console', description: 'Visit console.x.ai and sign up.' },
+      { step: 2, title: 'Generate API key', description: 'Navigate to API Keys → Create Key.' },
+      { step: 3, title: 'Enter above', description: 'Paste key to use Grok models.' },
+    ],
+  },
+  {
+    key: 'openrouter', name: 'OpenRouter', description: 'Unified API for 100+ AI models — GPT, Claude, Llama, Gemini & more',
+    category: 'AI', icon: OpenRouterIcon, rating: 4.8, installs: '80K+', free: false, price: 0, isFeatured: true,
+    docsUrl: 'https://openrouter.ai/docs',
+    configFields: [
+      { key: 'openrouter_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'sk-or-...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at OpenRouter', description: 'Go to openrouter.ai and create an account.' },
+      { step: 2, title: 'Get API key', description: 'Go to Keys → Create Key.' },
+      { step: 3, title: 'Paste above', description: 'One key to access GPT-4, Claude, Llama & 100+ models.' },
+    ],
+  },
+  {
+    key: 'fireworks-ai', name: 'Fireworks AI', description: 'Fast & cheap AI inference — fine-tuned models & function calling',
+    category: 'AI', icon: FireworksAIIcon, rating: 4.6, installs: '20K+', free: false, price: 0,
+    docsUrl: 'https://docs.fireworks.ai/',
+    configFields: [
+      { key: 'fireworks_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'fw_...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Fireworks', description: 'Go to fireworks.ai and create an account.' },
+      { step: 2, title: 'Get API key', description: 'Dashboard → API Keys → Create.' },
+      { step: 3, title: 'Enter above', description: 'Paste key for fast inference & function calling.' },
+    ],
+  },
+  {
+    key: 'assemblyai', name: 'AssemblyAI', description: 'Speech-to-text, speaker diarization & audio intelligence',
+    category: 'AI', icon: AssemblyAIIcon, rating: 4.7, installs: '30K+', free: true,
+    docsUrl: 'https://www.assemblyai.com/docs',
+    configFields: [
+      { key: 'assemblyai_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create AssemblyAI account', description: 'Go to assemblyai.com and sign up.' },
+      { step: 2, title: 'Get API key', description: 'Your API key is on the dashboard homepage.' },
+      { step: 3, title: 'Paste above', description: 'Enter key for speech-to-text & audio intelligence.' },
+    ],
+  },
+  {
+    key: 'runway-ml', name: 'Runway ML', description: 'AI video generation — Gen-3, text-to-video & image-to-video',
+    category: 'AI', icon: RunwayIcon, rating: 4.7, installs: '45K+', free: false, price: 0,
+    docsUrl: 'https://docs.runwayml.com/',
+    configFields: [
+      { key: 'runway_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'rw_...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Runway', description: 'Go to runwayml.com and create an account.' },
+      { step: 2, title: 'Get API access', description: 'Go to Settings → API → Generate Key.' },
+      { step: 3, title: 'Enter above', description: 'Paste key for AI video generation.' },
+    ],
+  },
+  {
+    key: 'ai21', name: 'AI21 Labs', description: 'Jamba models — long context, multilingual AI with enterprise focus',
+    category: 'AI', icon: AI21Icon, rating: 4.5, installs: '15K+', free: false, price: 0,
+    docsUrl: 'https://docs.ai21.com/',
+    configFields: [
+      { key: 'ai21_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create AI21 account', description: 'Go to studio.ai21.com and sign up.' },
+      { step: 2, title: 'Get API key', description: 'Go to Account → API Key.' },
+      { step: 3, title: 'Paste above', description: 'Enter key for Jamba & Jurassic models.' },
+    ],
+  },
+  {
+    key: 'meta-llama', name: 'Meta Llama (via API)', description: 'Meta\'s open-source Llama models — use via Together, Groq or Fireworks',
+    category: 'AI', icon: MetaLlamaIcon, rating: 4.8, installs: '90K+', free: true,
+    docsUrl: 'https://llama.meta.com/',
+    configFields: [
+      { key: 'llama_provider', label: 'Provider API Key', type: 'api_key' as const, placeholder: 'API key from Together/Groq/Fireworks', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Choose a provider', description: 'Use Together AI, Groq, or Fireworks AI to host Llama models.' },
+      { step: 2, title: 'Get provider API key', description: 'Sign up with your chosen provider and generate an API key.' },
+      { step: 3, title: 'Enter above', description: 'Paste the provider key to use Llama 3.x models.' },
+    ],
+  },
+  {
+    key: 'cerebras', name: 'Cerebras', description: 'Fastest AI inference — Llama & other models at 2000+ tokens/sec',
+    category: 'AI', icon: CerebrasIcon, rating: 4.7, installs: '20K+', free: true, isNew: true,
+    docsUrl: 'https://inference-docs.cerebras.ai/',
+    configFields: [
+      { key: 'cerebras_api_key', label: 'API Key', type: 'api_key' as const, placeholder: 'csk-...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to Cerebras Cloud', description: 'Visit cloud.cerebras.ai and sign up.' },
+      { step: 2, title: 'Create API key', description: 'Dashboard → API Keys → Create.' },
+      { step: 3, title: 'Paste above', description: 'Enter key for world\'s fastest inference.' },
+    ],
+  },
+];
   'All', 'AI', 'Backend', 'eCommerce', 'Developer', 'Design', 'Productivity',
   'Communication', 'Analytics', 'Marketing', 'Media', 'CMS', 'Automation',
   'Project Management', 'Social', 'Travel', 'Security', 'Scheduling', 'Utilities',
