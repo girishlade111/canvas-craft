@@ -21,6 +21,10 @@ export interface ComponentStyles {
   gap?: string;
   customCSS?: string;
   customClasses?: string;
+  minHeight?: string;
+  maxWidth?: string;
+  lineHeight?: string;
+  [key: string]: string | undefined;
 }
 
 export interface BuilderComponent {
