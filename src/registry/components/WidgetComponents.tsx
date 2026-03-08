@@ -138,7 +138,7 @@ export const AlertComponent: React.FC<{ content?: string; type?: string }> = ({ 
   );
 };
 
-// ─── Icon Component ────────────────────────────────────────
+// ─── Icon Component (Emoji/Text Icons) ────────────────────────────────────────
 export const IconComponent: React.FC<{ 
   icon?: string; 
   iconName?: string;
@@ -150,7 +150,7 @@ export const IconComponent: React.FC<{
 }) => {
   // If iconName is provided, try to render a Lucide icon
   if (iconName) {
-    const LucideIcon = icons[iconName as keyof typeof icons] as LucideIcon | undefined;
+    const LucideIcon = lucideIcons[iconName as keyof typeof lucideIcons] as LucideIcon | undefined;
     if (LucideIcon) {
       return (
         <LucideIcon 
@@ -177,14 +177,14 @@ export const IconComponent: React.FC<{
   );
 };
 
-// ─── Lucide Icon Component (for direct Lucide icon rendering) ──
+// ─── Lucide Icon Component (direct Lucide icon rendering) ──────────────────
 export const LucideIconComponent: React.FC<{
   name?: string;
   size?: number;
   color?: string;
   strokeWidth?: number;
 }> = ({ name = 'Star', size = 24, color, strokeWidth = 2 }) => {
-  const Icon = icons[name as keyof typeof icons] as LucideIcon | undefined;
+  const Icon = lucideIcons[name as keyof typeof lucideIcons] as LucideIcon | undefined;
   
   if (!Icon) {
     return (
@@ -205,6 +205,81 @@ export const LucideIconComponent: React.FC<{
       color={color || 'currentColor'} 
       strokeWidth={strokeWidth}
     />
+  );
+};
+
+// ─── Heroicons Component (outline & solid variants) ────────────────────────
+export const HeroIconComponent: React.FC<{
+  name?: string;
+  variant?: 'outline' | 'solid';
+  size?: number;
+  color?: string;
+}> = ({ name = 'HomeIcon', variant = 'outline', size = 24, color }) => {
+  const iconSet = variant === 'solid' ? HeroSolid : HeroOutline;
+  const Icon = iconSet[name as keyof typeof iconSet] as React.ComponentType<{ className?: string; style?: React.CSSProperties }> | undefined;
+  
+  if (!Icon) {
+    return (
+      <span style={{ 
+        fontSize: `${size}px`, 
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        🏠
+      </span>
+    );
+  }
+
+  return (
+    <Icon 
+      style={{ width: size, height: size, color: color || 'currentColor' }}
+    />
+  );
+};
+
+// ─── Universal Icon Component (supports multiple libraries) ────────────────
+export const UniversalIconComponent: React.FC<{
+  name?: string;
+  library?: 'lucide' | 'heroicons-outline' | 'heroicons-solid';
+  size?: number;
+  color?: string;
+  strokeWidth?: number;
+}> = ({ name = 'Star', library = 'lucide', size = 24, color, strokeWidth = 2 }) => {
+  // Lucide icons
+  if (library === 'lucide') {
+    const Icon = lucideIcons[name as keyof typeof lucideIcons] as LucideIcon | undefined;
+    if (Icon) {
+      return <Icon size={size} color={color || 'currentColor'} strokeWidth={strokeWidth} />;
+    }
+  }
+  
+  // Heroicons outline
+  if (library === 'heroicons-outline') {
+    const Icon = HeroOutline[name as keyof typeof HeroOutline] as React.ComponentType<{ className?: string; style?: React.CSSProperties }> | undefined;
+    if (Icon) {
+      return <Icon style={{ width: size, height: size, color: color || 'currentColor' }} />;
+    }
+  }
+  
+  // Heroicons solid
+  if (library === 'heroicons-solid') {
+    const Icon = HeroSolid[name as keyof typeof HeroSolid] as React.ComponentType<{ className?: string; style?: React.CSSProperties }> | undefined;
+    if (Icon) {
+      return <Icon style={{ width: size, height: size, color: color || 'currentColor' }} />;
+    }
+  }
+
+  // Fallback
+  return (
+    <span style={{ 
+      fontSize: `${size}px`, 
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}>
+      ⭐
+    </span>
   );
 };
 
