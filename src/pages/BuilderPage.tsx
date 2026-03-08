@@ -512,6 +512,7 @@ const BuilderPage = () => {
               {activePanel === 'booking' && <BookingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'apps' && <AppMarketPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'ai' && <AIToolsPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'marketplace' && <MarketplacePanel onClose={() => setActivePanel(null)} />}
             </Suspense>
 
             {/* Main canvas */}
