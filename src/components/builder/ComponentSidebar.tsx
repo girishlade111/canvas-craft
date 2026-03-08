@@ -153,9 +153,9 @@ const ComponentSidebar = ({ onClose }: ComponentSidebarProps) => {
                   </button>
                   {isOpen && (
                     <div className="px-2 pb-2 space-y-0.5">
-                      {componentLibrary[cat].map((comp) => (
-                        <DraggableItem key={comp.type} type={comp.type} label={comp.label} icon={comp.icon} isContainer={comp.isContainer} />
-                      ))}
+                    {componentLibrary[cat].map((comp, idx) => (
+                      <DraggableItem key={`${cat}-${comp.type}-${idx}`} uniqueId={`library-${cat}-${comp.type}-${idx}`} type={comp.type} label={comp.label} icon={comp.icon} isContainer={comp.isContainer} />
+                    ))}
                     </div>
                   )}
                 </div>
