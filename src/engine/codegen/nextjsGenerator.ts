@@ -538,6 +538,120 @@ next-env.d.ts
 *.swo
 `;
 
+  // .env.local — Environment variables template (Next.js uses .env.local)
+  files['.env.local'] = `# ════════════════════════════════════════════════════════════
+# Environment Variables — ${projectName}
+# ════════════════════════════════════════════════════════════
+# ⚠️  WARNING: Never commit this file with real credentials!
+# This file is for local development only.
+# ════════════════════════════════════════════════════════════
+
+# ─── Analytics & Tracking ────────────────────────────────────
+NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=
+NEXT_PUBLIC_GTM_ID=
+NEXT_PUBLIC_HOTJAR_ID=
+NEXT_PUBLIC_MIXPANEL_TOKEN=
+NEXT_PUBLIC_POSTHOG_KEY=
+
+# ─── Payment Providers ───────────────────────────────────────
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=
+NEXT_PUBLIC_PAYPAL_CLIENT_ID=
+
+# ─── Email Services ──────────────────────────────────────────
+MAILCHIMP_API_KEY=
+SENDGRID_API_KEY=
+RESEND_API_KEY=
+
+# ─── Authentication ──────────────────────────────────────────
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=
+NEXT_PUBLIC_AUTH0_DOMAIN=
+NEXT_PUBLIC_AUTH0_CLIENT_ID=
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+
+# ─── Supabase ────────────────────────────────────────────────
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# ─── Firebase ────────────────────────────────────────────────
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+
+# ─── Database ────────────────────────────────────────────────
+DATABASE_URL=
+
+# ─── CMS & Content ───────────────────────────────────────────
+NEXT_PUBLIC_CONTENTFUL_SPACE_ID=
+NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN=
+NEXT_PUBLIC_SANITY_PROJECT_ID=
+NEXT_PUBLIC_SANITY_DATASET=
+
+# ─── AI Services ─────────────────────────────────────────────
+OPENAI_API_KEY=
+ANTHROPIC_API_KEY=
+
+# ─── Maps & Location ─────────────────────────────────────────
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
+NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=
+
+# ─── Social Media ────────────────────────────────────────────
+NEXT_PUBLIC_FACEBOOK_APP_ID=
+TWITTER_API_KEY=
+TWITTER_API_SECRET=
+
+# ─── Cloud Storage ───────────────────────────────────────────
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_S3_BUCKET=
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+# ─── Custom API Keys ─────────────────────────────────────────
+# NEXT_PUBLIC_ prefix exposes to client-side code
+# Without NEXT_PUBLIC_ prefix = server-side only (keep secrets here)
+
+`;
+
+  // .env.example — Template for team sharing
+  files['.env.example'] = `# ════════════════════════════════════════════════════════════
+# Environment Variables Template — ${projectName}
+# ════════════════════════════════════════════════════════════
+# Copy this file to .env.local and fill in your credentials.
+# Never commit .env.local with real values!
+# ════════════════════════════════════════════════════════════
+
+# Analytics
+NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
+NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
+
+# Payment (Stripe)
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_xxxxxxxxxxxxx
+STRIPE_SECRET_KEY=sk_test_xxxxxxxxxxxxx
+
+# Email
+SENDGRID_API_KEY=SG.xxxxxxxxxxxxx
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJxxxxxxxxxxxxx
+
+# NextAuth
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-here
+
+# Database
+DATABASE_URL=postgresql://user:password@localhost:5432/dbname
+
+# Add more as needed...
+`;
+
   // public/placeholder.svg
   files['public/placeholder.svg'] = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
   <rect fill="#f1f5f9" width="800" height="600"/>

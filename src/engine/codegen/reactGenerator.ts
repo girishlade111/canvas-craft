@@ -754,6 +754,109 @@ npm-debug.log*
 coverage/
 `;
 
+  // .env — Environment variables template
+  files['.env'] = `# ════════════════════════════════════════════════════════════
+# Environment Variables — ${projectName}
+# ════════════════════════════════════════════════════════════
+# ⚠️  WARNING: Never commit this file with real credentials!
+# Copy this file to .env.local for local development.
+# ════════════════════════════════════════════════════════════
+
+# ─── Analytics & Tracking ────────────────────────────────────
+VITE_GOOGLE_ANALYTICS_ID=
+VITE_GTM_ID=
+VITE_HOTJAR_ID=
+VITE_MIXPANEL_TOKEN=
+VITE_POSTHOG_KEY=
+
+# ─── Payment Providers ───────────────────────────────────────
+VITE_STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=
+VITE_PAYPAL_CLIENT_ID=
+
+# ─── Email Services ──────────────────────────────────────────
+MAILCHIMP_API_KEY=
+SENDGRID_API_KEY=
+RESEND_API_KEY=
+
+# ─── Authentication ──────────────────────────────────────────
+VITE_AUTH0_DOMAIN=
+VITE_AUTH0_CLIENT_ID=
+VITE_CLERK_PUBLISHABLE_KEY=
+
+# ─── Supabase ────────────────────────────────────────────────
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# ─── Firebase ────────────────────────────────────────────────
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+
+# ─── CMS & Content ───────────────────────────────────────────
+VITE_CONTENTFUL_SPACE_ID=
+VITE_CONTENTFUL_ACCESS_TOKEN=
+VITE_SANITY_PROJECT_ID=
+VITE_SANITY_DATASET=
+
+# ─── AI Services ─────────────────────────────────────────────
+OPENAI_API_KEY=
+ANTHROPIC_API_KEY=
+
+# ─── Maps & Location ─────────────────────────────────────────
+VITE_GOOGLE_MAPS_API_KEY=
+VITE_MAPBOX_ACCESS_TOKEN=
+
+# ─── Social Media ────────────────────────────────────────────
+VITE_FACEBOOK_APP_ID=
+TWITTER_API_KEY=
+TWITTER_API_SECRET=
+
+# ─── Cloud Storage ───────────────────────────────────────────
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_S3_BUCKET=
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+# ─── Custom API Keys ─────────────────────────────────────────
+# Add your custom API keys below
+# VITE_ prefix exposes to client-side code
+# Without VITE_ prefix = server-side only (keep secrets here)
+
+`;
+
+  // .env.example — Template for team sharing
+  files['.env.example'] = `# ════════════════════════════════════════════════════════════
+# Environment Variables Template — ${projectName}
+# ════════════════════════════════════════════════════════════
+# Copy this file to .env and fill in your credentials.
+# Never commit .env with real values!
+# ════════════════════════════════════════════════════════════
+
+# Analytics
+VITE_GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
+VITE_GTM_ID=GTM-XXXXXXX
+
+# Payment (Stripe)
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_xxxxxxxxxxxxx
+STRIPE_SECRET_KEY=sk_test_xxxxxxxxxxxxx
+
+# Email
+SENDGRID_API_KEY=SG.xxxxxxxxxxxxx
+
+# Supabase
+VITE_SUPABASE_URL=https://xxxxx.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJxxxxxxxxxxxxx
+
+# Add more as needed...
+`;
+
   // VS Code settings for great DX
   files['.vscode/settings.json'] = JSON.stringify(
     {
