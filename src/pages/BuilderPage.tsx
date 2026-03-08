@@ -34,6 +34,7 @@ const MarketingPanel = lazy(() => import('@/components/builder/MarketingPanel'))
 const BookingPanel = lazy(() => import('@/components/builder/BookingPanel'));
 const AppMarketPanel = lazy(() => import('@/components/builder/AppMarketPanel'));
 const AIToolsPanel = lazy(() => import('@/components/builder/AIToolsPanel'));
+const ExportDialog = lazy(() => import('@/components/builder/ExportDialog'));
 
 import {
   DndContext,
@@ -95,6 +96,7 @@ const BuilderPage = () => {
   const [activePanel, setActivePanel] = useState<LeftPanel>('elements');
   const [showPublish, setShowPublish] = useState(false);
   const [showAuthGate, setShowAuthGate] = useState(false);
+  const [showExportDialog, setShowExportDialog] = useState(false);
   const [activeDrag, setActiveDrag] = useState<{
     type: string;
     label: string;
@@ -426,6 +428,7 @@ const BuilderPage = () => {
             onExportHTML={handleExportHTML}
             onExportReact={handleExportReact}
             onAuthRequired={handleAuthRequired}
+            onOpenExportDialog={() => setShowExportDialog(true)}
           />
 
           {actualProjectId && (
@@ -522,6 +525,19 @@ const BuilderPage = () => {
               projectId={actualProjectId}
               isOpen={showPublish}
               onClose={() => setShowPublish(false)}
+            />
+          )}
+
+          {showExportDialog && (
+            <ExportDialog
+              isOpen={showExportDialog}
+              onClose={() => setShowExportDialog(false)}
+              projectId={actualProjectId ?? undefined}
+              pages={pages?.map(p => ({
+                name: p.name,
+                slug: p.slug,
+                schema: p.schema as unknown as PageSchema,
+              }))}
             />
           )}
         </Suspense>
