@@ -651,17 +651,28 @@ const PropertiesPanel = () => {
       {/* Design tab */}
       {activeTab === 'design' && (
         <>
-          {selectedComponent.content !== undefined && (
-            <div className="property-group">
-              <span className="property-label">Content</span>
-              <textarea
-                value={selectedComponent.content || ''}
-                onChange={(e) => updateComponent(selectedComponentId, { content: e.target.value })}
-                className="property-input resize-y min-h-[60px]"
-                rows={3}
-              />
-            </div>
-          )}
+          {/* Content editor — show for all components that can have content */}
+          <div className="property-group">
+            <span className="property-label">Content</span>
+            <textarea
+              value={selectedComponent.content || ''}
+              onChange={(e) => updateComponent(selectedComponentId, { content: e.target.value })}
+              className="property-input resize-y min-h-[60px]"
+              rows={3}
+              placeholder={`Enter content for ${selectedComponent.label}...`}
+            />
+          </div>
+
+          {/* Label */}
+          <div className="property-group">
+            <span className="property-label">Label</span>
+            <input
+              value={selectedComponent.label || ''}
+              onChange={(e) => updateComponent(selectedComponentId, { label: e.target.value })}
+              className="property-input"
+              placeholder="Component label"
+            />
+          </div>
 
           {Object.entries(propertyGroups).map(([group, fields]) => {
             if (['Layout'].includes(group)) return null;

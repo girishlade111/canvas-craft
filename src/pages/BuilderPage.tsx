@@ -351,9 +351,9 @@ const BuilderPage = () => {
         type: compDef.type,
         category: compDef.category,
         label: compDef.label,
-        content: compDef.defaultContent,
+        content: compDef.defaultContent || '',
         styles: compDef.defaultStyles || {},
-        props: compDef.defaultProps,
+        props: compDef.defaultProps || {},
         isContainer: compDef.isContainer,
         children: compDef.isContainer ? [] : undefined,
       };
