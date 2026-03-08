@@ -73,11 +73,12 @@ const CMSPanel = ({ onClose }: CMSPanelProps) => {
 
   const handleAddPost = () => {
     if (!newPost.title.trim()) return;
+    const status = newPost.status as BlogPost['status'];
     const post: BlogPost = {
       id: Date.now().toString(),
       title: newPost.title,
       slug: newPost.title.toLowerCase().replace(/\s+/g, '-'),
-      status: newPost.status,
+      status,
       category: newPost.category,
       tags: [],
       author: 'Admin',
