@@ -506,19 +506,23 @@ const BuilderPage = () => {
           ) : null}
         </DragOverlay>
 
-        <AuthGateDialog
-          isOpen={showAuthGate}
-          onClose={() => setShowAuthGate(false)}
-          onAuthenticated={handleAuthComplete}
-        />
+        <Suspense fallback={null}>
+          {showAuthGate && (
+            <AuthGateDialog
+              isOpen={showAuthGate}
+              onClose={() => setShowAuthGate(false)}
+              onAuthenticated={handleAuthComplete}
+            />
+          )}
 
-        {actualProjectId && (
-          <PublishDialog
-            projectId={actualProjectId}
-            isOpen={showPublish}
-            onClose={() => setShowPublish(false)}
-          />
-        )}
+          {actualProjectId && showPublish && (
+            <PublishDialog
+              projectId={actualProjectId}
+              isOpen={showPublish}
+              onClose={() => setShowPublish(false)}
+            />
+          )}
+        </Suspense>
       </DndContext>
     </ClipboardProvider>
   );
