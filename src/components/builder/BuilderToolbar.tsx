@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Undo2, Redo2, Eye, Monitor, Tablet, Smartphone, Save, Upload,
   Code2, Download, Lock, Loader2, FileArchive, Github, Globe,
-  ChevronDown, ExternalLink, FolderOpen,
+  ChevronDown, ExternalLink, FolderOpen, Cloud,
 } from 'lucide-react';
 import type { DeviceView } from '@/types/builder';
 import { useState } from 'react';
@@ -28,12 +28,13 @@ interface BuilderToolbarProps {
   onExportReact?: () => void;
   onAuthRequired?: () => void;
   onOpenExportDialog?: () => void;
+  onSaveAsTemplate?: () => void;
 }
 
 const BuilderToolbar = ({
   onSave, isSaving, isAutosaving, projectId, onPublish,
   isAuthenticated, onExportZip, onExportHTML, onExportReact, onAuthRequired,
-  onOpenExportDialog,
+  onOpenExportDialog, onSaveAsTemplate,
 }: BuilderToolbarProps) => {
   const {
     schema, deviceView, setDeviceView, undo, redo, historyIndex, history,
@@ -232,6 +233,22 @@ const BuilderToolbar = ({
             </>
           )}
         </div>
+
+        {/* Save as Template */}
+        <button
+          onClick={() => {
+            if (!isAuthenticated) {
+              onAuthRequired?.();
+            } else {
+              onSaveAsTemplate?.();
+            }
+          }}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium hover:bg-muted transition-colors"
+          title="Save as Template"
+        >
+          <Cloud className="w-3.5 h-3.5" />
+          <span className="hidden lg:inline">Template</span>
+        </button>
 
         <button
           onClick={onSave}

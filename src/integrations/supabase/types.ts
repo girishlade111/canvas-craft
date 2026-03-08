@@ -784,6 +784,57 @@ export type Database = {
           },
         ]
       }
+      templates: {
+        Row: {
+          author_id: string | null
+          category: string
+          created_at: string
+          description: string
+          id: string
+          installs: number
+          is_premium: boolean
+          is_public: boolean
+          name: string
+          preview_image_url: string | null
+          schema: Json
+          tags: string[]
+          thumbnail: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          installs?: number
+          is_premium?: boolean
+          is_public?: boolean
+          name: string
+          preview_image_url?: string | null
+          schema?: Json
+          tags?: string[]
+          thumbnail?: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          installs?: number
+          is_premium?: boolean
+          is_public?: boolean
+          name?: string
+          preview_image_url?: string | null
+          schema?: Json
+          tags?: string[]
+          thumbnail?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

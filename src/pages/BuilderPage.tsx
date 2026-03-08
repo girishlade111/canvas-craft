@@ -42,6 +42,7 @@ const InteractionsPanel = lazy(() => import('@/components/builder/InteractionsPa
 const MultiLanguagePanel = lazy(() => import('@/components/builder/MultiLanguagePanel'));
 const DomainPanel = lazy(() => import('@/components/builder/DomainPanel'));
 const AccessibilityPanel = lazy(() => import('@/components/builder/AccessibilityPanel'));
+const SaveTemplateDialog = lazy(() => import('@/components/builder/SaveTemplateDialog'));
 
 import {
   DndContext,
@@ -105,6 +106,7 @@ const BuilderPage = () => {
   const [showPublish, setShowPublish] = useState(false);
   const [showAuthGate, setShowAuthGate] = useState(false);
   const [showExportDialog, setShowExportDialog] = useState(false);
+  const [showSaveTemplate, setShowSaveTemplate] = useState(false);
   const [activeDrag, setActiveDrag] = useState<{
     type: string;
     label: string;
@@ -470,6 +472,7 @@ const BuilderPage = () => {
             onExportReact={handleExportReact}
             onAuthRequired={handleAuthRequired}
             onOpenExportDialog={() => setShowExportDialog(true)}
+            onSaveAsTemplate={() => setShowSaveTemplate(true)}
           />
 
           {actualProjectId && (
@@ -586,6 +589,13 @@ const BuilderPage = () => {
                 slug: p.slug,
                 schema: p.schema as unknown as PageSchema,
               }))}
+            />
+          )}
+
+          {showSaveTemplate && (
+            <SaveTemplateDialog
+              open={showSaveTemplate}
+              onClose={() => setShowSaveTemplate(false)}
             />
           )}
         </Suspense>
