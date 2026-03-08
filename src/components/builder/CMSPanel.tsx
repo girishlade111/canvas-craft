@@ -83,7 +83,7 @@ const CMSPanel = ({ onClose }: CMSPanelProps) => {
       tags: [],
       author: 'Admin',
       excerpt: '',
-      publishDate: newPost.status === 'published' ? new Date().toISOString().split('T')[0] : '',
+      publishDate: status === 'published' ? new Date().toISOString().split('T')[0] : '',
       readTime: '1 min',
       featured: false,
     };
