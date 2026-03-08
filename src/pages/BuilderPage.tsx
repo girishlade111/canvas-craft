@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useBuilderStore } from '@/store/builderStore';
 import { usePages, useSavePage, type Page } from '@/hooks/usePages';
@@ -6,33 +6,35 @@ import { useAutosave } from '@/hooks/useAutosave';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useAuth } from '@/hooks/useAuth';
 import { useCreateProject } from '@/hooks/useProjects';
-import { exportToStaticHTML, exportToReact, downloadFile } from '@/lib/exportProject';
-import { downloadZip } from '@/engine/codegen/zipExporter';
-import { generateProjectFiles } from '@/engine/deploy/vercelDeploy';
 import { toast } from 'sonner';
+
+// Core builder components — always needed
 import BuilderToolbar from '@/components/builder/BuilderToolbar';
-import ComponentSidebar from '@/components/builder/ComponentSidebar';
-import PropertiesPanel from '@/components/builder/PropertiesPanel';
 import BuilderCanvas from '@/components/builder/BuilderCanvas';
-import CodeEditorPanel from '@/components/builder/CodeEditorPanel';
-import AssetPanel from '@/components/builder/AssetPanel';
-import VersionHistoryPanel from '@/components/builder/VersionHistoryPanel';
-import PageManager from '@/components/builder/PageManager';
-import PublishDialog from '@/components/builder/PublishDialog';
-import AuthGateDialog from '@/components/builder/AuthGateDialog';
-import LayersPanel from '@/components/builder/LayersPanel';
-import AdvancedSEOPanel from '@/components/builder/AdvancedSEOPanel';
-import GlobalDesignPanel from '@/components/builder/GlobalDesignPanel';
-import PopupBuilderPanel from '@/components/builder/PopupBuilderPanel';
-import FormBuilderPanel from '@/components/builder/FormBuilderPanel';
-import PhotoStudioPanel from '@/components/builder/PhotoStudioPanel';
-import CMSPanel from '@/components/builder/CMSPanel';
-import EcommercePanel from '@/components/builder/EcommercePanel';
-import MarketingPanel from '@/components/builder/MarketingPanel';
-import BookingPanel from '@/components/builder/BookingPanel';
-import AppMarketPanel from '@/components/builder/AppMarketPanel';
-import AIToolsPanel from '@/components/builder/AIToolsPanel';
 import { CanvasContextMenu, ClipboardProvider } from '@/components/builder/CanvasContextMenu';
+
+// Lazy-loaded panels — only loaded when user opens them
+const ComponentSidebar = lazy(() => import('@/components/builder/ComponentSidebar'));
+const PropertiesPanel = lazy(() => import('@/components/builder/PropertiesPanel'));
+const CodeEditorPanel = lazy(() => import('@/components/builder/CodeEditorPanel'));
+const AssetPanel = lazy(() => import('@/components/builder/AssetPanel'));
+const VersionHistoryPanel = lazy(() => import('@/components/builder/VersionHistoryPanel'));
+const PageManager = lazy(() => import('@/components/builder/PageManager'));
+const PublishDialog = lazy(() => import('@/components/builder/PublishDialog'));
+const AuthGateDialog = lazy(() => import('@/components/builder/AuthGateDialog'));
+const LayersPanel = lazy(() => import('@/components/builder/LayersPanel'));
+const AdvancedSEOPanel = lazy(() => import('@/components/builder/AdvancedSEOPanel'));
+const GlobalDesignPanel = lazy(() => import('@/components/builder/GlobalDesignPanel'));
+const PopupBuilderPanel = lazy(() => import('@/components/builder/PopupBuilderPanel'));
+const FormBuilderPanel = lazy(() => import('@/components/builder/FormBuilderPanel'));
+const PhotoStudioPanel = lazy(() => import('@/components/builder/PhotoStudioPanel'));
+const CMSPanel = lazy(() => import('@/components/builder/CMSPanel'));
+const EcommercePanel = lazy(() => import('@/components/builder/EcommercePanel'));
+const MarketingPanel = lazy(() => import('@/components/builder/MarketingPanel'));
+const BookingPanel = lazy(() => import('@/components/builder/BookingPanel'));
+const AppMarketPanel = lazy(() => import('@/components/builder/AppMarketPanel'));
+const AIToolsPanel = lazy(() => import('@/components/builder/AIToolsPanel'));
+
 import {
   DndContext,
   DragOverlay,
@@ -45,7 +47,16 @@ import {
   type DragOverEvent,
 } from '@dnd-kit/core';
 import type { BuilderComponent, PageSchema, ComponentCategory } from '@/types/builder';
-import { componentLibrary } from '@/data/componentLibrary';
+
+// Lazy-loaded component library — cached after first load
+let _componentLibraryCache: typeof import('@/data/componentLibrary')['componentLibrary'] | null = null;
+const getComponentLibrary = async () => {
+  if (!_componentLibraryCache) {
+    const mod = await import('@/data/componentLibrary');
+    _componentLibraryCache = mod.componentLibrary;
+  }
+  return _componentLibraryCache;
+};
 
 import {
   Loader2, Plus, Layers, Image, History, Search,
@@ -97,6 +108,9 @@ const BuilderPage = () => {
 
   const { isSaving: isAutosaving } = useAutosave(isLocalMode ? null : currentPageId);
 
+  // Preload component library when builder mounts (lazy from main bundle)
+  useEffect(() => { getComponentLibrary(); }, []);
+
   useEffect(() => {
     if (!isLocalMode && pages?.length && !currentPageId) {
       const page = pages[0];
@@ -138,6 +152,10 @@ const BuilderPage = () => {
 
   const handleExportZip = async () => {
     try {
+      const [{ generateProjectFiles }, { downloadZip }] = await Promise.all([
+        import('@/engine/deploy/vercelDeploy'),
+        import('@/engine/codegen/zipExporter'),
+      ]);
       const files = generateProjectFiles(schema);
       await downloadZip(files, schema.name || 'my-website');
       toast.success('ZIP downloaded — open in VS Code and run npm install');
@@ -146,12 +164,14 @@ const BuilderPage = () => {
     }
   };
 
-  const handleExportHTML = () => {
+  const handleExportHTML = async () => {
+    const { exportToStaticHTML, downloadFile } = await import('@/lib/exportProject');
     const html = exportToStaticHTML(schema);
     downloadFile(`${schema.name || 'page'}.html`, html);
   };
 
-  const handleExportReact = () => {
+  const handleExportReact = async () => {
+    const { exportToReact, downloadFile } = await import('@/lib/exportProject');
     const files = exportToReact(schema);
     Object.entries(files).forEach(([filename, content]) => {
       downloadFile(filename, content, 'text/typescript');
@@ -273,10 +293,11 @@ const BuilderPage = () => {
     // ── CASE 2: Library to canvas (add new component) ──
     if (!activeData?.fromLibrary) return;
 
+    if (!_componentLibraryCache) return;
     const compType = activeData.type as string;
     let compDef = null;
-    for (const cat of Object.keys(componentLibrary) as ComponentCategory[]) {
-      compDef = componentLibrary[cat].find(c => c.type === compType);
+    for (const cat of Object.keys(_componentLibraryCache) as ComponentCategory[]) {
+      compDef = _componentLibraryCache[cat].find(c => c.type === compType);
       if (compDef) break;
     }
     if (!compDef) return;
@@ -434,26 +455,28 @@ const BuilderPage = () => {
               })}
             </div>
 
-            {/* Flyout panels */}
-            {activePanel === 'elements' && (
-              <ComponentSidebar onClose={() => setActivePanel(null)} />
-            )}
-            {activePanel === 'layers' && <LayersPanel />}
-            {activePanel === 'assets' && actualProjectId && <AssetPanel projectId={actualProjectId} />}
-            {activePanel === 'seo' && <AdvancedSEOPanel onClose={() => setActivePanel(null)} />}
-            {activePanel === 'versions' && currentPageId && <VersionHistoryPanel pageId={currentPageId} />}
-            {activePanel === 'design' && <GlobalDesignPanel onClose={() => setActivePanel(null)} />}
-            {activePanel === 'popups' && <PopupBuilderPanel onClose={() => setActivePanel(null)} />}
-            {activePanel === 'forms' && <FormBuilderPanel onClose={() => setActivePanel(null)} />}
-            {activePanel === 'photo-studio' && selectedComponentId && (
-              <PhotoStudioPanel componentId={selectedComponentId} onClose={() => setActivePanel(null)} />
-            )}
-            {activePanel === 'cms' && <CMSPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
-            {activePanel === 'store' && <EcommercePanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
-            {activePanel === 'marketing' && <MarketingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
-            {activePanel === 'booking' && <BookingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
-            {activePanel === 'apps' && <AppMarketPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
-            {activePanel === 'ai' && <AIToolsPanel onClose={() => setActivePanel(null)} />}
+            {/* Flyout panels — lazy loaded on demand */}
+            <Suspense fallback={<div className="builder-flyout-panel p-4 text-center text-muted-foreground text-sm">Loading...</div>}>
+              {activePanel === 'elements' && (
+                <ComponentSidebar onClose={() => setActivePanel(null)} />
+              )}
+              {activePanel === 'layers' && <LayersPanel />}
+              {activePanel === 'assets' && actualProjectId && <AssetPanel projectId={actualProjectId} />}
+              {activePanel === 'seo' && <AdvancedSEOPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'versions' && currentPageId && <VersionHistoryPanel pageId={currentPageId} />}
+              {activePanel === 'design' && <GlobalDesignPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'popups' && <PopupBuilderPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'forms' && <FormBuilderPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'photo-studio' && selectedComponentId && (
+                <PhotoStudioPanel componentId={selectedComponentId} onClose={() => setActivePanel(null)} />
+              )}
+              {activePanel === 'cms' && <CMSPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+              {activePanel === 'store' && <EcommercePanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+              {activePanel === 'marketing' && <MarketingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+              {activePanel === 'booking' && <BookingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+              {activePanel === 'apps' && <AppMarketPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+              {activePanel === 'ai' && <AIToolsPanel onClose={() => setActivePanel(null)} />}
+            </Suspense>
 
             {/* Main canvas */}
             <CanvasContextMenu>
@@ -461,10 +484,14 @@ const BuilderPage = () => {
             </CanvasContextMenu>
 
             {/* Right properties panel */}
-            {rightSidebarOpen && selectedComponentId && <PropertiesPanel />}
+            <Suspense fallback={null}>
+              {rightSidebarOpen && selectedComponentId && <PropertiesPanel />}
+            </Suspense>
           </div>
 
-          {codeEditorOpen && <CodeEditorPanel />}
+          <Suspense fallback={null}>
+            {codeEditorOpen && <CodeEditorPanel />}
+          </Suspense>
         </div>
 
         {/* Drag overlay — ghost preview */}
