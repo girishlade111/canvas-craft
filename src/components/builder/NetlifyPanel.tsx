@@ -127,8 +127,9 @@ const NetlifyPanel = ({ projectId, onClose, onBack }: NetlifyPanelProps) => {
             updates: {
               status: 'completed',
               deployment_url: result.url,
-              provider: 'netlify',
               build_log: `Deployed to Netlify: ${result.url} (${result.deployId})`,
+            },
+          });
             },
           });
         }
