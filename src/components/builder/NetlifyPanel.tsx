@@ -131,7 +131,6 @@ const NetlifyPanel = ({ projectId, onClose, onBack }: NetlifyPanelProps) => {
             },
           });
         }
-        }
 
         toast.success('🚀 Deployed to Netlify successfully!');
       } else {
