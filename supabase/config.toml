@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.seed-interactive-elements]
 verify_jwt = false
+
+[functions.seed-premium-templates]
+verify_jwt = false
