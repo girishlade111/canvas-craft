@@ -130,8 +130,7 @@ const NetlifyPanel = ({ projectId, onClose, onBack }: NetlifyPanelProps) => {
               build_log: `Deployed to Netlify: ${result.url} (${result.deployId})`,
             },
           });
-            },
-          });
+        }
         }
 
         toast.success('🚀 Deployed to Netlify successfully!');
