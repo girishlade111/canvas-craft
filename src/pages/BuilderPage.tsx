@@ -36,6 +36,7 @@ const AppMarketPanel = lazy(() => import('@/components/builder/AppMarketPanel'))
 const AIToolsPanel = lazy(() => import('@/components/builder/AIToolsPanel'));
 const ExportDialog = lazy(() => import('@/components/builder/ExportDialog'));
 const TemplatesPanel = lazy(() => import('@/components/builder/TemplatesPanel'));
+const MarketplacePanel = lazy(() => import('@/components/builder/MarketplacePanel'));
 
 import {
   DndContext,
@@ -63,13 +64,13 @@ const getComponentLibrary = async () => {
 import {
   Loader2, Plus, Layers, Image, History, Search,
   Palette, Megaphone, FileText, Camera, ShoppingBag,
-  CalendarDays, Store, Sparkles, BookOpen, LayoutTemplate,
+  CalendarDays, Store, Sparkles, BookOpen, LayoutTemplate, Package,
 } from 'lucide-react';
 
 const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const generateSectionId = () => `section-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-type LeftPanel = 'elements' | 'templates' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | 'cms' | 'store' | 'marketing' | 'booking' | 'apps' | 'ai' | null;
+type LeftPanel = 'elements' | 'templates' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | 'cms' | 'store' | 'marketing' | 'booking' | 'apps' | 'ai' | 'marketplace' | null;
 
 const BuilderPage = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -411,12 +412,13 @@ const BuilderPage = () => {
   const iconBarItems: { id: LeftPanel; icon: typeof Plus; label: string; show?: boolean }[] = [
     { id: 'elements', icon: Plus, label: 'Add' },
     { id: 'templates', icon: LayoutTemplate, label: 'Templates' },
+    { id: 'marketplace', icon: Package, label: 'Market' },
     { id: 'layers', icon: Layers, label: 'Layers' },
     { id: 'design', icon: Palette, label: 'Design' },
     { id: 'cms', icon: BookOpen, label: 'CMS' },
     { id: 'store', icon: ShoppingBag, label: 'Store' },
     { id: 'booking', icon: CalendarDays, label: 'Book' },
-    { id: 'marketing', icon: Megaphone, label: 'Market' },
+    { id: 'marketing', icon: Megaphone, label: 'Promo' },
     { id: 'ai', icon: Sparkles, label: 'AI' },
     { id: 'apps', icon: Store, label: 'Apps' },
     { id: 'assets', icon: Image, label: 'Media', show: !!actualProjectId },
@@ -510,6 +512,7 @@ const BuilderPage = () => {
               {activePanel === 'booking' && <BookingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'apps' && <AppMarketPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'ai' && <AIToolsPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'marketplace' && <MarketplacePanel onClose={() => setActivePanel(null)} />}
             </Suspense>
 
             {/* Main canvas */}
