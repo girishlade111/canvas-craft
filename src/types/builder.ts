@@ -165,6 +165,11 @@ export interface PageSchema {
   name: string;
   sections: PageSection[];
   symbols?: ComponentSymbol[];
+  // Site-wide settings
+  logo?: string;
+  favicon?: string;
+  metaTitle?: string;
+  metaDescription?: string;
 }
 
 // ─── Template ──────────────────────────────────────────────

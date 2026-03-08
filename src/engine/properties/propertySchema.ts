@@ -277,13 +277,44 @@ propertySchemas.set('payment-block', allStyleProps);
 
 // Navigation
 propertySchemas.set('navbar', [
-  { key: 'brandName', label: 'Brand', type: 'string', group: 'Component', defaultValue: 'Brand' },
-  { key: 'logoUrl', label: 'Logo URL', type: 'image', group: 'Component' },
-  { key: 'sticky', label: 'Sticky', type: 'boolean', group: 'Component', defaultValue: false },
+  { key: 'brandName', label: 'Brand Name', type: 'string', group: 'Component', defaultValue: 'Brand' },
+  { key: 'logoUrl', label: 'Logo', type: 'image', group: 'Component', placeholder: 'Upload or enter logo URL' },
+  { key: 'sticky', label: 'Sticky Header', type: 'boolean', group: 'Component', defaultValue: false },
   ...allStyleProps,
 ]);
 propertySchemas.set('sidebar-nav', allStyleProps);
 propertySchemas.set('breadcrumbs', allStyleProps);
+
+// Theme / Site Components
+propertySchemas.set('site-logo', [
+  { key: 'src', label: 'Logo Image', type: 'image', group: 'Component', placeholder: 'Upload or enter logo URL' },
+  { key: 'width', label: 'Width', type: 'string', group: 'Component', placeholder: '120px', defaultValue: '120px' },
+  { key: 'alt', label: 'Alt Text', type: 'string', group: 'Component', placeholder: 'Site logo' },
+  { key: 'linkUrl', label: 'Link URL', type: 'url', group: 'Component', placeholder: '/', defaultValue: '/' },
+  ...allStyleProps,
+]);
+propertySchemas.set('site-title', [
+  { key: 'content', label: 'Title', type: 'string', group: 'Component', placeholder: 'My Website' },
+  ...allStyleProps,
+]);
+propertySchemas.set('site-tagline', [
+  { key: 'content', label: 'Tagline', type: 'string', group: 'Component', placeholder: 'Your site tagline' },
+  ...allStyleProps,
+]);
+propertySchemas.set('navigation-menu', [
+  { key: 'items', label: 'Menu Items', type: 'code', group: 'Component', placeholder: 'Home\\nAbout\\nServices\\nContact' },
+  { key: 'layout', label: 'Layout', type: 'select', group: 'Component', options: [
+    { label: 'Horizontal', value: 'horizontal' }, { label: 'Vertical', value: 'vertical' },
+  ], defaultValue: 'horizontal' },
+  ...allStyleProps,
+]);
+propertySchemas.set('header', [
+  { key: 'logoUrl', label: 'Logo', type: 'image', group: 'Component' },
+  { key: 'brandName', label: 'Brand Name', type: 'string', group: 'Component', placeholder: 'Brand' },
+  { key: 'sticky', label: 'Sticky', type: 'boolean', group: 'Component', defaultValue: false },
+  ...allStyleProps,
+]);
+propertySchemas.set('footer', allStyleProps);
 
 // Advanced
 propertySchemas.set('html', [

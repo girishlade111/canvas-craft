@@ -4,12 +4,13 @@ import type { ComponentStyles, PropertySchema } from '@/types/builder';
 import { isContainerType } from '@/types/builder';
 import {
   X, ChevronDown, ChevronRight, Layers, LayoutDashboard, Smartphone,
-  Sparkles, Link2, Accessibility, Palette,
+  Sparkles, Link2, Accessibility, Palette, Upload, Image as ImageIcon, Trash2, ExternalLink,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import AutoLayoutPanel from './AutoLayoutPanel';
 import ResponsivePanel from './ResponsivePanel';
 import AnimationPanel from './AnimationPanel';
+import { toast } from 'sonner';
 
 const GOOGLE_FONTS = [
   'inherit', 'Inter', 'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Poppins',
@@ -20,6 +21,176 @@ const GOOGLE_FONTS = [
   'Permanent Marker', 'Lobster', 'Caveat', 'JetBrains Mono', 'Fira Code',
 ];
 
+// ─── Image/Logo Picker Component ───────────────────────────
+
+const ImagePickerField: React.FC<{
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  label?: string;
+}> = ({ value, onChange, placeholder, label }) => {
+  const [showUrlInput, setShowUrlInput] = useState(false);
+  const [urlInput, setUrlInput] = useState(value || '');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image must be less than 5MB');
+      return;
+    }
+
+    // Convert to base64 for local preview (in real app, upload to storage)
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      onChange(dataUrl);
+      toast.success('Image uploaded!');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleUrlSubmit = () => {
+    if (urlInput.trim()) {
+      onChange(urlInput.trim());
+      setShowUrlInput(false);
+      toast.success('Image URL set!');
+    }
+  };
+
+  const handleClear = () => {
+    onChange('');
+    setUrlInput('');
+    toast.success('Image removed');
+  };
+
+  return (
+    <div className="flex-1 space-y-2">
+      {/* Preview */}
+      {value && (
+        <div className="relative group rounded-lg overflow-hidden" style={{ background: 'hsl(var(--muted))' }}>
+          <img 
+            src={value} 
+            alt={label || 'Preview'} 
+            className="w-full h-20 object-contain"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/placeholder.svg';
+            }}
+          />
+          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+            <button
+              onClick={() => setShowUrlInput(true)}
+              className="p-1.5 rounded bg-white/20 hover:bg-white/30 transition-colors"
+              title="Change URL"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-white" />
+            </button>
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="p-1.5 rounded bg-white/20 hover:bg-white/30 transition-colors"
+              title="Upload new"
+            >
+              <Upload className="w-3.5 h-3.5 text-white" />
+            </button>
+            <button
+              onClick={handleClear}
+              className="p-1.5 rounded bg-red-500/50 hover:bg-red-500/70 transition-colors"
+              title="Remove"
+            >
+              <Trash2 className="w-3.5 h-3.5 text-white" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* No image - show upload options */}
+      {!value && !showUrlInput && (
+        <div 
+          className="flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 border-dashed cursor-pointer hover:border-primary/50 transition-colors"
+          style={{ borderColor: 'hsl(var(--border))' }}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <ImageIcon className="w-6 h-6 opacity-40" />
+          <span className="text-[10px] opacity-50 text-center">Click to upload or drag & drop</span>
+          <div className="flex gap-2 mt-1">
+            <button
+              onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+              className="px-2 py-1 text-[10px] rounded font-medium"
+              style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
+            >
+              Upload
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); setShowUrlInput(true); }}
+              className="px-2 py-1 text-[10px] rounded font-medium"
+              style={{ background: 'hsl(var(--muted))' }}
+            >
+              URL
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* URL Input */}
+      {showUrlInput && (
+        <div className="space-y-2">
+          <input
+            value={urlInput}
+            onChange={(e) => setUrlInput(e.target.value)}
+            placeholder={placeholder || 'https://example.com/logo.png'}
+            className="property-input w-full"
+            onKeyDown={(e) => e.key === 'Enter' && handleUrlSubmit()}
+          />
+          <div className="flex gap-1">
+            <button
+              onClick={handleUrlSubmit}
+              className="flex-1 px-2 py-1 text-[10px] rounded font-medium"
+              style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
+            >
+              Apply
+            </button>
+            <button
+              onClick={() => { setShowUrlInput(false); setUrlInput(value || ''); }}
+              className="px-2 py-1 text-[10px] rounded font-medium"
+              style={{ background: 'hsl(var(--muted))' }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileUpload}
+        className="hidden"
+      />
+
+      {/* Current URL display (if has value and not showing URL input) */}
+      {value && !showUrlInput && (
+        <input
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="property-input w-full text-[10px]"
+          placeholder="Image URL"
+        />
+      )}
+    </div>
+  );
+};
+
 // ─── Property Field Renderer ──────────────────────────────
 
 const PropertyField: React.FC<{
@@ -28,6 +199,18 @@ const PropertyField: React.FC<{
   onChange: (value: string) => void;
 }> = ({ schema, value, onChange }) => {
   const currentValue = value ?? schema.defaultValue ?? '';
+
+  // Image/Logo picker
+  if (schema.type === 'image') {
+    return (
+      <ImagePickerField
+        value={String(currentValue || '')}
+        onChange={onChange}
+        placeholder={schema.placeholder}
+        label={schema.label}
+      />
+    );
+  }
 
   if (schema.type === 'color') {
     return (
@@ -114,6 +297,28 @@ const STYLE_KEYS = new Set([
 
 const PageSettingsPanel = () => {
   const { schema, setSchema } = useBuilderStore();
+  const [favicon, setFavicon] = useState(schema.favicon || '');
+  const [siteLogo, setSiteLogo] = useState(schema.logo || '');
+
+  const handleFaviconChange = (url: string) => {
+    setFavicon(url);
+    setSchema({ ...schema, favicon: url });
+    // Also update the actual favicon in the document
+    if (url) {
+      let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+      }
+      link.href = url;
+    }
+  };
+
+  const handleLogoChange = (url: string) => {
+    setSiteLogo(url);
+    setSchema({ ...schema, logo: url });
+  };
 
   return (
     <div className="builder-properties-panel overflow-y-auto">
@@ -121,11 +326,43 @@ const PageSettingsPanel = () => {
         <h2 className="text-xs font-semibold uppercase tracking-wider opacity-60">Page Settings</h2>
       </div>
       <div className="p-4 space-y-4">
+        {/* Page Name */}
         <div>
           <label className="text-xs opacity-70 mb-1.5 block font-medium">Page Name</label>
           <input value={schema.name || ''} onChange={e => setSchema({ ...schema, name: e.target.value })}
             className="property-input" placeholder="Page name" />
         </div>
+
+        {/* Site Logo */}
+        <div>
+          <label className="text-xs opacity-70 mb-1.5 block font-medium flex items-center gap-1.5">
+            <ImageIcon className="w-3.5 h-3.5" />
+            Site Logo
+          </label>
+          <ImagePickerField
+            value={siteLogo}
+            onChange={handleLogoChange}
+            placeholder="Upload or enter logo URL"
+            label="Site Logo"
+          />
+        </div>
+
+        {/* Favicon */}
+        <div>
+          <label className="text-xs opacity-70 mb-1.5 block font-medium flex items-center gap-1.5">
+            <ImageIcon className="w-3.5 h-3.5" />
+            Favicon
+          </label>
+          <ImagePickerField
+            value={favicon}
+            onChange={handleFaviconChange}
+            placeholder="Upload favicon (32x32 or 64x64 recommended)"
+            label="Favicon"
+          />
+          <p className="text-[9px] opacity-40 mt-1">Recommended: 32×32 or 64×64 PNG/ICO</p>
+        </div>
+
+        {/* Page Background */}
         <div>
           <label className="text-xs opacity-70 mb-1.5 block font-medium">Page Background</label>
           <div className="flex items-center gap-2">
@@ -133,6 +370,8 @@ const PageSettingsPanel = () => {
             <input className="property-input flex-1" placeholder="Color or gradient" />
           </div>
         </div>
+
+        {/* Page Width */}
         <div>
           <label className="text-xs opacity-70 mb-1.5 block font-medium">Page Width</label>
           <select className="property-input" defaultValue="1280">
@@ -142,10 +381,12 @@ const PageSettingsPanel = () => {
             <option value="100%">Full Width</option>
           </select>
         </div>
+
+        {/* Sections */}
         <div>
           <label className="text-xs opacity-70 mb-1.5 block font-medium">Sections</label>
           <div className="space-y-1">
-            {schema.sections.map((s, i) => (
+            {schema.sections.map((s) => (
               <div key={s.id} className="flex items-center gap-2 p-2 rounded text-xs" style={{ background: 'hsl(var(--builder-component-bg))' }}>
                 <span className="font-medium flex-1">{s.label}</span>
                 <span className="opacity-30">{s.components.length} elements</span>
@@ -153,6 +394,8 @@ const PageSettingsPanel = () => {
             ))}
           </div>
         </div>
+
+        {/* Tip */}
         <div className="mt-4 p-3 rounded-lg text-xs" style={{ background: 'hsl(var(--builder-component-bg))' }}>
           <div className="font-medium mb-1">💡 Tip</div>
           <p className="text-[10px] opacity-50">Select an element on the canvas to edit its properties. Double-click text elements to edit inline.</p>
