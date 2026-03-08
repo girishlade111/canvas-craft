@@ -404,16 +404,16 @@ const ICON_CATEGORIES = {
   ],
 };
 
-// Icon libraries info
+// Icon libraries info - Updated with integrated status
 const ICON_LIBRARIES = [
-  { name: 'Lucide', count: '1000+', description: 'Beautiful & consistent icons', url: 'https://lucide.dev', color: 'hsl(var(--destructive))' },
-  { name: 'Heroicons', count: '450+', description: 'By the makers of Tailwind CSS', url: 'https://heroicons.com', color: 'hsl(var(--primary))' },
-  { name: 'Phosphor', count: '6000+', description: 'Flexible icon family', url: 'https://phosphoricons.com', color: 'hsl(142 71% 45%)' },
-  { name: 'Tabler', count: '4500+', description: 'Free and open source', url: 'https://tabler-icons.io', color: 'hsl(217 91% 60%)' },
-  { name: 'Feather', count: '287', description: 'Simply beautiful', url: 'https://feathericons.com', color: 'hsl(187 92% 41%)' },
-  { name: 'Ionicons', count: '1300+', description: 'Premium designed icons', url: 'https://ionic.io/ionicons', color: 'hsl(239 84% 67%)' },
-  { name: 'Bootstrap', count: '1800+', description: 'Official Bootstrap icons', url: 'https://icons.getbootstrap.com', color: 'hsl(263 70% 50%)' },
-  { name: 'Font Awesome', count: '16000+', description: 'The iconic library', url: 'https://fontawesome.com', color: 'hsl(38 92% 50%)' },
+  { name: 'Lucide', count: '1000+', description: 'Beautiful & consistent icons', url: 'https://lucide.dev', color: 'hsl(var(--destructive))', integrated: true },
+  { name: 'Heroicons', count: '450+', description: 'By the makers of Tailwind CSS', url: 'https://heroicons.com', color: 'hsl(var(--primary))', integrated: true },
+  { name: 'Phosphor', count: '6000+', description: 'Flexible icon family', url: 'https://phosphoricons.com', color: 'hsl(142 71% 45%)', integrated: false },
+  { name: 'Tabler', count: '4500+', description: 'Free and open source', url: 'https://tabler-icons.io', color: 'hsl(217 91% 60%)', integrated: false },
+  { name: 'Feather', count: '287', description: 'Simply beautiful', url: 'https://feathericons.com', color: 'hsl(187 92% 41%)', integrated: false },
+  { name: 'Ionicons', count: '1300+', description: 'Premium designed icons', url: 'https://ionic.io/ionicons', color: 'hsl(239 84% 67%)', integrated: false },
+  { name: 'Bootstrap', count: '1800+', description: 'Official Bootstrap icons', url: 'https://icons.getbootstrap.com', color: 'hsl(263 70% 50%)', integrated: false },
+  { name: 'Font Awesome', count: '16000+', description: 'The iconic library', url: 'https://fontawesome.com', color: 'hsl(38 92% 50%)', integrated: false },
 ];
 
 interface IconsPanelProps {
