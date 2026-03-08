@@ -2073,6 +2073,7 @@ interface AppMarketPanelProps {
   onClose?: () => void;
   onOpenVercel?: () => void;
   onOpenNetlify?: () => void;
+  onOpenRailway?: () => void;
 }
 
 /* ── Badge helpers ── */
