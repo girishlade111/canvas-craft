@@ -7,6 +7,18 @@ import {
   Share2, Webhook, PieChart, Megaphone, ArrowLeft,
   ExternalLink, Key, Settings, BookOpen, AlertCircle,
 } from 'lucide-react';
+import {
+  SupabaseIcon, StripeIcon, GitHubIcon, GoogleIcon, GoogleDocsIcon,
+  GoogleSheetsIcon, GoogleDriveIcon, OneDriveIcon, PerplexityIcon,
+  ChatGPTIcon, ClaudeIcon, ShopifyIcon, ElevenLabsIcon, SarvamAIIcon,
+  FirecrawlIcon, AtlassianIcon, CanvaIcon, FigmaIcon, V0Icon,
+  AirtableIcon, SpotifyIcon, ZohoIcon, BookingIcon, ExpediaIcon,
+  SlackIcon, NotionIcon, ZapierIcon, VercelIcon, TwilioIcon,
+  HubSpotIcon, AWSIcon, JiraIcon, LinearIcon, ResendIcon,
+  PostmanIcon, MongoDBIcon, PrismaIcon, MixpanelIcon, SegmentIcon,
+  LottieIcon, SanityIcon, ContentfulIcon, ReplicateIcon, DeepgramIcon,
+  MakeIcon, N8NIcon,
+} from './BrandIcons';
 import { useInstalledApps, useInstallApp, useUninstallApp } from '@/hooks/useInstalledApps';
 import { toast } from 'sonner';
 
@@ -31,7 +43,7 @@ interface AppDef {
   name: string;
   description: string;
   category: string;
-  icon: typeof Zap;
+  icon: React.FC<{ className?: string; style?: React.CSSProperties }>;
   rating: number;
   installs: string;
   free: boolean;
@@ -41,25 +53,84 @@ interface AppDef {
   setupSteps: SetupStep[];
 }
 
-/* ── Expanded app catalog with connection guides ── */
+/* ── Expanded app catalog ── */
 const APP_CATALOG: AppDef[] = [
+  // ── Backend & Database ──
   {
-    key: 'google-analytics', name: 'Google Analytics', description: 'Track visitors, conversions and behavior',
-    category: 'Analytics', icon: BarChart3, rating: 4.8, installs: '50K+', free: true,
-    docsUrl: 'https://support.google.com/analytics/answer/9304153',
+    key: 'supabase', name: 'Supabase', description: 'Open-source Firebase alternative — Postgres, Auth, Storage, Realtime',
+    category: 'Backend', icon: SupabaseIcon, rating: 4.9, installs: '120K+', free: true,
+    docsUrl: 'https://supabase.com/docs',
     configFields: [
-      { key: 'ga_tracking_id', label: 'Measurement ID', type: 'tracking_id', placeholder: 'G-XXXXXXXXXX', required: true },
+      { key: 'supabase_url', label: 'Project URL', type: 'custom', placeholder: 'https://xxx.supabase.co', required: true },
+      { key: 'supabase_anon_key', label: 'Anon Key', type: 'api_key', placeholder: 'eyJhbGciOiJIUz...', required: true },
     ],
     setupSteps: [
-      { step: 1, title: 'Create a Google Analytics account', description: 'Go to analytics.google.com and sign up or log in.' },
-      { step: 2, title: 'Create a property', description: 'Click Admin → Create Property and follow the wizard.' },
-      { step: 3, title: 'Get your Measurement ID', description: 'Go to Admin → Data Streams → Web, copy the Measurement ID (starts with G-).' },
-      { step: 4, title: 'Paste the ID above', description: 'Enter your Measurement ID and click Save to start tracking.' },
+      { step: 1, title: 'Create a Supabase project', description: 'Go to supabase.com and create a new project.' },
+      { step: 2, title: 'Get your API keys', description: 'Go to Settings → API and copy the Project URL and anon key.' },
+      { step: 3, title: 'Enter credentials above', description: 'Paste both values to connect your Supabase project.' },
     ],
   },
   {
-    key: 'stripe', name: 'Stripe Payments', description: 'Accept credit card payments securely',
-    category: 'eCommerce', icon: CreditCard, rating: 4.9, installs: '200K+', free: true,
+    key: 'firebase', name: 'Firebase', description: 'Google\'s app platform — auth, database, storage',
+    category: 'Backend', icon: GoogleIcon, rating: 4.8, installs: '80K+', free: true,
+    docsUrl: 'https://firebase.google.com/docs/web/setup',
+    configFields: [
+      { key: 'firebase_api_key', label: 'API Key', type: 'api_key', placeholder: 'AIzaSy...', required: true },
+      { key: 'firebase_project_id', label: 'Project ID', type: 'project_id', placeholder: 'my-project-12345', required: true },
+      { key: 'firebase_auth_domain', label: 'Auth Domain', type: 'custom', placeholder: 'my-project.firebaseapp.com', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to Firebase Console', description: 'Visit console.firebase.google.com and create a new project.' },
+      { step: 2, title: 'Register a web app', description: 'Click the Web icon (</>), name your app, and register.' },
+      { step: 3, title: 'Copy config', description: 'Copy API Key, Project ID, and Auth Domain from the config snippet.' },
+    ],
+  },
+  {
+    key: 'mongodb', name: 'MongoDB Atlas', description: 'Cloud-hosted NoSQL document database',
+    category: 'Backend', icon: MongoDBIcon, rating: 4.7, installs: '55K+', free: true,
+    docsUrl: 'https://www.mongodb.com/docs/atlas/',
+    configFields: [
+      { key: 'mongodb_uri', label: 'Connection String', type: 'custom', placeholder: 'mongodb+srv://user:pass@cluster.mongodb.net/db', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create an Atlas account', description: 'Go to cloud.mongodb.com and sign up.' },
+      { step: 2, title: 'Create a cluster', description: 'Set up a free M0 cluster in your preferred region.' },
+      { step: 3, title: 'Get connection string', description: 'Click Connect → Drivers → copy the connection string.' },
+    ],
+  },
+  {
+    key: 'prisma', name: 'Prisma', description: 'Type-safe ORM for Node.js & TypeScript',
+    category: 'Backend', icon: PrismaIcon, rating: 4.6, installs: '40K+', free: true,
+    docsUrl: 'https://www.prisma.io/docs',
+    configFields: [
+      { key: 'database_url', label: 'Database URL', type: 'custom', placeholder: 'postgresql://user:pass@host:5432/db', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Install Prisma', description: 'Run npm install prisma @prisma/client in your project.' },
+      { step: 2, title: 'Init Prisma', description: 'Run npx prisma init to create schema.prisma.' },
+      { step: 3, title: 'Set database URL', description: 'Enter your database connection string above.' },
+    ],
+  },
+  {
+    key: 'aws', name: 'AWS', description: 'Amazon Web Services — S3, Lambda, CloudFront & more',
+    category: 'Backend', icon: AWSIcon, rating: 4.7, installs: '70K+', free: false, price: 0,
+    docsUrl: 'https://docs.aws.amazon.com/',
+    configFields: [
+      { key: 'aws_access_key', label: 'Access Key ID', type: 'api_key', placeholder: 'AKIA...', required: true, secret: true },
+      { key: 'aws_secret_key', label: 'Secret Access Key', type: 'api_key', placeholder: 'wJalrXUtnFEMI...', required: true, secret: true },
+      { key: 'aws_region', label: 'Region', type: 'custom', placeholder: 'us-east-1', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign in to AWS Console', description: 'Go to console.aws.amazon.com.' },
+      { step: 2, title: 'Create IAM user', description: 'Go to IAM → Users → Create user with programmatic access.' },
+      { step: 3, title: 'Copy credentials', description: 'Save the Access Key ID and Secret Access Key.' },
+    ],
+  },
+
+  // ── Payments & eCommerce ──
+  {
+    key: 'stripe', name: 'Stripe', description: 'Accept credit card payments securely',
+    category: 'eCommerce', icon: StripeIcon, rating: 4.9, installs: '200K+', free: true,
     docsUrl: 'https://docs.stripe.com/keys',
     configFields: [
       { key: 'stripe_publishable_key', label: 'Publishable Key', type: 'api_key', placeholder: 'pk_live_...', required: true },
@@ -67,127 +138,482 @@ const APP_CATALOG: AppDef[] = [
     ],
     setupSteps: [
       { step: 1, title: 'Create a Stripe account', description: 'Go to dashboard.stripe.com and register.' },
-      { step: 2, title: 'Get your API keys', description: 'Navigate to Developers → API Keys in your Stripe dashboard.' },
-      { step: 3, title: 'Copy both keys', description: 'Copy the Publishable Key (pk_live_...) and Secret Key (sk_live_...).' },
-      { step: 4, title: 'Paste and save', description: 'Enter both keys above. The Secret Key is stored securely.' },
+      { step: 2, title: 'Get your API keys', description: 'Navigate to Developers → API Keys.' },
+      { step: 3, title: 'Copy both keys', description: 'Copy the Publishable Key and Secret Key.' },
     ],
   },
   {
-    key: 'mailchimp', name: 'Mailchimp', description: 'Email marketing automation & newsletters',
-    category: 'Marketing', icon: Mail, rating: 4.7, installs: '100K+', free: true,
-    docsUrl: 'https://mailchimp.com/developer/marketing/guides/quick-start/',
+    key: 'shopify', name: 'Shopify', description: 'Complete eCommerce platform — products, checkout, inventory',
+    category: 'eCommerce', icon: ShopifyIcon, rating: 4.8, installs: '150K+', free: false, price: 29,
+    docsUrl: 'https://shopify.dev/docs/api',
     configFields: [
-      { key: 'mailchimp_api_key', label: 'API Key', type: 'api_key', placeholder: 'xxxxxxxx-us14', required: true, secret: true },
-      { key: 'mailchimp_list_id', label: 'Audience List ID', type: 'custom', placeholder: 'abc1234def', required: true },
+      { key: 'shopify_store_url', label: 'Store URL', type: 'custom', placeholder: 'your-store.myshopify.com', required: true },
+      { key: 'shopify_access_token', label: 'Admin API Access Token', type: 'token', placeholder: 'shpat_xxxxx', required: true, secret: true },
+      { key: 'shopify_storefront_token', label: 'Storefront Access Token', type: 'token', placeholder: 'xxxxx', required: true },
     ],
     setupSteps: [
-      { step: 1, title: 'Log in to Mailchimp', description: 'Go to mailchimp.com and sign in to your account.' },
-      { step: 2, title: 'Generate an API key', description: 'Go to Account → Extras → API Keys → Create A Key.' },
-      { step: 3, title: 'Find your Audience ID', description: 'Go to Audience → Settings → Audience name and defaults → copy the Audience ID.' },
-      { step: 4, title: 'Enter credentials', description: 'Paste both the API Key and Audience ID above.' },
+      { step: 1, title: 'Log in to Shopify', description: 'Go to your Shopify admin panel.' },
+      { step: 2, title: 'Create a custom app', description: 'Go to Settings → Apps → Develop apps → Create app.' },
+      { step: 3, title: 'Get API tokens', description: 'Install app and copy Admin API and Storefront tokens.' },
+    ],
+  },
+
+  // ── AI & Machine Learning ──
+  {
+    key: 'chatgpt', name: 'ChatGPT / OpenAI', description: 'GPT-4o, DALL-E, Whisper — AI text, image & audio',
+    category: 'AI', icon: ChatGPTIcon, rating: 4.9, installs: '300K+', free: false, price: 0,
+    docsUrl: 'https://platform.openai.com/docs',
+    configFields: [
+      { key: 'openai_api_key', label: 'API Key', type: 'api_key', placeholder: 'sk-proj-...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create an OpenAI account', description: 'Go to platform.openai.com and sign up.' },
+      { step: 2, title: 'Generate an API key', description: 'Go to API Keys → Create new secret key.' },
+      { step: 3, title: 'Paste the key above', description: 'Enter your API key to use GPT-4o, DALL-E, etc.' },
     ],
   },
   {
-    key: 'live-chat-pro', name: 'Tawk.to Chat', description: 'Free live chat widget for customer support',
-    category: 'Communication', icon: MessageSquare, rating: 4.6, installs: '25K+', free: true,
-    docsUrl: 'https://help.tawk.to/article/finding-your-tawk-to-widget-id',
+    key: 'claude', name: 'Anthropic Claude', description: 'Claude AI — safe, helpful AI assistant & code generation',
+    category: 'AI', icon: ClaudeIcon, rating: 4.9, installs: '180K+', free: false, price: 0,
+    docsUrl: 'https://docs.anthropic.com/',
     configFields: [
-      { key: 'tawk_property_id', label: 'Property ID', type: 'project_id', placeholder: '5xxxxxxxxxxxxxx', required: true },
-      { key: 'tawk_widget_id', label: 'Widget ID', type: 'custom', placeholder: '1xxxxxx', required: true },
+      { key: 'anthropic_api_key', label: 'API Key', type: 'api_key', placeholder: 'sk-ant-...', required: true, secret: true },
     ],
     setupSteps: [
-      { step: 1, title: 'Sign up at tawk.to', description: 'Go to tawk.to and create a free account.' },
-      { step: 2, title: 'Create a property', description: 'Add your website as a new property in the dashboard.' },
-      { step: 3, title: 'Get embed code IDs', description: 'Go to Administration → Chat Widget → find your Property ID and Widget ID from the embed code.' },
-      { step: 4, title: 'Enter the IDs', description: 'Paste both IDs above to activate the live chat on your site.' },
+      { step: 1, title: 'Create an Anthropic account', description: 'Go to console.anthropic.com and sign up.' },
+      { step: 2, title: 'Generate an API key', description: 'Go to API Keys → Create Key.' },
+      { step: 3, title: 'Enter the key above', description: 'Paste your API key to enable Claude integration.' },
     ],
   },
   {
-    key: 'calendly', name: 'Calendly', description: 'Scheduling & appointment booking',
-    category: 'Scheduling', icon: Calendar, rating: 4.5, installs: '30K+', free: false, price: 7.99,
-    docsUrl: 'https://developer.calendly.com/getting-started',
+    key: 'perplexity', name: 'Perplexity', description: 'AI-powered search and answer engine with citations',
+    category: 'AI', icon: PerplexityIcon, rating: 4.7, installs: '60K+', free: false, price: 0,
+    docsUrl: 'https://docs.perplexity.ai/',
     configFields: [
-      { key: 'calendly_api_key', label: 'Personal Access Token', type: 'token', placeholder: 'eyJhbGciOiJIUz...', required: true, secret: true },
-      { key: 'calendly_event_url', label: 'Event URL', type: 'custom', placeholder: 'https://calendly.com/your-name/30min', required: true },
+      { key: 'perplexity_api_key', label: 'API Key', type: 'api_key', placeholder: 'pplx-...', required: true, secret: true },
     ],
     setupSteps: [
-      { step: 1, title: 'Log in to Calendly', description: 'Go to calendly.com and sign in.' },
-      { step: 2, title: 'Create a Personal Access Token', description: 'Go to Integrations → API & Webhooks → Generate Token.' },
-      { step: 3, title: 'Get your event URL', description: 'Copy the link of the event type you want to embed.' },
-      { step: 4, title: 'Connect', description: 'Paste both above to enable scheduling on your website.' },
+      { step: 1, title: 'Go to Perplexity', description: 'Visit perplexity.ai and sign in.' },
+      { step: 2, title: 'Get API access', description: 'Navigate to API settings and generate a key.' },
+      { step: 3, title: 'Paste above', description: 'Enter your API key to enable AI search.' },
     ],
   },
   {
-    key: 'recaptcha', name: 'reCAPTCHA v3', description: 'Spam & bot protection for forms',
-    category: 'Security', icon: Shield, rating: 4.3, installs: '80K+', free: true,
-    docsUrl: 'https://developers.google.com/recaptcha/docs/v3',
+    key: 'elevenlabs', name: 'ElevenLabs', description: 'AI voice generation, text-to-speech & voice cloning',
+    category: 'AI', icon: ElevenLabsIcon, rating: 4.8, installs: '75K+', free: false, price: 0,
+    docsUrl: 'https://elevenlabs.io/docs',
     configFields: [
-      { key: 'recaptcha_site_key', label: 'Site Key', type: 'api_key', placeholder: '6Lxxxxxxxxxxxxxxxxxxxxxxxxx', required: true },
-      { key: 'recaptcha_secret_key', label: 'Secret Key', type: 'api_key', placeholder: '6Lxxxxxxxxxxxxxxxxxxxxxxxxx', required: true, secret: true },
+      { key: 'elevenlabs_api_key', label: 'API Key', type: 'api_key', placeholder: 'xi-...', required: true, secret: true },
     ],
     setupSteps: [
-      { step: 1, title: 'Go to reCAPTCHA Admin', description: 'Visit google.com/recaptcha/admin and sign in with Google.' },
-      { step: 2, title: 'Register a new site', description: 'Choose reCAPTCHA v3, add your domain(s).' },
-      { step: 3, title: 'Copy your keys', description: 'Copy the Site Key (public) and Secret Key (server-side).' },
-      { step: 4, title: 'Paste above', description: 'Enter both keys to activate reCAPTCHA on your forms.' },
+      { step: 1, title: 'Create an ElevenLabs account', description: 'Go to elevenlabs.io and sign up.' },
+      { step: 2, title: 'Get your API key', description: 'Go to Profile → API Keys.' },
+      { step: 3, title: 'Enter the key', description: 'Paste your API key to enable voice generation.' },
     ],
   },
   {
-    key: 'instagram-feed', name: 'Instagram Feed', description: 'Display your Instagram posts on your site',
-    category: 'Social', icon: Camera, rating: 4.4, installs: '40K+', free: true,
-    docsUrl: 'https://developers.facebook.com/docs/instagram-basic-display-api/',
+    key: 'sarvam-ai', name: 'Sarvam AI', description: 'Indian language AI — translation, TTS, ASR for Indic languages',
+    category: 'AI', icon: SarvamAIIcon, rating: 4.5, installs: '15K+', free: false, price: 0,
+    docsUrl: 'https://docs.sarvam.ai/',
     configFields: [
-      { key: 'instagram_access_token', label: 'Access Token', type: 'token', placeholder: 'IGQVJxxxxxxxxx...', required: true, secret: true },
+      { key: 'sarvam_api_key', label: 'API Key', type: 'api_key', placeholder: 'sarvam_...', required: true, secret: true },
     ],
     setupSteps: [
-      { step: 1, title: 'Create a Facebook App', description: 'Go to developers.facebook.com → My Apps → Create App.' },
-      { step: 2, title: 'Add Instagram Basic Display', description: 'In your app dashboard, add the Instagram Basic Display product.' },
-      { step: 3, title: 'Generate Access Token', description: 'Add your Instagram account as a tester, then generate a long-lived token.' },
-      { step: 4, title: 'Paste the token', description: 'Enter your access token above to display your feed.' },
+      { step: 1, title: 'Sign up at Sarvam AI', description: 'Go to sarvam.ai and create an account.' },
+      { step: 2, title: 'Get API key', description: 'Navigate to Dashboard → API Keys.' },
+      { step: 3, title: 'Enter above', description: 'Paste key to enable Indic language AI.' },
     ],
   },
   {
-    key: 'spotify-player', name: 'Spotify Player', description: 'Embed playlists, albums and tracks',
-    category: 'Media', icon: Music, rating: 4.2, installs: '15K+', free: true,
-    docsUrl: 'https://developer.spotify.com/documentation/web-api',
+    key: 'replicate', name: 'Replicate', description: 'Run open-source ML models — Stable Diffusion, LLaMA & more',
+    category: 'AI', icon: ReplicateIcon, rating: 4.6, installs: '45K+', free: false, price: 0,
+    docsUrl: 'https://replicate.com/docs',
     configFields: [
-      { key: 'spotify_client_id', label: 'Client ID', type: 'client_id', placeholder: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', required: true },
-      { key: 'spotify_client_secret', label: 'Client Secret', type: 'client_secret', placeholder: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', required: true, secret: true },
+      { key: 'replicate_api_token', label: 'API Token', type: 'token', placeholder: 'r8_...', required: true, secret: true },
     ],
     setupSteps: [
-      { step: 1, title: 'Go to Spotify Developer', description: 'Visit developer.spotify.com/dashboard and log in.' },
-      { step: 2, title: 'Create an app', description: 'Click "Create App", fill in name and description.' },
-      { step: 3, title: 'Copy credentials', description: 'From the app settings, copy Client ID and Client Secret.' },
-      { step: 4, title: 'Enter above', description: 'Paste both credentials to enable Spotify integration.' },
+      { step: 1, title: 'Sign up at Replicate', description: 'Go to replicate.com and create an account.' },
+      { step: 2, title: 'Get API token', description: 'Go to Account Settings → API Tokens.' },
+      { step: 3, title: 'Enter the token', description: 'Paste your token to run ML models.' },
     ],
   },
   {
-    key: 'youtube-gallery', name: 'YouTube Gallery', description: 'Display and auto-sync your YouTube videos',
-    category: 'Media', icon: Video, rating: 4.6, installs: '35K+', free: true,
-    docsUrl: 'https://developers.google.com/youtube/v3/getting-started',
+    key: 'deepgram', name: 'Deepgram', description: 'Speech-to-text & text-to-speech API with real-time transcription',
+    category: 'AI', icon: DeepgramIcon, rating: 4.6, installs: '25K+', free: true,
+    docsUrl: 'https://developers.deepgram.com/docs',
     configFields: [
-      { key: 'youtube_api_key', label: 'YouTube Data API Key', type: 'api_key', placeholder: 'AIzaSy...', required: true },
-      { key: 'youtube_channel_id', label: 'Channel ID', type: 'custom', placeholder: 'UCxxxxxxxxxxxxxxxxx', required: true },
+      { key: 'deepgram_api_key', label: 'API Key', type: 'api_key', placeholder: 'xxxxx', required: true, secret: true },
     ],
     setupSteps: [
-      { step: 1, title: 'Open Google Cloud Console', description: 'Go to console.cloud.google.com and create/select a project.' },
-      { step: 2, title: 'Enable YouTube Data API v3', description: 'Go to APIs & Services → Library → search "YouTube Data API v3" → Enable.' },
-      { step: 3, title: 'Create API key', description: 'Go to Credentials → Create Credentials → API Key.' },
-      { step: 4, title: 'Find your Channel ID', description: 'Go to youtube.com, click your profile → Settings → Advanced → Channel ID.' },
+      { step: 1, title: 'Create a Deepgram account', description: 'Go to deepgram.com and sign up.' },
+      { step: 2, title: 'Get API key', description: 'Go to Dashboard → API Keys → Create Key.' },
+      { step: 3, title: 'Enter above', description: 'Paste key to enable speech AI.' },
+    ],
+  },
+
+  // ── Developer Tools ──
+  {
+    key: 'github', name: 'GitHub', description: 'Code hosting, CI/CD, version control & collaboration',
+    category: 'Developer', icon: GitHubIcon, rating: 4.9, installs: '500K+', free: true,
+    docsUrl: 'https://docs.github.com/en/rest',
+    configFields: [
+      { key: 'github_token', label: 'Personal Access Token', type: 'token', placeholder: 'ghp_xxxxxxxxxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to GitHub Settings', description: 'Go to github.com → Settings → Developer settings → Personal access tokens.' },
+      { step: 2, title: 'Generate a token', description: 'Click "Generate new token (classic)" with needed scopes.' },
+      { step: 3, title: 'Paste the token', description: 'Enter your PAT above to connect GitHub.' },
     ],
   },
   {
-    key: 'google-maps', name: 'Google Maps', description: 'Interactive maps & location embeds',
-    category: 'Utilities', icon: MapPin, rating: 4.7, installs: '90K+', free: true,
-    docsUrl: 'https://developers.google.com/maps/documentation/javascript/get-api-key',
+    key: 'vercel', name: 'Vercel', description: 'Deploy frontend apps with zero-config CI/CD',
+    category: 'Developer', icon: VercelIcon, rating: 4.8, installs: '100K+', free: true,
+    docsUrl: 'https://vercel.com/docs',
     configFields: [
-      { key: 'google_maps_api_key', label: 'Maps API Key', type: 'api_key', placeholder: 'AIzaSy...', required: true },
+      { key: 'vercel_token', label: 'Access Token', type: 'token', placeholder: 'xxxxx', required: true, secret: true },
     ],
     setupSteps: [
-      { step: 1, title: 'Open Google Cloud Console', description: 'Go to console.cloud.google.com.' },
-      { step: 2, title: 'Enable Maps JavaScript API', description: 'APIs & Services → Library → Maps JavaScript API → Enable.' },
-      { step: 3, title: 'Create an API key', description: 'Go to Credentials → Create Credentials → API Key.' },
-      { step: 4, title: 'Paste the key', description: 'Enter your API Key above to embed interactive maps.' },
+      { step: 1, title: 'Log in to Vercel', description: 'Go to vercel.com and sign in.' },
+      { step: 2, title: 'Create an access token', description: 'Go to Settings → Tokens → Create.' },
+      { step: 3, title: 'Enter the token', description: 'Paste your access token above.' },
+    ],
+  },
+  {
+    key: 'v0', name: 'V0 by Vercel', description: 'AI-powered UI component generator with React & Tailwind',
+    category: 'Developer', icon: V0Icon, rating: 4.7, installs: '60K+', free: true,
+    docsUrl: 'https://v0.dev',
+    configFields: [
+      { key: 'v0_api_key', label: 'API Key', type: 'api_key', placeholder: 'v0_...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to v0.dev', description: 'Visit v0.dev and sign in with your Vercel account.' },
+      { step: 2, title: 'Get API access', description: 'Check your account settings for API key.' },
+      { step: 3, title: 'Enter above', description: 'Paste key to generate UI components with AI.' },
+    ],
+  },
+  {
+    key: 'figma', name: 'Figma', description: 'Design-to-code — import Figma designs directly',
+    category: 'Design', icon: FigmaIcon, rating: 4.8, installs: '90K+', free: true,
+    docsUrl: 'https://www.figma.com/developers/api',
+    configFields: [
+      { key: 'figma_access_token', label: 'Personal Access Token', type: 'token', placeholder: 'figd_xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Open Figma Settings', description: 'Go to figma.com → Settings → Personal Access Tokens.' },
+      { step: 2, title: 'Generate a token', description: 'Create a new token with read access.' },
+      { step: 3, title: 'Paste above', description: 'Enter your token to import Figma designs.' },
+    ],
+  },
+  {
+    key: 'canva', name: 'Canva', description: 'Design graphics, presentations & social media visuals',
+    category: 'Design', icon: CanvaIcon, rating: 4.7, installs: '80K+', free: true,
+    docsUrl: 'https://www.canva.dev/docs/connect/',
+    configFields: [
+      { key: 'canva_api_key', label: 'API Key', type: 'api_key', placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to Canva Developers', description: 'Visit canva.dev and sign in.' },
+      { step: 2, title: 'Create an app', description: 'Register a new app and get your API credentials.' },
+      { step: 3, title: 'Enter API key', description: 'Paste your key to embed Canva designs.' },
+    ],
+  },
+  {
+    key: 'postman', name: 'Postman', description: 'API testing, documentation & monitoring',
+    category: 'Developer', icon: PostmanIcon, rating: 4.5, installs: '50K+', free: true,
+    docsUrl: 'https://learning.postman.com/docs',
+    configFields: [
+      { key: 'postman_api_key', label: 'API Key', type: 'api_key', placeholder: 'PMAK-xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign in to Postman', description: 'Go to postman.com and log in.' },
+      { step: 2, title: 'Generate API key', description: 'Go to Settings → API Keys → Generate.' },
+      { step: 3, title: 'Enter above', description: 'Paste key to sync Postman collections.' },
+    ],
+  },
+  {
+    key: 'firecrawl', name: 'Firecrawl', description: 'AI-powered web scraping, search & data extraction',
+    category: 'Developer', icon: FirecrawlIcon, rating: 4.6, installs: '20K+', free: true,
+    docsUrl: 'https://docs.firecrawl.dev/',
+    configFields: [
+      { key: 'firecrawl_api_key', label: 'API Key', type: 'api_key', placeholder: 'fc-...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Firecrawl', description: 'Go to firecrawl.dev and create an account.' },
+      { step: 2, title: 'Get API key', description: 'Find your API key in the dashboard.' },
+      { step: 3, title: 'Enter above', description: 'Paste key to enable web scraping.' },
+    ],
+  },
+
+  // ── Google Workspace ──
+  {
+    key: 'google-docs', name: 'Google Docs', description: 'Embed & sync Google Docs in your website',
+    category: 'Productivity', icon: GoogleDocsIcon, rating: 4.6, installs: '40K+', free: true,
+    docsUrl: 'https://developers.google.com/docs/api',
+    configFields: [
+      { key: 'google_api_key', label: 'Google API Key', type: 'api_key', placeholder: 'AIzaSy...', required: true },
+      { key: 'google_doc_id', label: 'Document ID', type: 'custom', placeholder: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Enable Google Docs API', description: 'Go to console.cloud.google.com → APIs → Enable Google Docs API.' },
+      { step: 2, title: 'Create API key', description: 'Go to Credentials → Create API Key.' },
+      { step: 3, title: 'Get Document ID', description: 'Copy the ID from your Google Doc URL (between /d/ and /edit).' },
+    ],
+  },
+  {
+    key: 'google-sheets', name: 'Google Sheets', description: 'Use spreadsheets as a database or embed live data',
+    category: 'Productivity', icon: GoogleSheetsIcon, rating: 4.7, installs: '65K+', free: true,
+    docsUrl: 'https://developers.google.com/sheets/api',
+    configFields: [
+      { key: 'google_api_key', label: 'Google API Key', type: 'api_key', placeholder: 'AIzaSy...', required: true },
+      { key: 'sheet_id', label: 'Spreadsheet ID', type: 'custom', placeholder: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Enable Sheets API', description: 'Go to Google Cloud Console → APIs → Enable Google Sheets API.' },
+      { step: 2, title: 'Create API key', description: 'Credentials → Create API Key.' },
+      { step: 3, title: 'Get Spreadsheet ID', description: 'Copy the ID from your Google Sheet URL.' },
+    ],
+  },
+  {
+    key: 'google-drive', name: 'Google Drive', description: 'Access & embed files from Google Drive',
+    category: 'Productivity', icon: GoogleDriveIcon, rating: 4.6, installs: '55K+', free: true,
+    docsUrl: 'https://developers.google.com/drive/api',
+    configFields: [
+      { key: 'google_client_id', label: 'OAuth Client ID', type: 'client_id', placeholder: 'xxxxx.apps.googleusercontent.com', required: true },
+      { key: 'google_api_key', label: 'API Key', type: 'api_key', placeholder: 'AIzaSy...', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Enable Drive API', description: 'Go to Google Cloud Console → APIs → Enable Google Drive API.' },
+      { step: 2, title: 'Create OAuth credentials', description: 'Create OAuth 2.0 Client ID and API Key.' },
+      { step: 3, title: 'Enter credentials', description: 'Paste both values above to connect Drive.' },
+    ],
+  },
+  {
+    key: 'onedrive', name: 'Microsoft OneDrive', description: 'Cloud storage — files, photos & documents from Microsoft',
+    category: 'Productivity', icon: OneDriveIcon, rating: 4.5, installs: '35K+', free: true,
+    docsUrl: 'https://learn.microsoft.com/en-us/onedrive/developer/',
+    configFields: [
+      { key: 'onedrive_client_id', label: 'Application (Client) ID', type: 'client_id', placeholder: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', required: true },
+      { key: 'onedrive_client_secret', label: 'Client Secret', type: 'client_secret', placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Register an app in Azure', description: 'Go to portal.azure.com → App registrations → New.' },
+      { step: 2, title: 'Get credentials', description: 'Copy Application ID and create a Client Secret.' },
+      { step: 3, title: 'Enter above', description: 'Paste both to connect OneDrive.' },
+    ],
+  },
+
+  // ── Zoho Suite ──
+  {
+    key: 'zoho-sheet', name: 'Zoho Sheet', description: 'Online spreadsheet with collaboration & automation',
+    category: 'Productivity', icon: ZohoIcon, rating: 4.4, installs: '20K+', free: true,
+    docsUrl: 'https://www.zoho.com/sheet/help/api/',
+    configFields: [
+      { key: 'zoho_client_id', label: 'Client ID', type: 'client_id', placeholder: '1000.xxxxx', required: true },
+      { key: 'zoho_client_secret', label: 'Client Secret', type: 'client_secret', placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Register a Zoho app', description: 'Go to api-console.zoho.com and create a Self Client.' },
+      { step: 2, title: 'Get credentials', description: 'Copy Client ID and Client Secret.' },
+      { step: 3, title: 'Enter above', description: 'Paste both values to connect Zoho Sheet.' },
+    ],
+  },
+  {
+    key: 'zoho-writer', name: 'Zoho Writer', description: 'Online word processor with document automation',
+    category: 'Productivity', icon: ZohoIcon, rating: 4.3, installs: '15K+', free: true,
+    docsUrl: 'https://www.zoho.com/writer/help/api/',
+    configFields: [
+      { key: 'zoho_client_id', label: 'Client ID', type: 'client_id', placeholder: '1000.xxxxx', required: true },
+      { key: 'zoho_client_secret', label: 'Client Secret', type: 'client_secret', placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Register a Zoho app', description: 'Go to api-console.zoho.com and create a Self Client.' },
+      { step: 2, title: 'Get credentials', description: 'Copy Client ID and Client Secret.' },
+      { step: 3, title: 'Enter above', description: 'Paste to connect Zoho Writer.' },
+    ],
+  },
+  {
+    key: 'zoho-notebook', name: 'Zoho Notebook', description: 'Note-taking app with rich media support',
+    category: 'Productivity', icon: ZohoIcon, rating: 4.3, installs: '10K+', free: true,
+    docsUrl: 'https://www.zoho.com/notebook/',
+    configFields: [
+      { key: 'zoho_client_id', label: 'Client ID', type: 'client_id', placeholder: '1000.xxxxx', required: true },
+      { key: 'zoho_client_secret', label: 'Client Secret', type: 'client_secret', placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Register a Zoho app', description: 'Go to api-console.zoho.com.' },
+      { step: 2, title: 'Get credentials', description: 'Copy Client ID and Client Secret.' },
+      { step: 3, title: 'Enter above', description: 'Paste to connect Zoho Notebook.' },
+    ],
+  },
+
+  // ── Communication & Collaboration ──
+  {
+    key: 'slack', name: 'Slack', description: 'Send messages, notifications & alerts to Slack channels',
+    category: 'Communication', icon: SlackIcon, rating: 4.8, installs: '120K+', free: true,
+    docsUrl: 'https://api.slack.com/docs',
+    configFields: [
+      { key: 'slack_bot_token', label: 'Bot Token', type: 'token', placeholder: 'xoxb-xxxxx', required: true, secret: true },
+      { key: 'slack_channel', label: 'Channel ID', type: 'custom', placeholder: 'C0XXXXXXX', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Slack app', description: 'Go to api.slack.com/apps → Create New App.' },
+      { step: 2, title: 'Add Bot permissions', description: 'Add OAuth scopes like chat:write.' },
+      { step: 3, title: 'Install to workspace', description: 'Install the app and copy the Bot Token.' },
+    ],
+  },
+  {
+    key: 'twilio', name: 'Twilio', description: 'SMS, WhatsApp, voice & video communication APIs',
+    category: 'Communication', icon: TwilioIcon, rating: 4.6, installs: '55K+', free: false, price: 0,
+    docsUrl: 'https://www.twilio.com/docs',
+    configFields: [
+      { key: 'twilio_account_sid', label: 'Account SID', type: 'custom', placeholder: 'ACxxxxx', required: true },
+      { key: 'twilio_auth_token', label: 'Auth Token', type: 'token', placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Twilio account', description: 'Go to twilio.com and sign up.' },
+      { step: 2, title: 'Get credentials', description: 'Find Account SID and Auth Token on the dashboard.' },
+      { step: 3, title: 'Enter above', description: 'Paste both to enable SMS/voice.' },
+    ],
+  },
+  {
+    key: 'notion', name: 'Notion', description: 'All-in-one workspace — notes, docs, wikis & databases',
+    category: 'Productivity', icon: NotionIcon, rating: 4.7, installs: '70K+', free: true,
+    docsUrl: 'https://developers.notion.com/',
+    configFields: [
+      { key: 'notion_api_key', label: 'Integration Token', type: 'token', placeholder: 'secret_xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Notion integration', description: 'Go to notion.so/my-integrations → New integration.' },
+      { step: 2, title: 'Copy the token', description: 'Copy the Internal Integration Token.' },
+      { step: 3, title: 'Share pages', description: 'Share Notion pages with your integration, then paste token above.' },
+    ],
+  },
+  {
+    key: 'airtable', name: 'Airtable', description: 'Spreadsheet-database hybrid — flexible data management',
+    category: 'Productivity', icon: AirtableIcon, rating: 4.7, installs: '60K+', free: true,
+    docsUrl: 'https://airtable.com/developers/web/api/introduction',
+    configFields: [
+      { key: 'airtable_token', label: 'Personal Access Token', type: 'token', placeholder: 'patxxxxx', required: true, secret: true },
+      { key: 'airtable_base_id', label: 'Base ID', type: 'custom', placeholder: 'appXXXXXXXXXX', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to Airtable', description: 'Visit airtable.com/create/tokens.' },
+      { step: 2, title: 'Create a token', description: 'Generate a personal access token with needed scopes.' },
+      { step: 3, title: 'Get Base ID', description: 'Find the Base ID in the Airtable API docs for your base.' },
+    ],
+  },
+
+  // ── Project Management ──
+  {
+    key: 'atlassian', name: 'Atlassian (Confluence)', description: 'Team documentation, knowledge base & collaboration',
+    category: 'Project Management', icon: AtlassianIcon, rating: 4.5, installs: '40K+', free: true,
+    docsUrl: 'https://developer.atlassian.com/cloud/confluence/rest/',
+    configFields: [
+      { key: 'atlassian_email', label: 'Email', type: 'custom', placeholder: 'you@company.com', required: true },
+      { key: 'atlassian_api_token', label: 'API Token', type: 'token', placeholder: 'xxxxx', required: true, secret: true },
+      { key: 'atlassian_domain', label: 'Domain', type: 'custom', placeholder: 'your-company.atlassian.net', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to Atlassian account', description: 'Visit id.atlassian.com/manage-profile/security/api-tokens.' },
+      { step: 2, title: 'Create API token', description: 'Click Create API Token and copy it.' },
+      { step: 3, title: 'Enter credentials', description: 'Paste email, token, and your Atlassian domain.' },
+    ],
+  },
+  {
+    key: 'jira', name: 'Jira', description: 'Issue tracking, project management & agile boards',
+    category: 'Project Management', icon: JiraIcon, rating: 4.6, installs: '45K+', free: true,
+    docsUrl: 'https://developer.atlassian.com/cloud/jira/platform/rest/',
+    configFields: [
+      { key: 'jira_email', label: 'Email', type: 'custom', placeholder: 'you@company.com', required: true },
+      { key: 'jira_api_token', label: 'API Token', type: 'token', placeholder: 'xxxxx', required: true, secret: true },
+      { key: 'jira_domain', label: 'Jira Domain', type: 'custom', placeholder: 'your-company.atlassian.net', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to Atlassian account', description: 'Visit id.atlassian.com/manage-profile/security/api-tokens.' },
+      { step: 2, title: 'Create API token', description: 'Click Create API Token.' },
+      { step: 3, title: 'Enter credentials', description: 'Paste email, token, and Jira domain.' },
+    ],
+  },
+  {
+    key: 'linear', name: 'Linear', description: 'Modern issue tracking for high-performance teams',
+    category: 'Project Management', icon: LinearIcon, rating: 4.7, installs: '30K+', free: true,
+    docsUrl: 'https://developers.linear.app/',
+    configFields: [
+      { key: 'linear_api_key', label: 'API Key', type: 'api_key', placeholder: 'lin_api_xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Open Linear Settings', description: 'Go to linear.app → Settings → API.' },
+      { step: 2, title: 'Create API key', description: 'Generate a personal API key.' },
+      { step: 3, title: 'Enter above', description: 'Paste to connect Linear.' },
+    ],
+  },
+
+  // ── Travel & Booking ──
+  {
+    key: 'booking-com', name: 'Booking.com', description: 'Hotel & travel booking affiliate integration',
+    category: 'Travel', icon: BookingIcon, rating: 4.4, installs: '25K+', free: true,
+    docsUrl: 'https://developers.booking.com/',
+    configFields: [
+      { key: 'booking_affiliate_id', label: 'Affiliate ID', type: 'custom', placeholder: 'xxxxx', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Join Booking.com Affiliate', description: 'Go to booking.com/affiliate and sign up.' },
+      { step: 2, title: 'Get Affiliate ID', description: 'Find your affiliate ID in the dashboard.' },
+      { step: 3, title: 'Enter above', description: 'Paste ID to embed booking widgets.' },
+    ],
+  },
+  {
+    key: 'expedia', name: 'Expedia', description: 'Travel booking — flights, hotels & vacation packages',
+    category: 'Travel', icon: ExpediaIcon, rating: 4.3, installs: '18K+', free: true,
+    docsUrl: 'https://developers.expediagroup.com/',
+    configFields: [
+      { key: 'expedia_api_key', label: 'API Key', type: 'api_key', placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Join Expedia Affiliate', description: 'Go to developers.expediagroup.com and register.' },
+      { step: 2, title: 'Get API key', description: 'Create an app and copy the API key.' },
+      { step: 3, title: 'Enter above', description: 'Paste key to embed travel search.' },
+    ],
+  },
+
+  // ── Analytics ──
+  {
+    key: 'google-analytics', name: 'Google Analytics', description: 'Track visitors, conversions and behavior',
+    category: 'Analytics', icon: GoogleIcon, rating: 4.8, installs: '50K+', free: true,
+    docsUrl: 'https://support.google.com/analytics/answer/9304153',
+    configFields: [
+      { key: 'ga_tracking_id', label: 'Measurement ID', type: 'tracking_id', placeholder: 'G-XXXXXXXXXX', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Google Analytics account', description: 'Go to analytics.google.com.' },
+      { step: 2, title: 'Create a property', description: 'Click Admin → Create Property.' },
+      { step: 3, title: 'Get Measurement ID', description: 'Go to Data Streams → Web, copy G- ID.' },
+    ],
+  },
+  {
+    key: 'mixpanel', name: 'Mixpanel', description: 'Product analytics — funnels, retention & user behavior',
+    category: 'Analytics', icon: MixpanelIcon, rating: 4.6, installs: '35K+', free: true,
+    docsUrl: 'https://docs.mixpanel.com/',
+    configFields: [
+      { key: 'mixpanel_token', label: 'Project Token', type: 'token', placeholder: 'xxxxx', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Mixpanel account', description: 'Go to mixpanel.com and sign up.' },
+      { step: 2, title: 'Get project token', description: 'Go to Settings → Project Settings → Token.' },
+      { step: 3, title: 'Enter above', description: 'Paste token to start tracking events.' },
+    ],
+  },
+  {
+    key: 'segment', name: 'Segment', description: 'Customer data platform — collect, unify & route data',
+    category: 'Analytics', icon: SegmentIcon, rating: 4.5, installs: '30K+', free: true,
+    docsUrl: 'https://segment.com/docs/',
+    configFields: [
+      { key: 'segment_write_key', label: 'Write Key', type: 'api_key', placeholder: 'xxxxx', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Segment account', description: 'Go to segment.com and sign up.' },
+      { step: 2, title: 'Create a source', description: 'Add a JavaScript source and copy the Write Key.' },
+      { step: 3, title: 'Enter above', description: 'Paste write key to route analytics.' },
     ],
   },
   {
@@ -199,40 +625,37 @@ const APP_CATALOG: AppDef[] = [
     ],
     setupSteps: [
       { step: 1, title: 'Create a Hotjar account', description: 'Go to hotjar.com and sign up.' },
-      { step: 2, title: 'Add your site', description: 'In the dashboard, add your website URL.' },
-      { step: 3, title: 'Get your Site ID', description: 'Find the Site ID in your tracking code or Settings → Tracking.' },
-      { step: 4, title: 'Enter the Site ID', description: 'Paste it above to start collecting heatmap and recording data.' },
+      { step: 2, title: 'Add your site', description: 'Add your website URL in the dashboard.' },
+      { step: 3, title: 'Get Site ID', description: 'Find the Site ID in Settings → Tracking.' },
+    ],
+  },
+
+  // ── Marketing & Email ──
+  {
+    key: 'mailchimp', name: 'Mailchimp', description: 'Email marketing automation & newsletters',
+    category: 'Marketing', icon: Mail, rating: 4.7, installs: '100K+', free: true,
+    docsUrl: 'https://mailchimp.com/developer/marketing/guides/quick-start/',
+    configFields: [
+      { key: 'mailchimp_api_key', label: 'API Key', type: 'api_key', placeholder: 'xxxxxxxx-us14', required: true, secret: true },
+      { key: 'mailchimp_list_id', label: 'Audience List ID', type: 'custom', placeholder: 'abc1234def', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Log in to Mailchimp', description: 'Go to mailchimp.com and sign in.' },
+      { step: 2, title: 'Generate an API key', description: 'Account → Extras → API Keys → Create.' },
+      { step: 3, title: 'Find Audience ID', description: 'Audience → Settings → copy Audience ID.' },
     ],
   },
   {
-    key: 'intercom', name: 'Intercom', description: 'Customer messaging & support platform',
-    category: 'Communication', icon: MessageSquare, rating: 4.4, installs: '10K+', free: false, price: 19.99,
-    docsUrl: 'https://developers.intercom.com/docs/build-an-integration/getting-started/',
+    key: 'hubspot', name: 'HubSpot', description: 'CRM, marketing automation, sales & customer service',
+    category: 'Marketing', icon: HubSpotIcon, rating: 4.7, installs: '55K+', free: true,
+    docsUrl: 'https://developers.hubspot.com/docs/api/overview',
     configFields: [
-      { key: 'intercom_app_id', label: 'App ID', type: 'project_id', placeholder: 'xxxxxxxx', required: true },
-      { key: 'intercom_api_key', label: 'Access Token', type: 'token', placeholder: 'dG9rOm...', required: true, secret: true },
+      { key: 'hubspot_access_token', label: 'Private App Token', type: 'token', placeholder: 'pat-xxxxx', required: true, secret: true },
     ],
     setupSteps: [
-      { step: 1, title: 'Log in to Intercom', description: 'Go to app.intercom.com and sign in.' },
-      { step: 2, title: 'Find your App ID', description: 'Go to Settings → Installation → Web → copy App ID from the snippet.' },
-      { step: 3, title: 'Create an Access Token', description: 'Go to Settings → Integrations → Developer Hub → New App → get the Access Token.' },
-      { step: 4, title: 'Paste credentials', description: 'Enter App ID and Access Token above to enable Intercom chat.' },
-    ],
-  },
-  {
-    key: 'firebase', name: 'Firebase', description: 'Google\'s app platform — auth, database, storage',
-    category: 'Backend', icon: Database, rating: 4.8, installs: '80K+', free: true,
-    docsUrl: 'https://firebase.google.com/docs/web/setup',
-    configFields: [
-      { key: 'firebase_api_key', label: 'API Key', type: 'api_key', placeholder: 'AIzaSy...', required: true },
-      { key: 'firebase_project_id', label: 'Project ID', type: 'project_id', placeholder: 'my-project-12345', required: true },
-      { key: 'firebase_auth_domain', label: 'Auth Domain', type: 'custom', placeholder: 'my-project.firebaseapp.com', required: true },
-    ],
-    setupSteps: [
-      { step: 1, title: 'Go to Firebase Console', description: 'Visit console.firebase.google.com and create a new project.' },
-      { step: 2, title: 'Register a web app', description: 'Click the Web icon (</>), name your app, and register.' },
-      { step: 3, title: 'Copy config', description: 'Copy API Key, Project ID, and Auth Domain from the config snippet.' },
-      { step: 4, title: 'Enter the values above', description: 'Paste each field to connect your Firebase project.' },
+      { step: 1, title: 'Go to HubSpot', description: 'Log in to app.hubspot.com.' },
+      { step: 2, title: 'Create a private app', description: 'Settings → Integrations → Private Apps → Create.' },
+      { step: 3, title: 'Copy the token', description: 'Paste the Private App Token above.' },
     ],
   },
   {
@@ -240,29 +663,267 @@ const APP_CATALOG: AppDef[] = [
     category: 'Marketing', icon: Mail, rating: 4.5, installs: '45K+', free: true,
     docsUrl: 'https://docs.sendgrid.com/for-developers/sending-email/api-getting-started',
     configFields: [
-      { key: 'sendgrid_api_key', label: 'API Key', type: 'api_key', placeholder: 'SG.xxxxxxxxxxxxx...', required: true, secret: true },
+      { key: 'sendgrid_api_key', label: 'API Key', type: 'api_key', placeholder: 'SG.xxxxx', required: true, secret: true },
     ],
     setupSteps: [
       { step: 1, title: 'Create SendGrid account', description: 'Go to sendgrid.com and register.' },
-      { step: 2, title: 'Create an API Key', description: 'Go to Settings → API Keys → Create API Key → Full Access.' },
-      { step: 3, title: 'Copy the key', description: 'Copy the generated API Key (it\'s shown only once!).' },
-      { step: 4, title: 'Paste above', description: 'Enter the API Key to enable email sending from your site.' },
+      { step: 2, title: 'Create an API Key', description: 'Settings → API Keys → Create.' },
+      { step: 3, title: 'Paste above', description: 'Enter the API Key to enable emails.' },
+    ],
+  },
+  {
+    key: 'resend', name: 'Resend', description: 'Developer-friendly email API — simple, modern & reliable',
+    category: 'Marketing', icon: ResendIcon, rating: 4.6, installs: '25K+', free: true,
+    docsUrl: 'https://resend.com/docs',
+    configFields: [
+      { key: 'resend_api_key', label: 'API Key', type: 'api_key', placeholder: 're_xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at Resend', description: 'Go to resend.com and create an account.' },
+      { step: 2, title: 'Get API key', description: 'Go to API Keys → Create.' },
+      { step: 3, title: 'Enter above', description: 'Paste key to send emails.' },
+    ],
+  },
+  {
+    key: 'google-adsense', name: 'Google AdSense', description: 'Monetize your website with ads',
+    category: 'Marketing', icon: Megaphone, rating: 4.1, installs: '60K+', free: true,
+    docsUrl: 'https://support.google.com/adsense/answer/9274019',
+    configFields: [
+      { key: 'adsense_client_id', label: 'Publisher ID', type: 'tracking_id', placeholder: 'ca-pub-xxxxxxxx', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up for AdSense', description: 'Go to google.com/adsense and register.' },
+      { step: 2, title: 'Get approved', description: 'Wait for Google to review your site.' },
+      { step: 3, title: 'Copy Publisher ID', description: 'Paste your ca-pub- ID above.' },
+    ],
+  },
+
+  // ── Media ──
+  {
+    key: 'spotify', name: 'Spotify', description: 'Embed playlists, albums, tracks & podcasts',
+    category: 'Media', icon: SpotifyIcon, rating: 4.5, installs: '40K+', free: true,
+    docsUrl: 'https://developer.spotify.com/documentation/web-api',
+    configFields: [
+      { key: 'spotify_client_id', label: 'Client ID', type: 'client_id', placeholder: 'xxxxxxxx', required: true },
+      { key: 'spotify_client_secret', label: 'Client Secret', type: 'client_secret', placeholder: 'xxxxxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to Spotify Developer', description: 'Visit developer.spotify.com/dashboard.' },
+      { step: 2, title: 'Create an app', description: 'Click Create App, fill in details.' },
+      { step: 3, title: 'Copy credentials', description: 'Copy Client ID and Client Secret.' },
+    ],
+  },
+  {
+    key: 'youtube-gallery', name: 'YouTube', description: 'Display and sync your YouTube videos & channels',
+    category: 'Media', icon: Video, rating: 4.6, installs: '35K+', free: true,
+    docsUrl: 'https://developers.google.com/youtube/v3/getting-started',
+    configFields: [
+      { key: 'youtube_api_key', label: 'YouTube Data API Key', type: 'api_key', placeholder: 'AIzaSy...', required: true },
+      { key: 'youtube_channel_id', label: 'Channel ID', type: 'custom', placeholder: 'UCxxxxxxxxx', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Enable YouTube Data API', description: 'Go to Google Cloud Console → APIs → YouTube Data API v3.' },
+      { step: 2, title: 'Create API key', description: 'Credentials → Create API Key.' },
+      { step: 3, title: 'Find Channel ID', description: 'YouTube → Profile → Settings → Advanced → Channel ID.' },
     ],
   },
   {
     key: 'cloudinary', name: 'Cloudinary', description: 'Image & video optimization and CDN',
     category: 'Media', icon: Cloud, rating: 4.6, installs: '30K+', free: true,
-    docsUrl: 'https://cloudinary.com/documentation/how_to_integrate_cloudinary',
+    docsUrl: 'https://cloudinary.com/documentation',
     configFields: [
       { key: 'cloudinary_cloud_name', label: 'Cloud Name', type: 'custom', placeholder: 'my-cloud', required: true },
-      { key: 'cloudinary_api_key', label: 'API Key', type: 'api_key', placeholder: '123456789012345', required: true },
-      { key: 'cloudinary_api_secret', label: 'API Secret', type: 'api_key', placeholder: 'abcdefghijk...', required: true, secret: true },
+      { key: 'cloudinary_api_key', label: 'API Key', type: 'api_key', placeholder: '123456789', required: true },
+      { key: 'cloudinary_api_secret', label: 'API Secret', type: 'api_key', placeholder: 'abcdefghijk', required: true, secret: true },
     ],
     setupSteps: [
       { step: 1, title: 'Sign up at Cloudinary', description: 'Go to cloudinary.com and create a free account.' },
-      { step: 2, title: 'Go to Dashboard', description: 'Your Cloud Name, API Key, and API Secret are displayed on the dashboard.' },
-      { step: 3, title: 'Copy credentials', description: 'Copy all three values from the dashboard.' },
-      { step: 4, title: 'Enter above', description: 'Paste each value to enable Cloudinary media management.' },
+      { step: 2, title: 'Go to Dashboard', description: 'Copy Cloud Name, API Key, and API Secret.' },
+      { step: 3, title: 'Enter above', description: 'Paste each value to enable Cloudinary.' },
+    ],
+  },
+  {
+    key: 'lottie', name: 'Lottie Animations', description: 'Add lightweight, scalable animations to your site',
+    category: 'Media', icon: LottieIcon, rating: 4.5, installs: '30K+', free: true,
+    docsUrl: 'https://lottiefiles.com/developers',
+    configFields: [
+      { key: 'lottie_api_key', label: 'LottieFiles API Key', type: 'api_key', placeholder: 'xxxxx', required: false },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at LottieFiles', description: 'Go to lottiefiles.com and create an account.' },
+      { step: 2, title: 'Browse animations', description: 'Find free animations to use on your site.' },
+      { step: 3, title: 'Optional: API key', description: 'Get an API key for programmatic access.' },
+    ],
+  },
+
+  // ── CMS ──
+  {
+    key: 'sanity', name: 'Sanity', description: 'Headless CMS with real-time collaboration & structured content',
+    category: 'CMS', icon: SanityIcon, rating: 4.7, installs: '35K+', free: true,
+    docsUrl: 'https://www.sanity.io/docs',
+    configFields: [
+      { key: 'sanity_project_id', label: 'Project ID', type: 'project_id', placeholder: 'xxxxx', required: true },
+      { key: 'sanity_dataset', label: 'Dataset', type: 'custom', placeholder: 'production', required: true },
+      { key: 'sanity_token', label: 'API Token', type: 'token', placeholder: 'skxxxxx', required: false, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Sanity project', description: 'Go to sanity.io/manage and create a project.' },
+      { step: 2, title: 'Get Project ID', description: 'Find it in the project settings.' },
+      { step: 3, title: 'Create API token', description: 'Go to API → Tokens for authenticated access.' },
+    ],
+  },
+  {
+    key: 'contentful', name: 'Contentful', description: 'Headless CMS for structured content at scale',
+    category: 'CMS', icon: ContentfulIcon, rating: 4.6, installs: '30K+', free: true,
+    docsUrl: 'https://www.contentful.com/developers/docs/',
+    configFields: [
+      { key: 'contentful_space_id', label: 'Space ID', type: 'custom', placeholder: 'xxxxx', required: true },
+      { key: 'contentful_access_token', label: 'Content Delivery API Token', type: 'token', placeholder: 'xxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Contentful account', description: 'Go to contentful.com and sign up.' },
+      { step: 2, title: 'Get Space ID', description: 'Settings → General → Space ID.' },
+      { step: 3, title: 'Create API key', description: 'Settings → API Keys → Add API Key.' },
+    ],
+  },
+
+  // ── Automation ──
+  {
+    key: 'zapier', name: 'Zapier', description: 'Connect 5000+ apps with automated workflows',
+    category: 'Automation', icon: ZapierIcon, rating: 4.7, installs: '80K+', free: true,
+    docsUrl: 'https://zapier.com/developer',
+    configFields: [
+      { key: 'zapier_webhook_url', label: 'Webhook URL', type: 'webhook_url', placeholder: 'https://hooks.zapier.com/hooks/catch/...', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Zapier account', description: 'Go to zapier.com and sign up.' },
+      { step: 2, title: 'Create a Zap', description: 'Use "Webhooks by Zapier" as the trigger.' },
+      { step: 3, title: 'Copy webhook URL', description: 'Paste the webhook URL above.' },
+    ],
+  },
+  {
+    key: 'make', name: 'Make (Integromat)', description: 'Visual automation platform with 1000+ integrations',
+    category: 'Automation', icon: MakeIcon, rating: 4.6, installs: '40K+', free: true,
+    docsUrl: 'https://www.make.com/en/help',
+    configFields: [
+      { key: 'make_webhook_url', label: 'Webhook URL', type: 'webhook_url', placeholder: 'https://hook.make.com/xxxxx', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Make account', description: 'Go to make.com and sign up.' },
+      { step: 2, title: 'Create a scenario', description: 'Add a Webhook module as the first step.' },
+      { step: 3, title: 'Copy webhook URL', description: 'Paste it above to connect.' },
+    ],
+  },
+  {
+    key: 'n8n', name: 'n8n', description: 'Open-source workflow automation — self-hosted or cloud',
+    category: 'Automation', icon: N8NIcon, rating: 4.5, installs: '25K+', free: true,
+    docsUrl: 'https://docs.n8n.io/',
+    configFields: [
+      { key: 'n8n_webhook_url', label: 'Webhook URL', type: 'webhook_url', placeholder: 'https://your-n8n.com/webhook/xxxxx', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Set up n8n', description: 'Self-host or use n8n.cloud.' },
+      { step: 2, title: 'Create a workflow', description: 'Add a Webhook node as the trigger.' },
+      { step: 3, title: 'Copy webhook URL', description: 'Paste the production URL above.' },
+    ],
+  },
+
+  // ── Social & Chat ──
+  {
+    key: 'instagram-feed', name: 'Instagram Feed', description: 'Display your Instagram posts on your site',
+    category: 'Social', icon: Camera, rating: 4.4, installs: '40K+', free: true,
+    docsUrl: 'https://developers.facebook.com/docs/instagram-basic-display-api/',
+    configFields: [
+      { key: 'instagram_access_token', label: 'Access Token', type: 'token', placeholder: 'IGQVJxxxxxxxxx...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create a Facebook App', description: 'Go to developers.facebook.com → Create App.' },
+      { step: 2, title: 'Add Instagram Display', description: 'Add Instagram Basic Display product.' },
+      { step: 3, title: 'Generate token', description: 'Add your account as tester, generate long-lived token.' },
+    ],
+  },
+  {
+    key: 'live-chat-pro', name: 'Tawk.to Chat', description: 'Free live chat widget for customer support',
+    category: 'Communication', icon: MessageSquare, rating: 4.6, installs: '25K+', free: true,
+    docsUrl: 'https://help.tawk.to/',
+    configFields: [
+      { key: 'tawk_property_id', label: 'Property ID', type: 'project_id', placeholder: '5xxxxxx', required: true },
+      { key: 'tawk_widget_id', label: 'Widget ID', type: 'custom', placeholder: '1xxxxxx', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Sign up at tawk.to', description: 'Create a free account at tawk.to.' },
+      { step: 2, title: 'Create a property', description: 'Add your website as a property.' },
+      { step: 3, title: 'Get IDs', description: 'Find Property ID and Widget ID from embed code.' },
+    ],
+  },
+  {
+    key: 'intercom', name: 'Intercom', description: 'Customer messaging & support platform',
+    category: 'Communication', icon: MessageSquare, rating: 4.4, installs: '10K+', free: false, price: 19.99,
+    docsUrl: 'https://developers.intercom.com/',
+    configFields: [
+      { key: 'intercom_app_id', label: 'App ID', type: 'project_id', placeholder: 'xxxxxxxx', required: true },
+      { key: 'intercom_api_key', label: 'Access Token', type: 'token', placeholder: 'dG9rOm...', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Log in to Intercom', description: 'Go to app.intercom.com.' },
+      { step: 2, title: 'Find App ID', description: 'Settings → Installation → Web → copy App ID.' },
+      { step: 3, title: 'Create Access Token', description: 'Developer Hub → New App → get token.' },
+    ],
+  },
+
+  // ── Security & Utilities ──
+  {
+    key: 'recaptcha', name: 'reCAPTCHA v3', description: 'Spam & bot protection for forms',
+    category: 'Security', icon: Shield, rating: 4.3, installs: '80K+', free: true,
+    docsUrl: 'https://developers.google.com/recaptcha/docs/v3',
+    configFields: [
+      { key: 'recaptcha_site_key', label: 'Site Key', type: 'api_key', placeholder: '6Lxxxxxxxxx', required: true },
+      { key: 'recaptcha_secret_key', label: 'Secret Key', type: 'api_key', placeholder: '6Lxxxxxxxxx', required: true, secret: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Go to reCAPTCHA Admin', description: 'Visit google.com/recaptcha/admin.' },
+      { step: 2, title: 'Register your site', description: 'Choose v3, add your domain.' },
+      { step: 3, title: 'Copy keys', description: 'Paste Site Key and Secret Key above.' },
+    ],
+  },
+  {
+    key: 'google-maps', name: 'Google Maps', description: 'Interactive maps & location embeds',
+    category: 'Utilities', icon: MapPin, rating: 4.7, installs: '90K+', free: true,
+    docsUrl: 'https://developers.google.com/maps/documentation/javascript/get-api-key',
+    configFields: [
+      { key: 'google_maps_api_key', label: 'Maps API Key', type: 'api_key', placeholder: 'AIzaSy...', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Open Google Cloud Console', description: 'Go to console.cloud.google.com.' },
+      { step: 2, title: 'Enable Maps API', description: 'APIs → Maps JavaScript API → Enable.' },
+      { step: 3, title: 'Create API key', description: 'Credentials → Create API Key.' },
+    ],
+  },
+  {
+    key: 'calendly', name: 'Calendly', description: 'Scheduling & appointment booking',
+    category: 'Scheduling', icon: Calendar, rating: 4.5, installs: '30K+', free: false, price: 7.99,
+    docsUrl: 'https://developer.calendly.com/',
+    configFields: [
+      { key: 'calendly_api_key', label: 'Personal Access Token', type: 'token', placeholder: 'eyJhbGciOiJIUz...', required: true, secret: true },
+      { key: 'calendly_event_url', label: 'Event URL', type: 'custom', placeholder: 'https://calendly.com/your-name/30min', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Log in to Calendly', description: 'Go to calendly.com and sign in.' },
+      { step: 2, title: 'Generate token', description: 'Integrations → API & Webhooks → Generate Token.' },
+      { step: 3, title: 'Get event URL', description: 'Copy the link of the event type to embed.' },
+    ],
+  },
+  {
+    key: 'onesignal', name: 'OneSignal', description: 'Push notifications for web & mobile',
+    category: 'Communication', icon: Bell, rating: 4.4, installs: '18K+', free: true,
+    docsUrl: 'https://documentation.onesignal.com/',
+    configFields: [
+      { key: 'onesignal_app_id', label: 'App ID', type: 'project_id', placeholder: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', required: true },
+    ],
+    setupSteps: [
+      { step: 1, title: 'Create OneSignal account', description: 'Go to onesignal.com and sign up.' },
+      { step: 2, title: 'Create an app', description: 'New App → configure for Web Push.' },
+      { step: 3, title: 'Get App ID', description: 'Settings → Keys & IDs → App ID.' },
     ],
   },
   {
@@ -274,43 +935,18 @@ const APP_CATALOG: AppDef[] = [
       { key: 'webhook_secret', label: 'Secret (optional)', type: 'token', placeholder: 'whsec_...', required: false, secret: true },
     ],
     setupSteps: [
-      { step: 1, title: 'Get webhook URL', description: 'Create a webhook endpoint in your target service (Zapier, Make, n8n, etc.).' },
-      { step: 2, title: 'Copy the URL', description: 'Copy the generated webhook URL from the service.' },
-      { step: 3, title: 'Add a secret (optional)', description: 'Some services provide a signing secret for verifying payloads.' },
-      { step: 4, title: 'Paste above', description: 'Enter the URL (and optional secret) to connect.' },
-    ],
-  },
-  {
-    key: 'onesignal', name: 'OneSignal', description: 'Push notifications for web & mobile',
-    category: 'Communication', icon: Bell, rating: 4.4, installs: '18K+', free: true,
-    docsUrl: 'https://documentation.onesignal.com/docs/web-push-quickstart',
-    configFields: [
-      { key: 'onesignal_app_id', label: 'App ID', type: 'project_id', placeholder: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', required: true },
-    ],
-    setupSteps: [
-      { step: 1, title: 'Create a OneSignal account', description: 'Go to onesignal.com and sign up.' },
-      { step: 2, title: 'Create an app', description: 'Click New App/Website and configure for Web Push.' },
-      { step: 3, title: 'Get your App ID', description: 'Find the App ID in Settings → Keys & IDs.' },
-      { step: 4, title: 'Paste above', description: 'Enter the App ID to enable push notifications.' },
-    ],
-  },
-  {
-    key: 'google-adsense', name: 'Google AdSense', description: 'Monetize your website with ads',
-    category: 'Marketing', icon: Megaphone, rating: 4.1, installs: '60K+', free: true,
-    docsUrl: 'https://support.google.com/adsense/answer/9274019',
-    configFields: [
-      { key: 'adsense_client_id', label: 'Publisher ID', type: 'tracking_id', placeholder: 'ca-pub-xxxxxxxxxxxxxxxx', required: true },
-    ],
-    setupSteps: [
-      { step: 1, title: 'Sign up for AdSense', description: 'Go to google.com/adsense and register your website.' },
-      { step: 2, title: 'Get approved', description: 'Wait for Google to review and approve your site.' },
-      { step: 3, title: 'Copy Publisher ID', description: 'Find your Publisher ID (ca-pub-...) in the AdSense dashboard.' },
-      { step: 4, title: 'Enter above', description: 'Paste the Publisher ID to start showing ads.' },
+      { step: 1, title: 'Get webhook URL', description: 'Create an endpoint in your target service.' },
+      { step: 2, title: 'Copy the URL', description: 'Copy the generated webhook URL.' },
+      { step: 3, title: 'Paste above', description: 'Enter URL and optional secret.' },
     ],
   },
 ];
 
-const CATEGORIES = ['All', 'Analytics', 'Marketing', 'eCommerce', 'Communication', 'Social', 'Media', 'Security', 'Scheduling', 'Utilities', 'Backend'];
+const CATEGORIES = [
+  'All', 'AI', 'Backend', 'eCommerce', 'Developer', 'Design', 'Productivity',
+  'Communication', 'Analytics', 'Marketing', 'Media', 'CMS', 'Automation',
+  'Project Management', 'Social', 'Travel', 'Security', 'Scheduling', 'Utilities',
+];
 
 /* ── Field type icon helper ── */
 const getFieldIcon = (type: ConfigField['type']) => {
@@ -337,22 +973,20 @@ const AppDetailView = ({ app, installed, onBack, onToggle, isPending }: {
       toast.error(`Please fill in: ${missing.map(f => f.label).join(', ')}`);
       return;
     }
-    // Save configs (in a real app, send to backend)
     setSaved(true);
     toast.success(`${app.name} configuration saved!`);
   };
 
-  const Icon = app.icon;
+  const AppIcon = app.icon;
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
       <div className="flex items-center gap-2 px-4 py-3 border-b" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
         <button onClick={onBack} className="p-1 rounded hover:bg-muted transition-colors">
           <ArrowLeft className="w-4 h-4" />
         </button>
-        <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
-          <Icon className="w-3.5 h-3.5" style={{ color: 'hsl(var(--primary))' }} />
+        <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'hsl(var(--muted) / 0.3)' }}>
+          <AppIcon className="w-5 h-5" />
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-xs font-semibold truncate">{app.name}</h3>
@@ -361,7 +995,6 @@ const AppDetailView = ({ app, installed, onBack, onToggle, isPending }: {
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        {/* Description card */}
         <div className="p-3 mx-3 mt-3 rounded-lg" style={{ background: 'hsl(var(--muted) / 0.3)' }}>
           <p className="text-[11px] leading-relaxed opacity-70">{app.description}</p>
           <div className="flex items-center gap-3 mt-2">
@@ -371,12 +1004,11 @@ const AppDetailView = ({ app, installed, onBack, onToggle, isPending }: {
             </div>
             <span className="text-[10px] opacity-40">{app.installs} installs</span>
             <span className="text-[10px] font-medium" style={{ color: app.free ? 'hsl(var(--success))' : 'hsl(var(--primary))' }}>
-              {app.free ? 'Free' : `$${app.price}/mo`}
+              {app.free ? 'Free' : app.price === 0 ? 'Pay-as-you-go' : `$${app.price}/mo`}
             </span>
           </div>
         </div>
 
-        {/* Setup Steps */}
         <div className="px-3 mt-4">
           <div className="flex items-center gap-1.5 mb-2">
             <BookOpen className="w-3.5 h-3.5" style={{ color: 'hsl(var(--primary))' }} />
@@ -406,7 +1038,6 @@ const AppDetailView = ({ app, installed, onBack, onToggle, isPending }: {
           )}
         </div>
 
-        {/* Configuration Fields */}
         <div className="px-3 mt-4 pb-4">
           <div className="flex items-center gap-1.5 mb-2">
             <Settings className="w-3.5 h-3.5" style={{ color: 'hsl(var(--primary))' }} />
@@ -455,15 +1086,13 @@ const AppDetailView = ({ app, installed, onBack, onToggle, isPending }: {
             })}
           </div>
 
-          {/* Info note */}
           <div className="flex items-start gap-2 mt-3 p-2 rounded-lg" style={{ background: 'hsl(var(--primary) / 0.05)', border: '1px solid hsl(var(--primary) / 0.1)' }}>
             <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: 'hsl(var(--primary))' }} />
             <p className="text-[9px] leading-relaxed opacity-60">
-              Secret keys are stored securely and never exposed in client-side code. Publishable keys are safe to use in the browser.
+              Secret keys are stored securely and never exposed in client-side code.
             </p>
           </div>
 
-          {/* Action buttons */}
           <div className="flex gap-2 mt-3">
             <button onClick={handleSave}
               className="flex-1 py-2 rounded-lg text-[11px] font-semibold transition-colors"
@@ -508,7 +1137,7 @@ const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
 
   const filtered = APP_CATALOG.filter(a => {
     if (activeView === 'installed' && !installedKeys.has(a.key)) return false;
-    if (search && !a.name.toLowerCase().includes(search.toLowerCase()) && !a.category.toLowerCase().includes(search.toLowerCase())) return false;
+    if (search && !a.name.toLowerCase().includes(search.toLowerCase()) && !a.category.toLowerCase().includes(search.toLowerCase()) && !a.description.toLowerCase().includes(search.toLowerCase())) return false;
     if (filterCategory !== 'All' && a.category !== filterCategory) return false;
     return true;
   });
@@ -531,7 +1160,6 @@ const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
     }
   };
 
-  // Detail view for a selected app
   const detailApp = selectedApp ? APP_CATALOG.find(a => a.key === selectedApp) : null;
   if (detailApp) {
     return (
@@ -547,7 +1175,6 @@ const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
     );
   }
 
-  // No-project fallback
   if (!projectId) {
     return (
       <div className="builder-flyout overflow-y-auto">
@@ -563,14 +1190,14 @@ const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
           <p className="text-xs opacity-50">Save your project first to install apps.</p>
           <p className="text-[10px] opacity-30 mt-1">You can still browse and view setup guides.</p>
           <div className="mt-4 space-y-1">
-            {APP_CATALOG.slice(0, 6).map(app => {
-              const Icon = app.icon;
+            {APP_CATALOG.slice(0, 8).map(app => {
+              const AppIcon = app.icon;
               return (
                 <button key={app.key} onClick={() => setSelectedApp(app.key)}
                   className="w-full flex items-center gap-2.5 p-2.5 rounded-lg text-left transition-colors hover:bg-muted/30"
                   style={{ background: 'hsl(var(--builder-component-bg))' }}>
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
-                    <Icon className="w-3.5 h-3.5" style={{ color: 'hsl(var(--primary))' }} />
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'hsl(var(--muted) / 0.3)' }}>
+                    <AppIcon className="w-5 h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-[11px] font-semibold truncate">{app.name}</h3>
@@ -588,7 +1215,6 @@ const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
 
   return (
     <div className="builder-flyout overflow-y-auto">
-      {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
         <div className="flex items-center gap-2">
           <Store className="w-4 h-4" style={{ color: 'hsl(var(--primary))' }} />
@@ -600,7 +1226,6 @@ const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
         {onClose && <button onClick={onClose} className="p-1 rounded hover:bg-muted"><X className="w-4 h-4" /></button>}
       </div>
 
-      {/* Browse / Installed tabs */}
       <div className="flex p-2 gap-1 border-b" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
         {(['browse', 'installed'] as const).map(view => (
           <button key={view} onClick={() => setActiveView(view)}
@@ -611,7 +1236,6 @@ const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
         ))}
       </div>
 
-      {/* Search + category filter */}
       <div className="p-3 space-y-2 border-b" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
         <div className="relative">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: 'hsl(var(--muted-foreground))' }} />
@@ -628,13 +1252,12 @@ const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
         </div>
       </div>
 
-      {/* App list */}
       {isLoading ? (
         <div className="p-6 flex justify-center"><Loader2 className="w-5 h-5 animate-spin opacity-50" /></div>
       ) : (
         <div className="space-y-1 p-2">
           {filtered.map(app => {
-            const Icon = app.icon;
+            const AppIcon = app.icon;
             const installed = installedKeys.has(app.key);
             return (
               <div key={app.key}
@@ -642,8 +1265,8 @@ const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
                 style={{ background: 'hsl(var(--builder-component-bg))' }}
                 onClick={() => setSelectedApp(app.key)}>
                 <div className="flex items-start gap-2.5">
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
-                    <Icon className="w-4 h-4" style={{ color: 'hsl(var(--primary))' }} />
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'hsl(var(--muted) / 0.3)' }}>
+                    <AppIcon className="w-5 h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 mb-0.5">
@@ -658,7 +1281,7 @@ const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
                       </div>
                       <span className="text-[9px] opacity-30">{app.installs}</span>
                       <span className="text-[9px] font-medium" style={{ color: app.free ? 'hsl(var(--success))' : 'hsl(var(--primary))' }}>
-                        {app.free ? 'Free' : `$${app.price}/mo`}
+                        {app.free ? 'Free' : app.price === 0 ? 'Pay-as-you-go' : `$${app.price}/mo`}
                       </span>
                     </div>
                   </div>
