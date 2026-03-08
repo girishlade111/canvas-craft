@@ -1976,6 +1976,7 @@ const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
           onBack={() => setSelectedApp(null)}
           onToggle={() => handleToggle(detailApp.key)}
           isPending={installApp.isPending || uninstallApp.isPending}
+          projectId={projectId}
         />
       </div>
     );
