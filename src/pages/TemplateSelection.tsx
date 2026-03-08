@@ -29,6 +29,8 @@ const TemplateSelection = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [search, setSearch] = useState('');
   const [source, setSource] = useState<'cloud' | 'local'>('cloud');
+  const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
+  const [previewDevice, setPreviewDevice] = useState<DeviceView>('desktop');
 
   // Cloud templates from Supabase
   const { data: cloudTemplates = [], isLoading: cloudLoading } = useTemplates(
