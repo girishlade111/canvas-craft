@@ -17,7 +17,14 @@ import {
   HubSpotIcon, AWSIcon, JiraIcon, LinearIcon, ResendIcon,
   PostmanIcon, MongoDBIcon, PrismaIcon, MixpanelIcon, SegmentIcon,
   LottieIcon, SanityIcon, ContentfulIcon, ReplicateIcon, DeepgramIcon,
-  MakeIcon, N8NIcon,
+  MakeIcon, N8NIcon, ClaudeCodeIcon, GeminiIcon, MistralIcon,
+  HuggingFaceIcon, StabilityIcon, NetlifyIcon, RailwayIcon,
+  CloudflareIcon, PayPalIcon, RazorpayIcon, LemonSqueezyIcon,
+  DiscordIcon, TelegramIcon, TeamsIcon, ZoomIcon, WordPressIcon,
+  GhostIcon, StrapiIcon, Auth0Icon, ClerkIcon, AlgoliaIcon,
+  PineconeIcon, SentryIcon, RenderIcon, DigitalOceanIcon,
+  FramerIcon, WebflowIcon, PaddleIcon, GumroadIcon, WooCommerceIcon,
+  PostHogIcon, UpstashIcon, NeonIcon, PlausibleIcon, DenoIcon, TursoIcon,
 } from './BrandIcons';
 import { useInstalledApps, useInstallApp, useUninstallApp } from '@/hooks/useInstalledApps';
 import { toast } from 'sonner';
