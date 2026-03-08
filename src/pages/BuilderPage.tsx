@@ -42,6 +42,7 @@ const InteractionsPanel = lazy(() => import('@/components/builder/InteractionsPa
 const MultiLanguagePanel = lazy(() => import('@/components/builder/MultiLanguagePanel'));
 const DomainPanel = lazy(() => import('@/components/builder/DomainPanel'));
 const AccessibilityPanel = lazy(() => import('@/components/builder/AccessibilityPanel'));
+const SaveTemplateDialog = lazy(() => import('@/components/builder/SaveTemplateDialog'));
 
 import {
   DndContext,
