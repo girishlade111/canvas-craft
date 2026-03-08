@@ -72,7 +72,7 @@ import {
   Loader2, Plus, Layers, Image, History, Search,
   Palette, Megaphone, FileText, Camera, ShoppingBag,
   CalendarDays, Store, Sparkles, BookOpen, LayoutTemplate, Package,
-  Users, Zap, Languages, Globe, Accessibility,
+  Users, Zap, Languages, Globe, Accessibility, Wand2,
 } from 'lucide-react';
 
 const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
