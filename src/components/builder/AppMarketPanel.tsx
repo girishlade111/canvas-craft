@@ -2072,6 +2072,7 @@ interface AppMarketPanelProps {
   projectId?: string | null;
   onClose?: () => void;
   onOpenVercel?: () => void;
+  onOpenNetlify?: () => void;
 }
 
 /* ── Badge helpers ── */
