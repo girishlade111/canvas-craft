@@ -6,7 +6,7 @@
 import React from 'react';
 import { registerComponents } from '@/engine/registry';
 import type { PageSchema } from '@/types/builder';
-import type { ComponentDefinition, ComponentCategory } from '@/types/builder';
+import type { ComponentDefinition } from '@/types/builder';
 
 // ─── Plugin Types ──────────────────────────────────────────
 

@@ -20,11 +20,11 @@ const RecursiveRenderer: React.FC<RecursiveRendererProps> = memo(({ node, device
   // Merge base styles with responsive overrides
   const resolvedStyles = {
     ...node.styles,
-    ...(node.responsiveStyles?.[deviceView] || {}),
+    ...node.responsiveStyles?.[deviceView],
   };
 
   // Strip builder-internal style keys
-  const { customCSS, customClasses, ...cssStyles } = resolvedStyles;
+  const { customCSS: _css, customClasses, ...cssStyles } = resolvedStyles;
 
   const componentProps: Record<string, any> = {
     content: node.content,

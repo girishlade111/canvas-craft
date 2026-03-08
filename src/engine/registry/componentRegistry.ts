@@ -111,7 +111,12 @@ Object.entries(defaultComponents).forEach(([type, component]) => {
 // ─── Public API ────────────────────────────────────────────
 
 export const getComponent = (type: string): React.FC<any> => {
-  return registry.get(type) || ((props: any) => <FallbackComponent type={type}>{props.children}</FallbackComponent>);
+  const found = registry.get(type);
+  if (found) return found;
+  const Fallback: React.FC<any> = (props) => {
+    return React.createElement(FallbackComponent, { type }, props.children);
+  };
+  return Fallback;
 };
 
 export const registerComponent = (type: string, component: React.FC<any>): void => {

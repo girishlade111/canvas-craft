@@ -22,7 +22,7 @@ export const downloadFile = (filename: string, content: string, type = 'text/htm
 /**
  * Download a full project as a zip (placeholder for future JSZip integration).
  */
-export const downloadProject = async (files: Record<string, string>, projectName: string) => {
+export const downloadProject = async (files: Record<string, string>, _projectName: string) => {
   // For now, download each file individually
   Object.entries(files).forEach(([filename, content]) => {
     const type = filename.endsWith('.html') ? 'text/html' : 'text/plain';

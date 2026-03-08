@@ -4,7 +4,7 @@
  * No UI concerns, no side effects — just data transformations.
  */
 
-import type { BuilderComponent, PageSchema, PageSection } from '@/types/builder';
+import type { BuilderComponent, PageSection } from '@/types/builder';
 
 // ─── Queries ───────────────────────────────────────────────
 
