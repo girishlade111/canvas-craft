@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBuilderStore } from '@/store/builderStore';
-import { Code2, ArrowLeft, Search, LayoutGrid, Loader2, Cloud, HardDrive, Plus, Upload } from 'lucide-react';
+import { Code2, ArrowLeft, Search, LayoutGrid, Loader2, Cloud, HardDrive, Upload, Eye, X, Monitor, Tablet, Smartphone } from 'lucide-react';
 import { useTemplates, useIncrementTemplateInstalls, useCreateTemplate } from '@/hooks/useTemplates';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import RecursiveRenderer from '@/engine/renderer/RecursiveRenderer';
 
-import type { Template } from '@/types/builder';
+import type { Template, DeviceView } from '@/types/builder';
 
 const categories = [
   { id: 'all', label: 'All Templates' },
