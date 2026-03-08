@@ -1,95 +1,137 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { templates } from '@/data/templates';
 import { useBuilderStore } from '@/store/builderStore';
-import { Code2, ArrowLeft, Layers, Sparkles, Zap } from 'lucide-react';
+import { Code2, ArrowLeft, Search, Layers, Grid3X3, LayoutGrid } from 'lucide-react';
+
+const categories = [
+  { id: 'all', label: 'All Templates' },
+  { id: 'starter', label: 'Starter' },
+  { id: 'business', label: 'Business' },
+  { id: 'creative', label: 'Creative' },
+  { id: 'marketing', label: 'Marketing' },
+  { id: 'commerce', label: 'E-commerce' },
+  { id: 'content', label: 'Content' },
+  { id: 'tech', label: 'Tech' },
+  { id: 'food', label: 'Food & Drink' },
+];
 
 const TemplateSelection = () => {
   const navigate = useNavigate();
   const setSchema = useBuilderStore((s) => s.setSchema);
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [search, setSearch] = useState('');
+
+  const filtered = templates.filter(t => {
+    const matchesCategory = activeCategory === 'all' || t.category === activeCategory;
+    const matchesSearch = !search || t.name.toLowerCase().includes(search.toLowerCase()) || t.description.toLowerCase().includes(search.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   const handleSelect = (templateId: string) => {
     const template = templates.find((t) => t.id === templateId);
     if (template) {
       setSchema(JSON.parse(JSON.stringify(template.schema)));
-      // Navigate to builder without project ID (local mode)
       navigate('/builder/local');
     }
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="border-b border-border px-6 h-16 flex items-center justify-between shrink-0 bg-card/50 backdrop-blur-sm">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate('/')}
-            className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </button>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <Code2 className="w-4 h-4 text-primary-foreground" />
+      <header className="sticky top-0 z-50 glass border-b border-border/50">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-16">
+          <div className="flex items-center gap-3">
+            <button onClick={() => navigate('/')}
+              className="p-2 rounded-xl hover:bg-muted transition-colors text-muted-foreground hover:text-foreground">
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center"
+                style={{ background: 'var(--gradient-primary)' }}>
+                <Code2 className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-lg font-bold">DevBuilder</span>
             </div>
-            <span className="text-lg font-semibold">DevBuilder</span>
+          </div>
+          <div className="relative w-80 hidden sm:block">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search templates..."
+              className="w-full pl-10 pr-4 py-2 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+            />
           </div>
         </div>
       </header>
 
-      {/* Content */}
-      <div className="flex-1 flex flex-col items-center px-6 py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-            Choose a Template
+      <div className="max-w-7xl mx-auto px-6 py-10">
+        {/* Title */}
+        <div className="text-center mb-10 animate-slide-up">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-3">
+            Choose Your <span className="text-gradient">Template</span>
           </h1>
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-            Pick a starting point and make it yours. Every template is fully customizable.
+          <p className="text-muted-foreground max-w-md mx-auto">
+            Every template is fully customizable. Pick one and make it yours.
           </p>
         </div>
 
-        {/* Features strip */}
-        <div className="flex flex-wrap items-center justify-center gap-6 mb-12 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-primary" />
-            <span>Drag & Drop</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Code2 className="w-4 h-4 text-primary" />
-            <span>Code Editor</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-primary" />
-            <span>Live Preview</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span>50+ Components</span>
-          </div>
+        {/* Category tabs */}
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-10 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          {categories.map(cat => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id)}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                activeCategory === cat.id
+                  ? 'text-primary-foreground shadow-md'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+              }`}
+              style={activeCategory === cat.id ? { background: 'var(--gradient-primary)' } : undefined}
+            >
+              {cat.label}
+            </button>
+          ))}
         </div>
 
-        {/* Template Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 max-w-6xl w-full">
-          {templates.map((template, i) => (
+        {/* Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 stagger-children">
+          {filtered.map((template) => (
             <button
               key={template.id}
               onClick={() => handleSelect(template.id)}
-              className="template-card text-left group animate-fade-in"
-              style={{ animationDelay: `${i * 80}ms` }}
+              className="template-card text-left group"
             >
-              <div className="h-40 flex items-center justify-center text-6xl bg-muted/50">
-                {template.thumbnail}
+              <div className="h-44 flex items-center justify-center text-6xl bg-muted/30 group-hover:bg-muted/50 transition-colors relative overflow-hidden">
+                <span className="relative z-10">{template.thumbnail}</span>
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center bg-foreground/5">
+                  <div className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
+                    style={{ background: 'var(--gradient-primary)' }}>
+                    Use Template
+                  </div>
+                </div>
               </div>
               <div className="p-4">
-                <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
-                  {template.name}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {template.description}
-                </p>
+                <div className="flex items-center justify-between mb-1">
+                  <h3 className="font-semibold group-hover:text-primary transition-colors">{template.name}</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground uppercase tracking-wider font-medium">
+                    {template.category}
+                  </span>
+                </div>
+                <p className="text-sm text-muted-foreground">{template.description}</p>
               </div>
             </button>
           ))}
         </div>
+
+        {filtered.length === 0 && (
+          <div className="text-center py-20 text-muted-foreground">
+            <LayoutGrid className="w-12 h-12 mx-auto mb-3 opacity-30" />
+            <p>No templates match your search.</p>
+          </div>
+        )}
       </div>
     </div>
   );
