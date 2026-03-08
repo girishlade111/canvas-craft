@@ -297,6 +297,28 @@ const STYLE_KEYS = new Set([
 
 const PageSettingsPanel = () => {
   const { schema, setSchema } = useBuilderStore();
+  const [favicon, setFavicon] = useState(schema.favicon || '');
+  const [siteLogo, setSiteLogo] = useState(schema.logo || '');
+
+  const handleFaviconChange = (url: string) => {
+    setFavicon(url);
+    setSchema({ ...schema, favicon: url });
+    // Also update the actual favicon in the document
+    if (url) {
+      let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+      }
+      link.href = url;
+    }
+  };
+
+  const handleLogoChange = (url: string) => {
+    setSiteLogo(url);
+    setSchema({ ...schema, logo: url });
+  };
 
   return (
     <div className="builder-properties-panel overflow-y-auto">
@@ -304,11 +326,43 @@ const PageSettingsPanel = () => {
         <h2 className="text-xs font-semibold uppercase tracking-wider opacity-60">Page Settings</h2>
       </div>
       <div className="p-4 space-y-4">
+        {/* Page Name */}
         <div>
           <label className="text-xs opacity-70 mb-1.5 block font-medium">Page Name</label>
           <input value={schema.name || ''} onChange={e => setSchema({ ...schema, name: e.target.value })}
             className="property-input" placeholder="Page name" />
         </div>
+
+        {/* Site Logo */}
+        <div>
+          <label className="text-xs opacity-70 mb-1.5 block font-medium flex items-center gap-1.5">
+            <ImageIcon className="w-3.5 h-3.5" />
+            Site Logo
+          </label>
+          <ImagePickerField
+            value={siteLogo}
+            onChange={handleLogoChange}
+            placeholder="Upload or enter logo URL"
+            label="Site Logo"
+          />
+        </div>
+
+        {/* Favicon */}
+        <div>
+          <label className="text-xs opacity-70 mb-1.5 block font-medium flex items-center gap-1.5">
+            <ImageIcon className="w-3.5 h-3.5" />
+            Favicon
+          </label>
+          <ImagePickerField
+            value={favicon}
+            onChange={handleFaviconChange}
+            placeholder="Upload favicon (32x32 or 64x64 recommended)"
+            label="Favicon"
+          />
+          <p className="text-[9px] opacity-40 mt-1">Recommended: 32×32 or 64×64 PNG/ICO</p>
+        </div>
+
+        {/* Page Background */}
         <div>
           <label className="text-xs opacity-70 mb-1.5 block font-medium">Page Background</label>
           <div className="flex items-center gap-2">
@@ -316,6 +370,8 @@ const PageSettingsPanel = () => {
             <input className="property-input flex-1" placeholder="Color or gradient" />
           </div>
         </div>
+
+        {/* Page Width */}
         <div>
           <label className="text-xs opacity-70 mb-1.5 block font-medium">Page Width</label>
           <select className="property-input" defaultValue="1280">
@@ -325,10 +381,12 @@ const PageSettingsPanel = () => {
             <option value="100%">Full Width</option>
           </select>
         </div>
+
+        {/* Sections */}
         <div>
           <label className="text-xs opacity-70 mb-1.5 block font-medium">Sections</label>
           <div className="space-y-1">
-            {schema.sections.map((s, i) => (
+            {schema.sections.map((s) => (
               <div key={s.id} className="flex items-center gap-2 p-2 rounded text-xs" style={{ background: 'hsl(var(--builder-component-bg))' }}>
                 <span className="font-medium flex-1">{s.label}</span>
                 <span className="opacity-30">{s.components.length} elements</span>
@@ -336,6 +394,8 @@ const PageSettingsPanel = () => {
             ))}
           </div>
         </div>
+
+        {/* Tip */}
         <div className="mt-4 p-3 rounded-lg text-xs" style={{ background: 'hsl(var(--builder-component-bg))' }}>
           <div className="font-medium mb-1">💡 Tip</div>
           <p className="text-[10px] opacity-50">Select an element on the canvas to edit its properties. Double-click text elements to edit inline.</p>
