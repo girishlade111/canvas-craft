@@ -28,7 +28,6 @@ const handlePositions: Record<ResizeDirection, React.CSSProperties> = {
 };
 
 const ResizeHandles: React.FC<{
-  nodeId: string;
   onResizeStart: (dir: ResizeDirection, e: React.MouseEvent) => void;
 }> = ({ onResizeStart }) => (
   <>
@@ -70,6 +69,42 @@ const DimensionBadge: React.FC<{ width: number; height: number }> = ({ width, he
   </div>
 );
 
+// ─── Drop Indicator ────────────────────────────────────────
+
+const DropIndicator: React.FC<{ position: 'before' | 'after' | 'inside' }> = ({ position }) => {
+  if (position === 'inside') {
+    return (
+      <div
+        className="absolute inset-0 pointer-events-none z-10 rounded"
+        style={{
+          border: '2px dashed hsl(var(--primary))',
+          background: 'hsl(var(--primary) / 0.06)',
+        }}
+      />
+    );
+  }
+  return (
+    <div
+      className="absolute left-0 right-0 pointer-events-none z-10"
+      style={{
+        height: '3px',
+        background: 'hsl(var(--primary))',
+        borderRadius: '2px',
+        ...(position === 'before' ? { top: '-2px' } : { bottom: '-2px' }),
+      }}
+    >
+      <div
+        className="absolute w-2 h-2 rounded-full"
+        style={{
+          background: 'hsl(var(--primary))',
+          top: '-2.5px',
+          left: '-1px',
+        }}
+      />
+    </div>
+  );
+};
+
 // ─── Main Render Node ──────────────────────────────────────
 
 const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0 }) => {
@@ -89,10 +124,16 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0 }) => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [showDimensions, setShowDimensions] = useState(false);
 
+  // ALL components are droppable — containers accept children, others accept siblings
   const { setNodeRef, isOver } = useDroppable({
     id: node.id,
-    data: { type: 'component', componentId: node.id, isContainer, accepts: isContainer },
-    disabled: !isContainer || isLocked,
+    data: {
+      type: 'component',
+      componentId: node.id,
+      isContainer,
+      accepts: true, // All components accept drops (as sibling or child)
+    },
+    disabled: isLocked,
   });
 
   const Component = getComponent(node.type);
@@ -184,11 +225,15 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0 }) => {
     );
   }
 
+  // Determine drop indicator type
+  const showDropIndicator = isOver && !isResizing;
+  const dropPosition = isContainer ? 'inside' : 'after';
+
   return (
     <div
       ref={(el) => {
         (nodeRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-        if (isContainer && el) setNodeRef(el);
+        if (el) setNodeRef(el);
       }}
       className={[
         'canvas-component',
@@ -200,6 +245,11 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0 }) => {
       style={renderStyles}
       onClick={(e) => { e.stopPropagation(); if (!isLocked) selectComponent(node.id); }}
     >
+      {/* Drop indicator for non-container components */}
+      {showDropIndicator && !isContainer && (
+        <DropIndicator position={dropPosition} />
+      )}
+
       {/* Selected toolbar */}
       {isSelected && !isResizing && (
         <div className="component-toolbar">
@@ -216,7 +266,7 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0 }) => {
 
       {/* Resize handles when selected */}
       {isSelected && !isLocked && (
-        <ResizeHandles nodeId={node.id} onResizeStart={handleResizeStart} />
+        <ResizeHandles onResizeStart={handleResizeStart} />
       )}
 
       {/* Dimension badge while resizing */}
