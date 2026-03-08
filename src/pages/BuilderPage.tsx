@@ -96,6 +96,7 @@ const BuilderPage = () => {
   const [activePanel, setActivePanel] = useState<LeftPanel>('elements');
   const [showPublish, setShowPublish] = useState(false);
   const [showAuthGate, setShowAuthGate] = useState(false);
+  const [showExportDialog, setShowExportDialog] = useState(false);
   const [activeDrag, setActiveDrag] = useState<{
     type: string;
     label: string;
