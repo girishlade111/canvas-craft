@@ -305,6 +305,77 @@ propertySchemas.set('api-placeholder', [
   ...allStyleProps,
 ]);
 
+// Widgets
+propertySchemas.set('social-icons', [
+  { key: 'layout', label: 'Layout', type: 'select', group: 'Component', options: [
+    { label: 'Horizontal', value: 'horizontal' }, { label: 'Vertical', value: 'vertical' },
+  ], defaultValue: 'horizontal' },
+  { key: 'size', label: 'Size', type: 'string', group: 'Component', placeholder: '36', defaultValue: '36' },
+  ...allStyleProps,
+]);
+propertySchemas.set('countdown', [
+  { key: 'targetDate', label: 'Target Date', type: 'string', group: 'Component', placeholder: '2026-12-31T00:00:00' },
+  ...allStyleProps,
+]);
+propertySchemas.set('progress-bar', [
+  { key: 'value', label: 'Value (%)', type: 'number', group: 'Component', defaultValue: 65, min: 0, max: 100 },
+  { key: 'label', label: 'Label', type: 'string', group: 'Component', placeholder: 'Progress' },
+  { key: 'color', label: 'Bar Color', type: 'color', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('star-rating', [
+  { key: 'rating', label: 'Rating', type: 'number', group: 'Component', defaultValue: 4, min: 0, max: 5 },
+  { key: 'maxStars', label: 'Max Stars', type: 'number', group: 'Component', defaultValue: 5, min: 1, max: 10 },
+  ...allStyleProps,
+]);
+propertySchemas.set('map', [
+  { key: 'address', label: 'Address', type: 'string', group: 'Component', placeholder: 'New York City' },
+  ...allStyleProps,
+]);
+propertySchemas.set('badge', [
+  { key: 'variant', label: 'Variant', type: 'select', group: 'Component', options: [
+    { label: 'Default', value: 'default' }, { label: 'Secondary', value: 'secondary' },
+    { label: 'Success', value: 'success' }, { label: 'Warning', value: 'warning' },
+    { label: 'Destructive', value: 'destructive' },
+  ], defaultValue: 'default' },
+  ...allStyleProps,
+]);
+propertySchemas.set('alert', [
+  { key: 'type', label: 'Type', type: 'select', group: 'Component', options: [
+    { label: 'Info', value: 'info' }, { label: 'Success', value: 'success' },
+    { label: 'Warning', value: 'warning' }, { label: 'Error', value: 'error' },
+  ], defaultValue: 'info' },
+  ...allStyleProps,
+]);
+propertySchemas.set('icon', [
+  { key: 'icon', label: 'Icon', type: 'string', group: 'Component', placeholder: '⭐', defaultValue: '⭐' },
+  { key: 'size', label: 'Size', type: 'string', group: 'Component', placeholder: '32', defaultValue: '32' },
+  { key: 'color', label: 'Color', type: 'color', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('avatar', [
+  { key: 'src', label: 'Image URL', type: 'image', group: 'Component' },
+  { key: 'name', label: 'Name', type: 'string', group: 'Component', defaultValue: 'User' },
+  { key: 'size', label: 'Size', type: 'string', group: 'Component', placeholder: '48', defaultValue: '48' },
+  ...allStyleProps,
+]);
+propertySchemas.set('tooltip', [
+  { key: 'tooltipText', label: 'Tooltip', type: 'string', group: 'Component', placeholder: 'Tooltip text' },
+  ...allStyleProps,
+]);
+propertySchemas.set('cta-banner', [
+  { key: 'buttonText', label: 'Button Text', type: 'string', group: 'Component', defaultValue: 'Get Started Free' },
+  ...allStyleProps,
+]);
+propertySchemas.set('logo-cloud', [
+  { key: 'title', label: 'Title', type: 'string', group: 'Component', defaultValue: 'Trusted by' },
+  ...allStyleProps,
+]);
+propertySchemas.set('stats', [
+  { key: 'columns', label: 'Columns', type: 'number', group: 'Component', defaultValue: 4, min: 1, max: 6 },
+  ...allStyleProps,
+]);
+
 // ─── Public API ────────────────────────────────────────────
 
 export const getPropertySchema = (type: string): PropertySchema[] => {

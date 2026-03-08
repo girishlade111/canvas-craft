@@ -36,6 +36,12 @@ import {
 import {
   HtmlComponent, CustomCodeComponent, ApiPlaceholderComponent,
 } from '@/registry/components/AdvancedComponents';
+import {
+  SocialIconsComponent, CountdownComponent, ProgressBarComponent,
+  StarRatingComponent, MapComponent, BadgeComponent, AlertComponent,
+  IconComponent, AvatarComponent, TooltipComponent, CTABannerComponent,
+  LogoCloudComponent, StatsComponent,
+} from '@/registry/components/WidgetComponents';
 
 // ─── Registry Store ────────────────────────────────────────
 
@@ -96,6 +102,21 @@ const defaultComponents: Record<string, React.FC<any>> = {
   'shopping-cart': ShoppingCartComponent,
   checkout: CheckoutComponent,
   'payment-block': PaymentBlockComponent,
+
+  // Widgets
+  'social-icons': SocialIconsComponent,
+  countdown: CountdownComponent,
+  'progress-bar': ProgressBarComponent,
+  'star-rating': StarRatingComponent,
+  map: MapComponent,
+  badge: BadgeComponent,
+  alert: AlertComponent,
+  icon: IconComponent,
+  avatar: AvatarComponent,
+  tooltip: TooltipComponent,
+  'cta-banner': CTABannerComponent,
+  'logo-cloud': LogoCloudComponent,
+  stats: StatsComponent,
 
   // Advanced
   html: HtmlComponent,

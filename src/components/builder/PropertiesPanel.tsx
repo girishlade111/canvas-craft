@@ -2,10 +2,20 @@ import { useBuilderStore } from '@/store/builderStore';
 import { getPropertyGroups } from '@/engine/properties';
 import type { ComponentStyles, PropertySchema } from '@/types/builder';
 import { isContainerType } from '@/types/builder';
-import { X, ChevronDown, ChevronRight, Layers, LayoutDashboard, Smartphone } from 'lucide-react';
+import { X, ChevronDown, ChevronRight, Layers, LayoutDashboard, Smartphone, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import AutoLayoutPanel from './AutoLayoutPanel';
 import ResponsivePanel from './ResponsivePanel';
+import AnimationPanel from './AnimationPanel';
+
+const GOOGLE_FONTS = [
+  'inherit', 'Inter', 'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Poppins',
+  'Raleway', 'Oswald', 'Merriweather', 'Playfair Display', 'Nunito', 'Ubuntu',
+  'Rubik', 'Work Sans', 'DM Sans', 'Outfit', 'Space Grotesk', 'Sora',
+  'Archivo', 'Barlow', 'Fira Sans', 'Source Sans 3', 'Mulish', 'Manrope',
+  'PT Sans', 'Quicksand', 'Comfortaa', 'Pacifico', 'Dancing Script',
+  'Permanent Marker', 'Lobster', 'Caveat', 'JetBrains Mono', 'Fira Code',
+];
 
 const PropertyField: React.FC<{
   schema: PropertySchema;
@@ -30,6 +40,22 @@ const PropertyField: React.FC<{
           placeholder={schema.placeholder || schema.label}
         />
       </div>
+    );
+  }
+
+  // Font family with Google Fonts dropdown
+  if (schema.key === 'fontFamily') {
+    return (
+      <select
+        value={String(currentValue || 'inherit')}
+        onChange={(e) => onChange(e.target.value)}
+        className="property-input flex-1"
+        style={{ fontFamily: String(currentValue || 'inherit') }}
+      >
+        {GOOGLE_FONTS.map(f => (
+          <option key={f} value={f} style={{ fontFamily: f }}>{f}</option>
+        ))}
+      </select>
     );
   }
 
@@ -116,12 +142,13 @@ const STYLE_KEYS = new Set([
   'backgroundRepeat', 'letterSpacing', 'textDecoration',
   'textTransform', 'whiteSpace', 'wordBreak', 'objectFit', 'aspectRatio',
   'borderTop', 'borderRight', 'borderBottom', 'borderLeft',
+  'animation',
 ]);
 
 const PropertiesPanel = () => {
   const { selectedComponentId, updateComponentStyles, updateComponent, toggleRightSidebar } = useBuilderStore();
   const [openGroups, setOpenGroups] = useState<string[]>(['Auto Layout', 'Component', 'Layout', 'Responsive']);
-  const [activeTab, setActiveTab] = useState<'design' | 'layout' | 'responsive'>('design');
+  const [activeTab, setActiveTab] = useState<'design' | 'layout' | 'animate' | 'responsive'>('design');
 
   if (!selectedComponentId) return null;
 
@@ -171,6 +198,10 @@ const PropertiesPanel = () => {
           <span className="text-sm font-medium">{selectedComponent.label}</span>
         </div>
         <span className="text-xs opacity-40">{selectedComponent.type}</span>
+        {/* Quick ID copy */}
+        <div className="mt-1">
+          <span className="text-[10px] font-mono opacity-30">{selectedComponent.id}</span>
+        </div>
       </div>
 
       {/* Tab switcher */}
@@ -178,12 +209,13 @@ const PropertiesPanel = () => {
         {[
           { id: 'design' as const, label: 'Design', icon: Layers },
           { id: 'layout' as const, label: 'Layout', icon: LayoutDashboard },
+          { id: 'animate' as const, label: 'Animate', icon: Sparkles },
           { id: 'responsive' as const, label: 'Responsive', icon: Smartphone },
         ].map(({ id, label, icon: Icon }) => (
           <button
             key={id}
             onClick={() => setActiveTab(id)}
-            className={`flex-1 flex items-center justify-center gap-1 py-2 text-xs font-medium transition-colors ${
+            className={`flex-1 flex items-center justify-center gap-1 py-2 text-[11px] font-medium transition-colors ${
               activeTab === id
                 ? 'border-b-2 opacity-100'
                 : 'opacity-50 hover:opacity-80'
@@ -214,7 +246,6 @@ const PropertiesPanel = () => {
 
           {/* Property groups */}
           {Object.entries(propertyGroups).map(([group, fields]) => {
-            // Skip layout fields in design tab — they're in the layout tab
             if (['Layout'].includes(group)) return null;
             const isOpen = openGroups.includes(group);
             return (
@@ -254,7 +285,6 @@ const PropertiesPanel = () => {
       {/* Layout tab */}
       {activeTab === 'layout' && (
         <>
-          {/* Auto Layout section for containers */}
           {isContainer && (
             <div className="border-b" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
               <div className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider opacity-60">
@@ -263,8 +293,6 @@ const PropertiesPanel = () => {
               <AutoLayoutPanel componentId={selectedComponentId} />
             </div>
           )}
-
-          {/* Layout properties from schema */}
           {propertyGroups['Layout'] && (
             <div className="border-b" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
               <div className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider opacity-60">
@@ -285,6 +313,16 @@ const PropertiesPanel = () => {
             </div>
           )}
         </>
+      )}
+
+      {/* Animate tab */}
+      {activeTab === 'animate' && (
+        <div className="border-b" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
+          <div className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider opacity-60">
+            Animation & Effects
+          </div>
+          <AnimationPanel componentId={selectedComponentId} />
+        </div>
       )}
 
       {/* Responsive tab */}

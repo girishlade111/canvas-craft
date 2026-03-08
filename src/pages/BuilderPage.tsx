@@ -16,6 +16,9 @@ import VersionHistoryPanel from '@/components/builder/VersionHistoryPanel';
 import PageManager from '@/components/builder/PageManager';
 import PublishDialog from '@/components/builder/PublishDialog';
 import AuthGateDialog from '@/components/builder/AuthGateDialog';
+import LayersPanel from '@/components/builder/LayersPanel';
+import SEOPanel from '@/components/builder/SEOPanel';
+import { CanvasContextMenu, ClipboardProvider } from '@/components/builder/CanvasContextMenu';
 import {
   DndContext,
   DragOverlay,
@@ -60,9 +63,10 @@ const BuilderPage = () => {
   const [showVersions, setShowVersions] = useState(false);
   const [showPublish, setShowPublish] = useState(false);
   const [showAuthGate, setShowAuthGate] = useState(false);
+  const [showLayers, setShowLayers] = useState(false);
+  const [showSEO, setShowSEO] = useState(false);
   const [activeDrag, setActiveDrag] = useState<{ type: string; label: string } | null>(null);
 
-  // Autosave only in project mode
   const { isSaving: isAutosaving } = useAutosave(isLocalMode ? null : currentPageId);
 
   useEffect(() => {
@@ -98,7 +102,6 @@ const BuilderPage = () => {
     if (!user) {
       setShowAuthGate(true);
     } else if (isLocalMode) {
-      // User is authenticated but in local mode — create a project first, then publish
       handleCreateProjectAndPublish();
     } else {
       setShowPublish(true);
@@ -113,7 +116,6 @@ const BuilderPage = () => {
         templateSchema: schema,
       });
       navigate(`/builder/${project.id}`, { replace: true });
-      // Small delay to let the page load before opening publish
       setTimeout(() => setShowPublish(true), 500);
     } catch (err: any) {
       toast.error('Failed to create project: ' + err.message);
@@ -122,7 +124,6 @@ const BuilderPage = () => {
 
   const handleAuthComplete = async () => {
     setShowAuthGate(false);
-    // After auth, create a project from the current schema and redirect
     try {
       const project = await createProject.mutateAsync({
         name: schema.name || 'My Website',
@@ -193,65 +194,73 @@ const BuilderPage = () => {
   }
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="builder-layout">
-        <BuilderToolbar
-          onSave={handleSave}
-          isSaving={savePage.isPending}
-          isAutosaving={isAutosaving}
-          onToggleAssets={() => { setShowAssets(!showAssets); setShowVersions(false); }}
-          onToggleVersions={() => { setShowVersions(!showVersions); setShowAssets(false); }}
-          showAssets={showAssets}
-          showVersions={showVersions}
-          projectId={actualProjectId ?? undefined}
-          onPublish={handlePublishClick}
+    <ClipboardProvider>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="builder-layout">
+          <BuilderToolbar
+            onSave={handleSave}
+            isSaving={savePage.isPending}
+            isAutosaving={isAutosaving}
+            onToggleAssets={() => { setShowAssets(!showAssets); setShowVersions(false); setShowLayers(false); setShowSEO(false); }}
+            onToggleVersions={() => { setShowVersions(!showVersions); setShowAssets(false); setShowLayers(false); setShowSEO(false); }}
+            showAssets={showAssets}
+            showVersions={showVersions}
+            projectId={actualProjectId ?? undefined}
+            onPublish={handlePublishClick}
+            onToggleLayers={() => { setShowLayers(!showLayers); setShowAssets(false); setShowVersions(false); }}
+            showLayers={showLayers}
+            onToggleSEO={() => { setShowSEO(!showSEO); setShowAssets(false); setShowVersions(false); setShowLayers(false); }}
+            showSEO={showSEO}
+          />
+          {actualProjectId && (
+            <PageManager
+              projectId={actualProjectId}
+              currentPageId={currentPageId}
+              onSelectPage={handleSelectPage}
+            />
+          )}
+          <div className="flex flex-1 overflow-hidden">
+            {leftSidebarOpen && !showAssets && !showLayers && <ComponentSidebar />}
+            {showLayers && <LayersPanel />}
+            {showAssets && actualProjectId && <AssetPanel projectId={actualProjectId} />}
+            <CanvasContextMenu>
+              <BuilderCanvas />
+            </CanvasContextMenu>
+            {rightSidebarOpen && selectedComponentId && !showVersions && !showSEO && <PropertiesPanel />}
+            {showSEO && <SEOPanel onClose={() => setShowSEO(false)} />}
+            {showVersions && currentPageId && <VersionHistoryPanel pageId={currentPageId} />}
+          </div>
+          {codeEditorOpen && <CodeEditorPanel />}
+        </div>
+
+        <DragOverlay>
+          {activeDrag ? (
+            <div className="component-item shadow-lg opacity-90" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
+              {activeDrag.label}
+            </div>
+          ) : null}
+        </DragOverlay>
+
+        <AuthGateDialog
+          isOpen={showAuthGate}
+          onClose={() => setShowAuthGate(false)}
+          onAuthenticated={handleAuthComplete}
         />
+
         {actualProjectId && (
-          <PageManager
+          <PublishDialog
             projectId={actualProjectId}
-            currentPageId={currentPageId}
-            onSelectPage={handleSelectPage}
+            isOpen={showPublish}
+            onClose={() => setShowPublish(false)}
           />
         )}
-        <div className="flex flex-1 overflow-hidden">
-          {leftSidebarOpen && !showAssets && <ComponentSidebar />}
-          {showAssets && actualProjectId && <AssetPanel projectId={actualProjectId} />}
-          <BuilderCanvas />
-          {rightSidebarOpen && selectedComponentId && !showVersions && <PropertiesPanel />}
-          {showVersions && currentPageId && <VersionHistoryPanel pageId={currentPageId} />}
-        </div>
-        {codeEditorOpen && <CodeEditorPanel />}
-      </div>
-
-      <DragOverlay>
-        {activeDrag ? (
-          <div className="component-item shadow-lg opacity-90" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
-            {activeDrag.label}
-          </div>
-        ) : null}
-      </DragOverlay>
-
-      {/* Auth gate modal */}
-      <AuthGateDialog
-        isOpen={showAuthGate}
-        onClose={() => setShowAuthGate(false)}
-        onAuthenticated={handleAuthComplete}
-      />
-
-      {/* Publish dialog — only when we have a real project */}
-      {actualProjectId && (
-        <PublishDialog
-          projectId={actualProjectId}
-          isOpen={showPublish}
-          onClose={() => setShowPublish(false)}
-        />
-      )}
-    </DndContext>
+      </DndContext>
+    </ClipboardProvider>
   );
 };
 

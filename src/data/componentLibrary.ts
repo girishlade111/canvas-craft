@@ -16,12 +16,15 @@ export const componentLibrary: Record<ComponentCategory, ComponentDefinition[]> 
     { type: 'list', label: 'List', category: 'Text', icon: 'List', defaultContent: 'Item 1\nItem 2\nItem 3', defaultStyles: { fontSize: '16px', padding: '0 0 0 20px' } },
     { type: 'quote', label: 'Quote', category: 'Text', icon: 'Quote', defaultContent: '"Design is not just what it looks like. Design is how it works."', defaultStyles: { fontSize: '18px', fontWeight: '500', padding: '20px' } },
     { type: 'button', label: 'Button', category: 'Text', icon: 'MousePointerClick', defaultContent: 'Click Me', defaultStyles: {} },
+    { type: 'badge', label: 'Badge', category: 'Text', icon: 'Circle', defaultContent: 'New', defaultStyles: {} },
   ],
   Media: [
     { type: 'image', label: 'Image', category: 'Media', icon: 'Image', defaultStyles: { width: '100%', height: 'auto' }, defaultProps: { src: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800', alt: 'Placeholder' } },
     { type: 'video', label: 'Video', category: 'Media', icon: 'Video', defaultStyles: { width: '100%' }, defaultProps: { src: '' } },
     { type: 'gallery', label: 'Gallery', category: 'Media', icon: 'GalleryHorizontal', defaultStyles: { display: 'grid', gap: '10px' } },
     { type: 'background-video', label: 'Background Video', category: 'Media', icon: 'MonitorPlay', isContainer: true, acceptsChildren: true, defaultStyles: { width: '100%', height: '400px' } },
+    { type: 'icon', label: 'Icon', category: 'Media', icon: 'Sparkles', defaultStyles: {}, defaultProps: { icon: '⭐', size: '32' } },
+    { type: 'avatar', label: 'Avatar', category: 'Media', icon: 'Circle', defaultStyles: {}, defaultProps: { name: 'User', size: '48' } },
   ],
   Layout: [
     { type: 'hero', label: 'Hero Section', category: 'Layout', icon: 'Sparkles', isContainer: true, acceptsChildren: true, defaultContent: 'Build Something Amazing', defaultStyles: { padding: '80px 20px', textAlign: 'center' } },
@@ -31,6 +34,9 @@ export const componentLibrary: Record<ComponentCategory, ComponentDefinition[]> 
     { type: 'pricing-table', label: 'Pricing Table', category: 'Layout', icon: 'DollarSign', defaultStyles: { padding: '40px 20px' } },
     { type: 'tabs', label: 'Tabs', category: 'Layout', icon: 'PanelTop', isContainer: true, acceptsChildren: true, defaultStyles: {} },
     { type: 'accordion', label: 'Accordion', category: 'Layout', icon: 'ChevronDown', isContainer: true, acceptsChildren: true, defaultStyles: {} },
+    { type: 'cta-banner', label: 'CTA Banner', category: 'Layout', icon: 'Sparkles', defaultStyles: {}, defaultProps: { buttonText: 'Get Started Free' } },
+    { type: 'logo-cloud', label: 'Logo Cloud', category: 'Layout', icon: 'LayoutGrid', defaultStyles: {}, defaultProps: { title: 'Trusted by' } },
+    { type: 'stats', label: 'Stats Counter', category: 'Layout', icon: 'DollarSign', defaultStyles: { padding: '40px 20px' }, defaultProps: { columns: 4 } },
   ],
   Forms: [
     { type: 'input', label: 'Input', category: 'Forms', icon: 'TextCursorInput', defaultStyles: { width: '100%' }, defaultProps: { placeholder: 'Enter text...', label: 'Label' } },
@@ -53,11 +59,18 @@ export const componentLibrary: Record<ComponentCategory, ComponentDefinition[]> 
     { type: 'navbar', label: 'Navbar', category: 'Navigation', icon: 'Menu', isContainer: true, acceptsChildren: true, defaultStyles: { padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
     { type: 'sidebar-nav', label: 'Sidebar Navigation', category: 'Navigation', icon: 'PanelLeft', isContainer: true, acceptsChildren: true, defaultStyles: { padding: '20px', width: '260px' } },
     { type: 'breadcrumbs', label: 'Breadcrumbs', category: 'Navigation', icon: 'ChevronRight', defaultStyles: { padding: '8px 0', fontSize: '14px' } },
+    { type: 'social-icons', label: 'Social Icons', category: 'Navigation', icon: 'Globe', defaultStyles: {}, defaultProps: { layout: 'horizontal', size: '36' } },
   ],
   Advanced: [
     { type: 'html', label: 'HTML Component', category: 'Advanced', icon: 'Code2', defaultContent: '<div>Custom HTML</div>', defaultStyles: {} },
     { type: 'custom-code', label: 'Custom Code', category: 'Advanced', icon: 'Terminal', defaultContent: '// Custom code here', defaultStyles: {} },
     { type: 'api-placeholder', label: 'API Component', category: 'Advanced', icon: 'Globe', defaultStyles: { padding: '20px' } },
+    { type: 'countdown', label: 'Countdown', category: 'Advanced', icon: 'Circle', defaultStyles: { padding: '20px' } },
+    { type: 'progress-bar', label: 'Progress Bar', category: 'Advanced', icon: 'Minus', defaultStyles: { padding: '8px 0' }, defaultProps: { value: 65, label: 'Progress' } },
+    { type: 'star-rating', label: 'Star Rating', category: 'Advanced', icon: 'Sparkles', defaultStyles: {}, defaultProps: { rating: 4, maxStars: 5 } },
+    { type: 'map', label: 'Map', category: 'Advanced', icon: 'Globe', defaultStyles: {}, defaultProps: { address: 'New York City' } },
+    { type: 'alert', label: 'Alert Banner', category: 'Advanced', icon: 'Sparkles', defaultStyles: {}, defaultProps: { type: 'info' }, defaultContent: 'This is an important message.' },
+    { type: 'tooltip', label: 'Tooltip', category: 'Advanced', icon: 'MessageSquareQuote', defaultStyles: {}, defaultContent: 'Hover me', defaultProps: { tooltipText: 'Tooltip text' } },
   ],
 };
 
