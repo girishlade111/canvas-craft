@@ -117,7 +117,7 @@ const SEO_COMPONENTS = {
     { id: 'redirects', name: '301 Redirects', icon: RefreshCw, description: 'URL redirections', preview: '↪️' },
     { id: 'hreflang', name: 'Hreflang Tags', icon: Languages, description: 'Multi-language SEO', preview: '🌍' },
     { id: 'lazy-load', name: 'Lazy Loading', icon: Zap, description: 'Image optimization', preview: '⚡' },
-    { id: 'preload', name: 'Resource Preload', icon: Download, description: 'Critical resources', preview: '📥' },
+    { id: 'preload', name: 'Resource Preload', icon: Zap, description: 'Critical resources', preview: '📥' },
   ],
   'Analytics & Tracking': [
     { id: 'ga4', name: 'Google Analytics 4', icon: BarChart3, description: 'Traffic analytics', preview: '📊' },
