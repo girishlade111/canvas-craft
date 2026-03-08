@@ -538,10 +538,10 @@ const AdvancedSEOPanel = ({ onClose }: { onClose: () => void }) => {
 
             <Section title="Google Preview" icon={Eye}>
               <div className="rounded-lg p-4 bg-background border border-border">
-                <div className="text-sm font-medium text-blue-600 hover:underline cursor-pointer">
+                <div className="text-sm font-medium text-primary hover:underline cursor-pointer">
                   {seo.title || 'Page Title Goes Here'}
                 </div>
-                <div className="text-xs text-green-700 mt-0.5">
+                <div className="text-xs text-success mt-0.5">
                   {seo.canonicalUrl || 'https://yoursite.com/page'}
                 </div>
                 <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
