@@ -98,6 +98,8 @@ const App = () => (
             </Routes>
           </Suspense>
         </BrowserRouter>
+        <Toaster />
+        <Sonner />
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>

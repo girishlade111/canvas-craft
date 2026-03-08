@@ -660,7 +660,7 @@
   }
   .animate-gradient {
     background-size: 200% 200%;
-    animation: gradient-shift 8s ease infinite;
+    animation: gradient-shift 12s ease infinite;
   }
   .animate-slide-up { animation: slide-up 0.35s ease-out both; }
   .animate-scale-in { animation: scale-in 0.25s ease-out both; }
