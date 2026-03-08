@@ -113,44 +113,41 @@ const TemplateSelection = () => {
           <div className="flex items-center justify-center py-20">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
-        ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 stagger-children">
-          {filtered.map((template) => (
-            <button
-              key={template.id}
-              onClick={() => handleSelect(template.id)}
-              className="template-card text-left group"
-            >
-              <div className="h-44 flex items-center justify-center text-6xl bg-muted/30 group-hover:bg-muted/50 transition-colors relative overflow-hidden">
-                <span className="relative z-10">{template.thumbnail}</span>
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center bg-foreground/5">
-                  <div className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
-                    style={{ background: 'var(--gradient-primary)' }}>
-                    Use Template
-                  </div>
-                </div>
-              </div>
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-1">
-                  <h3 className="font-semibold group-hover:text-primary transition-colors">{template.name}</h3>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground uppercase tracking-wider font-medium">
-                    {template.category}
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground">{template.description}</p>
-              </div>
-            </button>
-          ))}
-        </div>
-
-        {!loading && filtered.length === 0 && (
+        ) : filtered.length === 0 ? (
           <div className="text-center py-20 text-muted-foreground">
             <LayoutGrid className="w-12 h-12 mx-auto mb-3 opacity-30" />
             <p>No templates match your search.</p>
           </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 stagger-children">
+            {filtered.map((template) => (
+              <button
+                key={template.id}
+                onClick={() => handleSelect(template.id)}
+                className="template-card text-left group"
+              >
+                <div className="h-44 flex items-center justify-center text-6xl bg-muted/30 group-hover:bg-muted/50 transition-colors relative overflow-hidden">
+                  <span className="relative z-10">{template.thumbnail}</span>
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center bg-foreground/5">
+                    <div className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
+                      style={{ background: 'var(--gradient-primary)' }}>
+                      Use Template
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <h3 className="font-semibold group-hover:text-primary transition-colors">{template.name}</h3>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground uppercase tracking-wider font-medium">
+                      {template.category}
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">{template.description}</p>
+                </div>
+              </button>
+            ))}
+          </div>
         )}
-        {loading ? null : null}
-        {/* close loading ternary */}
       </div>
     </div>
   );
