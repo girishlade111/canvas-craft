@@ -5,19 +5,17 @@ import {
   Layers, Eye, EyeOff, Lock, Unlock, ChevronRight, ChevronDown,
   GripVertical, Trash2, Copy, Plus, ArrowUp, ArrowDown, Image,
   MoreHorizontal, Type, Square, Box, LayoutGrid, Columns, Rows,
-  Circle, Star, Heart, Zap, Code, Video, Music, FileText, Link,
-  Button, FormInput, CheckSquare, List, Table, Navigation, Menu,
+  Circle, Star, Zap, Code, Music, FileText, Link,
+  FormInput, CheckSquare, List, Table, Navigation, Menu,
   Quote, Heading1, Heading2, AlignLeft, ImageIcon, Film, MapPin,
-  Calendar, Clock, User, Users, Mail, Phone, Globe, Share2,
-  ShoppingCart, CreditCard, Package, Tag, Percent, Award, Trophy,
-  Briefcase, Building, Home, Car, Plane, Ship, Train, Bike,
-  Palette, Brush, Pen, Pencil, Eraser, Scissors, Wand2, Sparkles,
-  Sun, Moon, Cloud, Umbrella, Droplet, Wind, Thermometer, Snowflake,
+  Calendar, Clock, User, Globe, Share2,
+  ShoppingCart, CreditCard, Package, Tag,
+  Pencil, Sparkles, Cloud,
   Search, Filter, SlidersHorizontal, Settings, MoreVertical,
-  FolderOpen, FolderClosed, Component, Puzzle, Blocks, Grip,
-  AlertCircle, Info, HelpCircle, CheckCircle, XCircle, AlertTriangle,
-  Maximize2, Minimize2, Move, RotateCw, Flip, Undo2, Redo2,
-  PanelLeft, PanelRight, PanelTop, PanelBottom, Layout,
+  FolderClosed, Move,
+  CheckCircle,
+  Maximize2, Minimize2,
+  PanelLeft, PanelTop, PanelBottom, Layout,
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
@@ -29,8 +27,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
+// ─── Custom Minus Icon ─────────────────────────────────────
+
+const MinusIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <line x1="5" y1="12" x2="19" y2="12" />
+  </svg>
+);
 
 // ─── Component Type Icons Map ──────────────────────────────
 
@@ -65,11 +70,9 @@ const COMPONENT_ICONS: Record<string, any> = {
   youtube: Film, vimeo: Film, spotify: Music, instagram: ImageIcon,
   twitter: Globe, embed: Code, iframe: Globe,
   // Advanced
-  table: Table, list: List, divider: Minus, spacer: Move,
+  table: Table, list: List, divider: MinusIcon, spacer: Move,
   html: Code, script: Code, 'custom-code': Code,
 };
-
-const Minus = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <line x1="5" y1="12" x2="19" y2="12" />
   </svg>
