@@ -10,4 +10,5 @@ export {
   getRegisteredTypes,
   getRegistrySize,
   registerComponents,
+  onRegistryUpdate,
 } from './componentRegistry';
