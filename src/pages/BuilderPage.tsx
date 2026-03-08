@@ -81,7 +81,7 @@ import {
 const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const generateSectionId = () => `section-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-type LeftPanel = 'elements' | 'templates' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | 'cms' | 'store' | 'marketing' | 'booking' | 'apps' | 'ai' | 'marketplace' | 'members' | 'interactions' | 'interactive-elements' | 'languages' | 'domain' | 'accessibility' | 'vercel' | 'netlify' | null;
+type LeftPanel = 'elements' | 'templates' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | 'cms' | 'store' | 'marketing' | 'booking' | 'apps' | 'ai' | 'marketplace' | 'members' | 'interactions' | 'interactive-elements' | 'languages' | 'domain' | 'accessibility' | 'vercel' | 'netlify' | 'railway' | null;
 
 const BuilderPage = () => {
   const { projectId } = useParams<{ projectId: string }>();
