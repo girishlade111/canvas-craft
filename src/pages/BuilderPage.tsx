@@ -71,7 +71,7 @@ const BuilderPage = () => {
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (!currentPageId) return;
     try {
       await savePage.mutateAsync({ pageId: currentPageId, schema });
@@ -79,7 +79,10 @@ const BuilderPage = () => {
     } catch (err: any) {
       toast.error('Failed to save: ' + err.message);
     }
-  };
+  }, [currentPageId, savePage, schema]);
+
+  // Keyboard shortcuts (Ctrl+Z, Ctrl+S, Delete, etc.)
+  useKeyboardShortcuts({ onSave: handleSave });
 
   const handleDragStart = (event: DragStartEvent) => {
     const data = event.active.data.current;
