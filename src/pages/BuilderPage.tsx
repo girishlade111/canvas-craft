@@ -425,6 +425,7 @@ const BuilderPage = () => {
     { id: 'layers', icon: Layers, label: 'Layers' },
     { id: 'design', icon: Palette, label: 'Design' },
     { id: 'interactions', icon: Zap, label: 'Effects' },
+    { id: 'interactive-elements', icon: Wand2, label: 'Animate' },
     { id: 'cms', icon: BookOpen, label: 'CMS' },
     { id: 'store', icon: ShoppingBag, label: 'Store' },
     { id: 'booking', icon: CalendarDays, label: 'Book' },
