@@ -42,6 +42,17 @@ const PREVIEW_MAP: Record<string, string> = {
   "conference": "event-preview.jpg",
   "music": "music-preview.jpg",
   "band": "music-preview.jpg",
+  "landing": "landing-preview.jpg",
+  "education": "education-preview.jpg",
+  "course": "education-preview.jpg",
+  "enterprise": "enterprise-preview.jpg",
+  "corporate": "enterprise-preview.jpg",
+  "non-profit": "nonprofit-preview.jpg",
+  "nonprofit": "nonprofit-preview.jpg",
+  "charity": "nonprofit-preview.jpg",
+  "community": "community-preview.jpg",
+  "forum": "community-preview.jpg",
+  "blank": "landing-preview.jpg",
 };
 
 Deno.serve(async (req) => {
