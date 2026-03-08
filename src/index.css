@@ -48,6 +48,7 @@
     --builder-selected: 220 90% 56%;
     --builder-component-bg: 220 16% 18%;
     --builder-component-hover: 220 16% 24%;
+    --builder-resize-handle: 220 90% 56%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -155,10 +156,17 @@
     min-height: 4px;
   }
   .canvas-component:hover {
-    outline-color: hsl(var(--builder-hover) / 0.5);
+    outline-color: hsl(var(--builder-hover) / 0.4);
   }
   .canvas-component.selected {
     outline: 2px solid hsl(var(--builder-selected));
+  }
+  .canvas-component.selected:hover {
+    outline-color: hsl(var(--builder-selected));
+  }
+  .canvas-component.resizing {
+    outline: 2px solid hsl(var(--builder-selected));
+    user-select: none;
   }
   .canvas-component.drop-target {
     outline: 2px dashed hsl(var(--primary));
@@ -198,5 +206,14 @@
   }
   .property-input:focus {
     box-shadow: 0 0 0 2px hsl(var(--builder-hover));
+  }
+
+  /* Resize handle hover effects */
+  .resize-handle {
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .resize-handle:hover {
+    transform: scale(1.3);
+    opacity: 1 !important;
   }
 }
