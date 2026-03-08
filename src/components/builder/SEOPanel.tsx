@@ -213,18 +213,45 @@ const KeywordDensityBar = ({ keyword, density, status }: { keyword: string; dens
 
 const SEOPanel = ({ onClose }: { onClose: () => void }) => {
   const [seo, setSeo] = useState<SEOData>({
-    title: '', description: '', ogTitle: '', ogDescription: '', ogImage: '',
-    twitterCard: 'summary_large_image', twitterSite: '',
-    canonicalUrl: '', noIndex: false, noFollow: false, customHead: '', focusKeyword: '',
-    secondaryKeywords: '', robotsTxt: 'User-agent: *\nAllow: /\n\nSitemap: https://example.com/sitemap.xml',
-    schemaType: 'WebSite', schemaData: '', breadcrumbs: ['Home'],
-    redirects: [], hreflang: [],
+    // Basic Meta
+    title: '', description: '', keywords: '', author: '',
+    // Open Graph
+    ogTitle: '', ogDescription: '', ogImage: '', ogType: 'website', ogSiteName: '', ogLocale: 'en_US',
+    // Twitter Cards
+    twitterCard: 'summary_large_image', twitterSite: '', twitterCreator: '', twitterImage: '',
+    // LinkedIn & Pinterest
+    linkedinImage: '', pinterestVerification: '',
+    // Technical SEO
+    canonicalUrl: '', noIndex: false, noFollow: false, noArchive: false, noSnippet: false,
+    maxSnippet: '', maxImagePreview: 'large', maxVideoPreview: '',
+    customHead: '',
+    // Keywords
+    focusKeyword: '', secondaryKeywords: '', keywordDensityTarget: 2,
+    // Robots
+    robotsTxt: 'User-agent: *\nAllow: /\n\nSitemap: https://example.com/sitemap.xml',
+    crawlDelay: '',
+    // Schema
+    schemaType: 'WebSite', schemaData: '',
+    // Navigation
+    breadcrumbs: ['Home'], redirects: [], hreflang: [],
+    // Performance
     lazyLoadImages: true, minifyCSS: true, minifyJS: true, preloadFonts: true,
-    altTagsRequired: true, ariaLabels: true, skipLinks: false,
+    preconnectDomains: '', prefetchPages: '', criticalCSS: false,
+    // Accessibility
+    altTagsRequired: true, ariaLabels: true, skipLinks: false, focusIndicators: true, colorContrast: true,
+    // Analytics
     googleAnalyticsId: '', googleTagManagerId: '', facebookPixelId: '',
-    sitemapEnabled: true, sitemapFrequency: 'weekly', sitemapPriority: '0.8',
+    hotjarId: '', clarityId: '', plausibleDomain: '', umamiWebsiteId: '',
+    // Sitemap
+    sitemapEnabled: true, sitemapFrequency: 'weekly', sitemapPriority: '0.8', sitemapLastmod: true,
+    // Local SEO
+    localBusinessName: '', localBusinessAddress: '', localBusinessPhone: '', localBusinessHours: '', googleMyBusinessId: '',
+    // E-commerce
+    productPrice: '', productCurrency: 'USD', productAvailability: 'InStock', productBrand: '', productSku: '',
+    // Advanced
+    jsonLdCustom: '', verificationGoogle: '', verificationBing: '', verificationYandex: '', dnsPrefetch: '',
   });
-  const [activeTab, setActiveTab] = useState<'overview' | 'keywords' | 'meta' | 'social' | 'schema' | 'technical' | 'performance' | 'analytics'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'keywords' | 'meta' | 'social' | 'schema' | 'technical' | 'performance' | 'analytics' | 'local' | 'ecommerce'>('overview');
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   const update = (key: keyof SEOData, value: any) => setSeo(prev => ({ ...prev, [key]: value }));
