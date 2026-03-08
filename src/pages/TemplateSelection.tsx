@@ -14,6 +14,7 @@ const categories = [
   { id: 'content', label: 'Content' },
   { id: 'tech', label: 'Tech' },
   { id: 'food', label: 'Food & Drink' },
+  { id: 'social', label: 'Social' },
 ];
 
 const TemplateSelection = () => {
