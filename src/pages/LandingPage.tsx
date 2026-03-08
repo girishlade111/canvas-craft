@@ -591,9 +591,42 @@ const LandingPage = () => {
                 </div>
                 <span className="font-bold text-lg">DevBuilder</span>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5">
                 The most powerful visual website builder. Create, customize, and publish stunning websites without code.
               </p>
+              {/* Social Icons */}
+              <div className="flex items-center gap-2">
+                {[
+                  { icon: Instagram, href: 'https://www.instagram.com/girish_lade_/', label: 'Instagram' },
+                  { icon: Linkedin, href: 'https://www.linkedin.com/in/girish-lade-075bba201/', label: 'LinkedIn' },
+                  { icon: Github, href: 'https://github.com/girishlade111', label: 'GitHub' },
+                  { icon: CodepenIcon, href: 'https://codepen.io/Girish-Lade-the-looper', label: 'CodePen' },
+                  { icon: Mail, href: 'mailto:admin@ladestack.in', label: 'Email' },
+                  { icon: ExternalLink, href: 'https://ladestack.in', label: 'Website' },
+                ].map(({ icon: Icon, href, label }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target={href.startsWith('mailto') ? undefined : '_blank'}
+                    rel="noopener noreferrer"
+                    title={label}
+                    className="group w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110"
+                    style={{
+                      background: 'hsl(var(--muted))',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'var(--gradient-primary)';
+                      e.currentTarget.style.boxShadow = '0 4px 15px -3px hsl(var(--primary) / 0.4)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'hsl(var(--muted))';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  >
+                    <Icon className="w-4 h-4 text-muted-foreground group-hover:text-white transition-colors" />
+                  </a>
+                ))}
+              </div>
             </div>
             <div>
               <h4 className="font-semibold mb-4 text-sm">Product</h4>
@@ -614,17 +647,31 @@ const LandingPage = () => {
               </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-sm">Legal</h4>
+              <h4 className="font-semibold mb-4 text-sm">Connect</h4>
               <div className="space-y-2.5 text-sm text-muted-foreground">
-                <span className="block">Privacy Policy</span>
-                <span className="block">Terms of Service</span>
-                <span className="block">Cookie Policy</span>
+                <a href="https://www.instagram.com/girish_lade_/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-foreground transition-colors">
+                  <Instagram className="w-3.5 h-3.5" /> Instagram
+                </a>
+                <a href="https://www.linkedin.com/in/girish-lade-075bba201/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-foreground transition-colors">
+                  <Linkedin className="w-3.5 h-3.5" /> LinkedIn
+                </a>
+                <a href="https://github.com/girishlade111" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-foreground transition-colors">
+                  <Github className="w-3.5 h-3.5" /> GitHub
+                </a>
+                <a href="mailto:admin@ladestack.in" className="flex items-center gap-2 hover:text-foreground transition-colors">
+                  <Mail className="w-3.5 h-3.5" /> admin@ladestack.in
+                </a>
+                <a href="https://ladestack.in" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-foreground transition-colors">
+                  <ExternalLink className="w-3.5 h-3.5" /> ladestack.in
+                </a>
               </div>
             </div>
           </div>
           <div className="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
             <span>© {new Date().getFullYear()} DevBuilder. All rights reserved.</span>
-            <span>Made with ❤️ for creators everywhere</span>
+            <div className="flex items-center gap-4">
+              <span>Made with ❤️ by <a href="https://ladestack.in" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors font-medium">LadeStack</a></span>
+            </div>
           </div>
         </div>
       </footer>
