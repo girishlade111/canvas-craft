@@ -26,7 +26,6 @@ import { CanvasContextMenu, ClipboardProvider } from '@/components/builder/Canva
 import {
   DndContext,
   DragOverlay,
-  closestCenter,
   pointerWithin,
   PointerSensor,
   useSensor,
