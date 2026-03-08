@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { icons } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 // ─── Social Icons ──────────────────────────────────────────
 export const SocialIconsComponent: React.FC<{ layout?: string; size?: string }> = ({ layout = 'horizontal', size = '24' }) => {
