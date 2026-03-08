@@ -2080,7 +2080,7 @@ interface AppMarketPanelProps {
 const FEATURED_APPS = new Set(['supabase', 'stripe', 'chatgpt', 'vercel', 'github', 'slack', 'figma', 'notion', 'auth0', 'clerk']);
 const NEW_APPS = new Set(['twitch', 'reddit', 'pinterest', 'mailgun', 'convertkit', 'supabase-edge-functions', 'vercel-ai-sdk', 'langchain', 'crewai']);
 
-const AppMarketPanel = ({ projectId, onClose, onOpenVercel, onOpenNetlify }: AppMarketPanelProps) => {
+const AppMarketPanel = ({ projectId, onClose, onOpenVercel, onOpenNetlify, onOpenRailway }: AppMarketPanelProps) => {
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState('All');
   const [activeView, setActiveView] = useState<'browse' | 'installed'>('browse');
