@@ -21,7 +21,11 @@ import PageManager from '@/components/builder/PageManager';
 import PublishDialog from '@/components/builder/PublishDialog';
 import AuthGateDialog from '@/components/builder/AuthGateDialog';
 import LayersPanel from '@/components/builder/LayersPanel';
-import SEOPanel from '@/components/builder/SEOPanel';
+import AdvancedSEOPanel from '@/components/builder/AdvancedSEOPanel';
+import GlobalDesignPanel from '@/components/builder/GlobalDesignPanel';
+import PopupBuilderPanel from '@/components/builder/PopupBuilderPanel';
+import FormBuilderPanel from '@/components/builder/FormBuilderPanel';
+import PhotoStudioPanel from '@/components/builder/PhotoStudioPanel';
 import { CanvasContextMenu, ClipboardProvider } from '@/components/builder/CanvasContextMenu';
 import {
   DndContext,
@@ -39,12 +43,13 @@ import { componentLibrary } from '@/data/componentLibrary';
 
 import {
   Loader2, Plus, Layers, Image, History, Search,
+  Palette, Megaphone, FileText, Camera,
 } from 'lucide-react';
 
 const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const generateSectionId = () => `section-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-type LeftPanel = 'elements' | 'layers' | 'assets' | 'versions' | 'seo' | null;
+type LeftPanel = 'elements' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | null;
 
 const BuilderPage = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -184,7 +189,6 @@ const BuilderPage = () => {
   const handleDragStart = (event: DragStartEvent) => {
     const data = event.active.data.current;
     if (data?.fromCanvas) {
-      // Dragging existing component on canvas
       setActiveDrag({
         type: data.componentType,
         label: data.label,
@@ -192,7 +196,6 @@ const BuilderPage = () => {
         componentId: data.componentId,
       });
     } else if (data?.type) {
-      // Dragging from library
       setActiveDrag({ type: data.type, label: data.label });
     }
   };
@@ -226,7 +229,6 @@ const BuilderPage = () => {
       const componentId = activeData.componentId as string;
       const overData = over.data.current;
 
-      // Dropping on a container
       if (overData?.isContainer && overData?.componentId) {
         const targetContainerId = overData.componentId as string;
         if (targetContainerId !== componentId) {
@@ -235,12 +237,10 @@ const BuilderPage = () => {
         return;
       }
 
-      // Dropping on/near a sibling component
       if (overData?.componentId) {
         const targetId = overData.componentId as string;
         if (targetId === componentId) return;
 
-        // Find the target's parent section
         const parentSection = schema.sections.find(s =>
           s.components.some(function check(c: BuilderComponent): boolean {
             return c.id === targetId || (c.children?.some(check) ?? false);
@@ -255,7 +255,6 @@ const BuilderPage = () => {
         return;
       }
 
-      // Dropping on section
       const targetSectionId = overData?.sectionId || over.id;
       const targetSection = schema.sections.find(s => s.id === targetSectionId);
       if (targetSection) {
@@ -289,13 +288,11 @@ const BuilderPage = () => {
 
     const overData = over.data.current;
 
-    // Drop on container
     if (overData?.isContainer && overData?.componentId) {
       addComponentToContainer(overData.componentId, newComp);
       return;
     }
 
-    // Drop on/near existing component (insert as sibling)
     if (overData?.componentId && !overData?.isContainer) {
       const targetId = overData.componentId as string;
       const parentSection = schema.sections.find(s =>
@@ -314,7 +311,6 @@ const BuilderPage = () => {
       }
     }
 
-    // Drop on section or empty canvas
     const targetSectionId = overData?.sectionId || over.id;
     const targetSection = schema.sections.find(s => s.id === targetSectionId);
     const section = targetSection || schema.sections.find(s => s.type === 'body');
@@ -351,12 +347,20 @@ const BuilderPage = () => {
     );
   }
 
-  const iconBarItems: { id: LeftPanel; icon: typeof Plus; label: string }[] = [
+  // Check if selected component is an image type for Photo Studio
+  const selectedComponent = selectedComponentId ? useBuilderStore.getState().getSelectedComponent() : null;
+  const isImageSelected = selectedComponent?.type === 'image' || selectedComponent?.type === 'avatar' || selectedComponent?.type === 'background-image';
+
+  const iconBarItems: { id: LeftPanel; icon: typeof Plus; label: string; show?: boolean }[] = [
     { id: 'elements', icon: Plus, label: 'Add' },
     { id: 'layers', icon: Layers, label: 'Layers' },
-    { id: 'assets', icon: Image, label: 'Media' },
-    { id: 'versions', icon: History, label: 'History' },
+    { id: 'design', icon: Palette, label: 'Design' },
+    { id: 'assets', icon: Image, label: 'Media', show: !!actualProjectId },
+    { id: 'forms', icon: FileText, label: 'Forms' },
+    { id: 'popups', icon: Megaphone, label: 'Popups' },
+    { id: 'photo-studio', icon: Camera, label: 'Photo', show: isImageSelected },
     { id: 'seo', icon: Search, label: 'SEO' },
+    { id: 'versions', icon: History, label: 'History', show: !!currentPageId },
   ];
 
   return (
@@ -399,11 +403,10 @@ const BuilderPage = () => {
           )}
 
           <div className="flex flex-1 overflow-hidden">
-            {/* Wix-style dark icon bar */}
+            {/* Icon bar */}
             <div className="builder-icon-bar">
-              {iconBarItems.map(({ id, icon: Icon, label }) => {
-                if (id === 'assets' && !actualProjectId) return null;
-                if (id === 'versions' && !currentPageId) return null;
+              {iconBarItems.map(({ id, icon: Icon, label, show }) => {
+                if (show === false) return null;
                 return (
                   <button
                     key={id}
@@ -424,8 +427,14 @@ const BuilderPage = () => {
             )}
             {activePanel === 'layers' && <LayersPanel />}
             {activePanel === 'assets' && actualProjectId && <AssetPanel projectId={actualProjectId} />}
-            {activePanel === 'seo' && <SEOPanel onClose={() => setActivePanel(null)} />}
+            {activePanel === 'seo' && <AdvancedSEOPanel onClose={() => setActivePanel(null)} />}
             {activePanel === 'versions' && currentPageId && <VersionHistoryPanel pageId={currentPageId} />}
+            {activePanel === 'design' && <GlobalDesignPanel onClose={() => setActivePanel(null)} />}
+            {activePanel === 'popups' && <PopupBuilderPanel onClose={() => setActivePanel(null)} />}
+            {activePanel === 'forms' && <FormBuilderPanel onClose={() => setActivePanel(null)} />}
+            {activePanel === 'photo-studio' && selectedComponentId && (
+              <PhotoStudioPanel componentId={selectedComponentId} onClose={() => setActivePanel(null)} />
+            )}
 
             {/* Main canvas */}
             <CanvasContextMenu>
