@@ -37,6 +37,11 @@ const AIToolsPanel = lazy(() => import('@/components/builder/AIToolsPanel'));
 const ExportDialog = lazy(() => import('@/components/builder/ExportDialog'));
 const TemplatesPanel = lazy(() => import('@/components/builder/TemplatesPanel'));
 const MarketplacePanel = lazy(() => import('@/components/builder/MarketplacePanel'));
+const MemberAreaPanel = lazy(() => import('@/components/builder/MemberAreaPanel'));
+const InteractionsPanel = lazy(() => import('@/components/builder/InteractionsPanel'));
+const MultiLanguagePanel = lazy(() => import('@/components/builder/MultiLanguagePanel'));
+const DomainPanel = lazy(() => import('@/components/builder/DomainPanel'));
+const AccessibilityPanel = lazy(() => import('@/components/builder/AccessibilityPanel'));
 
 import {
   DndContext,
