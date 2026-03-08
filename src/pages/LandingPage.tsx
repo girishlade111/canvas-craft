@@ -80,7 +80,7 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       {/* === NAV === */}
-      <nav className="fixed top-0 inset-x-0 z-50 glass">
+      <nav className="fixed top-0 inset-x-0 z-50 glass" style={{ contain: 'layout style' }}>
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-16">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg"
@@ -122,15 +122,9 @@ const LandingPage = () => {
 
       {/* === HERO === */}
       <section className="relative pt-32 pb-24 px-6 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full opacity-15 blur-[150px] animate-gradient"
-            style={{ background: 'var(--gradient-primary)' }} />
-          <div className="absolute top-40 right-0 w-[300px] h-[300px] rounded-full opacity-10 blur-[100px]"
-            style={{ background: 'hsl(var(--accent))' }} />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-8 blur-[120px]"
-            style={{ background: 'hsl(var(--primary))' }} />
-          <div className="absolute inset-0 opacity-[0.03]"
-            style={{ backgroundImage: 'radial-gradient(circle, hsl(var(--foreground)) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ contain: 'strict' }}>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full opacity-12 blur-[80px]"
+            style={{ background: 'var(--gradient-primary)', willChange: 'auto' }} />
         </div>
 
         <div className="max-w-5xl mx-auto text-center relative z-10">
@@ -295,7 +289,7 @@ const LandingPage = () => {
       </section>
 
       {/* === ADVANCED FEATURES (2-col highlight) === */}
-      <section className="py-24 px-6 relative">
+      <section className="py-24 px-6 relative" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 800px' }}>
         <div className="absolute inset-0 pointer-events-none opacity-50" style={{ background: 'var(--gradient-hero)' }} />
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
@@ -359,7 +353,7 @@ const LandingPage = () => {
       </section>
 
       {/* === USE CASES === */}
-      <section className="py-24 px-6 relative">
+      <section className="py-24 px-6 relative" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 700px' }}>
         <div className="absolute inset-0 pointer-events-none opacity-30" style={{ background: 'var(--gradient-hero)' }} />
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
@@ -440,7 +434,7 @@ const LandingPage = () => {
       </section>
 
       {/* === COMPARISON TABLE === */}
-      <section id="compare" className="py-24 px-6 relative">
+      <section id="compare" className="py-24 px-6 relative" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px' }}>
         <div className="absolute inset-0 pointer-events-none opacity-30" style={{ background: 'var(--gradient-hero)' }} />
         <div className="max-w-3xl mx-auto relative z-10">
           <div className="text-center mb-16">
@@ -481,7 +475,7 @@ const LandingPage = () => {
       </section>
 
       {/* === TESTIMONIALS === */}
-      <section className="py-24 px-6">
+      <section className="py-24 px-6" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px' }}>
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-1.5 mb-4">
@@ -526,7 +520,7 @@ const LandingPage = () => {
       </section>
 
       {/* === FAQ === */}
-      <section id="faq" className="py-24 px-6 relative">
+      <section id="faq" className="py-24 px-6 relative" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px' }}>
         <div className="absolute inset-0 pointer-events-none opacity-30" style={{ background: 'var(--gradient-hero)' }} />
         <div className="max-w-3xl mx-auto relative z-10">
           <div className="text-center mb-16">
