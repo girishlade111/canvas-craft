@@ -567,10 +567,6 @@ const PropertiesPanel = () => {
   const [openGroups, setOpenGroups] = useState<string[]>(['Auto Layout', 'Component', 'Layout', 'Responsive', 'Typography', 'Appearance', 'Background', 'Advanced']);
   const [activeTab, setActiveTab] = useState<'design' | 'layout' | 'animate' | 'link' | 'a11y' | 'responsive'>('design');
 
-  if (!selectedComponentId) {
-    return <PageSettingsPanel />;
-  }
-
   // Use schema from reactive subscription to ensure re-render on changes
   const selectedComponent = useMemo(() => {
     if (!selectedComponentId) return null;
@@ -591,7 +587,9 @@ const PropertiesPanel = () => {
     return null;
   }, [selectedComponentId, schema]);
 
-  if (!selectedComponent) return null;
+  if (!selectedComponentId || !selectedComponent) {
+    return <PageSettingsPanel />;
+  }
 
   const isContainer = isContainerType(selectedComponent.type);
   const propertyGroups = getPropertyGroups(selectedComponent.type);
