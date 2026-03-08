@@ -19,11 +19,12 @@ const DroppableSection = ({ section }: { section: PageSection }) => {
     <div
       ref={setNodeRef}
       style={section.styles as React.CSSProperties}
-      className={`relative transition-all min-h-[60px] ${isOver ? 'ring-2 ring-primary ring-inset bg-primary/5' : ''}`}
+      className={`relative transition-all min-h-[80px] ${isOver ? 'ring-2 ring-primary ring-inset' : ''}`}
     >
       {section.components.length === 0 && (
         <div className="empty-container-placeholder">
-          Drop components here — {section.label}
+          <div className="text-lg mb-1">+</div>
+          <div>Drag & drop elements here</div>
         </div>
       )}
       {section.components.map((comp) => (
@@ -33,7 +34,6 @@ const DroppableSection = ({ section }: { section: PageSection }) => {
   );
 };
 
-// Empty canvas droppable (when no sections exist)
 const EmptyCanvasDropZone = () => {
   const { setNodeRef, isOver } = useDroppable({
     id: 'empty-canvas',
@@ -43,15 +43,22 @@ const EmptyCanvasDropZone = () => {
   return (
     <div
       ref={setNodeRef}
-      className={`flex flex-col items-center justify-center h-96 rounded-lg border-2 border-dashed transition-all m-4 ${
+      className={`flex flex-col items-center justify-center rounded-lg border-2 border-dashed transition-all ${
         isOver
           ? 'border-primary bg-primary/5'
-          : 'border-border/40 opacity-40'
+          : 'border-border/40'
       }`}
+      style={{ minHeight: '400px' }}
     >
-      <div className="text-4xl mb-4">📦</div>
-      <p className="text-sm font-medium mb-1">Drag & drop components here</p>
-      <p className="text-xs opacity-60">Pick a component from the left sidebar and drop it on the canvas</p>
+      <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4" style={{ background: 'hsl(var(--builder-component-bg))' }}>
+        <span className="text-2xl">📦</span>
+      </div>
+      <p className="text-sm font-medium mb-1" style={{ color: 'hsl(var(--builder-sidebar-foreground))' }}>
+        Start building your page
+      </p>
+      <p className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
+        Drag elements from the left panel
+      </p>
     </div>
   );
 };
@@ -71,52 +78,6 @@ const GridOverlay: React.FC<{ gridSize: number }> = ({ gridSize }) => (
   />
 );
 
-// ─── Ruler ─────────────────────────────────────────────────
-
-const Ruler: React.FC<{ direction: 'horizontal' | 'vertical'; size: number }> = ({ direction, size }) => {
-  const isH = direction === 'horizontal';
-  const ticks = Math.ceil(size / 100);
-
-  return (
-    <div
-      className="shrink-0"
-      style={{
-        background: 'hsl(var(--builder-toolbar))',
-        position: 'relative',
-        overflow: 'hidden',
-        ...(isH
-          ? { height: '20px', width: '100%' }
-          : { width: '20px', height: '100%' }),
-      }}
-    >
-      {Array.from({ length: ticks + 1 }).map((_, i) => {
-        const pos = i * 100;
-        return (
-          <div
-            key={i}
-            className="absolute"
-            style={{
-              ...(isH
-                ? { left: `${pos}px`, top: 0, height: '100%', borderLeft: '1px solid hsl(var(--builder-panel-border))' }
-                : { top: `${pos}px`, left: 0, width: '100%', borderTop: '1px solid hsl(var(--builder-panel-border))' }),
-            }}
-          >
-            <span
-              className="absolute text-[9px] font-mono"
-              style={{
-                color: 'hsl(var(--muted-foreground))',
-                ...(isH ? { left: '3px', top: '2px' } : { top: '3px', left: '3px' }),
-              }}
-            >
-              {pos}
-            </span>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
-
 // ─── Canvas Controls Bar ───────────────────────────────────
 
 const CanvasControls: React.FC = () => {
@@ -127,52 +88,43 @@ const CanvasControls: React.FC = () => {
 
   return (
     <div
-      className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full z-30 text-xs"
+      className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1.5 rounded-full z-30 text-xs"
       style={{
-        background: 'hsl(var(--builder-toolbar))',
+        background: 'hsl(var(--builder-sidebar))',
         border: '1px solid hsl(var(--builder-panel-border))',
-        color: 'hsl(var(--builder-toolbar-foreground))',
-        boxShadow: '0 4px 20px -4px rgba(0,0,0,0.4)',
+        color: 'hsl(var(--builder-sidebar-foreground))',
+        boxShadow: '0 4px 20px -4px hsl(220 13% 70% / 0.3)',
       }}
     >
-      {/* Zoom */}
       <button
         onClick={() => setCanvasZoom(canvasZoom - 0.1)}
-        className="px-1.5 py-0.5 rounded hover:bg-white/10 transition-colors"
-        title="Zoom out"
+        className="px-1.5 py-0.5 rounded hover:bg-muted transition-colors"
       >
         −
       </button>
-      <span className="font-mono w-12 text-center">{Math.round(canvasZoom * 100)}%</span>
+      <span className="font-mono w-12 text-center text-[11px]">{Math.round(canvasZoom * 100)}%</span>
       <button
         onClick={() => setCanvasZoom(canvasZoom + 0.1)}
-        className="px-1.5 py-0.5 rounded hover:bg-white/10 transition-colors"
-        title="Zoom in"
+        className="px-1.5 py-0.5 rounded hover:bg-muted transition-colors"
       >
         +
       </button>
 
       <div className="w-px h-4 mx-1" style={{ background: 'hsl(var(--builder-panel-border))' }} />
 
-      {/* Grid */}
       <button
         onClick={toggleGrid}
-        className={`px-2 py-0.5 rounded transition-colors ${showGrid ? 'bg-primary text-primary-foreground' : 'hover:bg-white/10'}`}
-        title="Toggle grid"
+        className={`px-2 py-0.5 rounded transition-colors ${showGrid ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'}`}
       >
         Grid
       </button>
-
-      {/* Snap */}
       <button
         onClick={toggleSnapToGrid}
-        className={`px-2 py-0.5 rounded transition-colors ${snapToGrid ? 'bg-primary text-primary-foreground' : 'hover:bg-white/10'}`}
-        title="Snap to grid"
+        className={`px-2 py-0.5 rounded transition-colors ${snapToGrid ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'}`}
       >
         Snap
       </button>
 
-      {/* Grid size */}
       {showGrid && (
         <select
           value={gridSize}
@@ -191,11 +143,9 @@ const CanvasControls: React.FC = () => {
 
       <div className="w-px h-4 mx-1" style={{ background: 'hsl(var(--builder-panel-border))' }} />
 
-      {/* Fit */}
       <button
         onClick={() => setCanvasZoom(1)}
-        className="px-2 py-0.5 rounded hover:bg-white/10 transition-colors"
-        title="Reset zoom"
+        className="px-2 py-0.5 rounded hover:bg-muted transition-colors"
       >
         100%
       </button>
@@ -210,39 +160,30 @@ const BuilderCanvas = () => {
 
   return (
     <div className="builder-canvas-area relative" onClick={() => selectComponent(null)}>
-      {/* Top ruler */}
-      <div className="absolute top-0 left-8 right-0 z-10">
-        <Ruler direction="horizontal" size={2000} />
-      </div>
-
-      {/* Left ruler */}
-      <div className="absolute top-5 left-0 bottom-0 z-10">
-        <Ruler direction="vertical" size={3000} />
-      </div>
-
       {/* Canvas with zoom */}
       <div
-        className="mt-5 ml-5"
         style={{
           transform: `scale(${canvasZoom})`,
           transformOrigin: 'top center',
           transition: 'transform 0.2s ease',
+          width: deviceWidths[deviceView],
+          maxWidth: deviceView === 'desktop' ? '1280px' : deviceWidths[deviceView],
+          margin: '0 auto',
         }}
       >
+        {/* Device label */}
         <div
-          className="builder-canvas rounded-lg overflow-hidden relative"
-          style={{ width: deviceWidths[deviceView], maxWidth: '100%' }}
+          className="text-[10px] font-medium uppercase tracking-wider mb-2 text-center"
+          style={{ color: 'hsl(var(--muted-foreground))' }}
         >
-          {/* Grid overlay */}
-          {showGrid && <GridOverlay gridSize={gridSize} />}
+          {deviceView} {deviceView !== 'desktop' ? `— ${deviceWidths[deviceView]}` : ''}
+        </div>
 
-          {/* Device frame label */}
-          <div
-            className="absolute -top-6 left-0 text-[10px] font-mono uppercase tracking-wider z-10"
-            style={{ color: 'hsl(var(--muted-foreground))' }}
-          >
-            {deviceView} {deviceView !== 'desktop' ? `(${deviceWidths[deviceView]})` : ''}
-          </div>
+        <div
+          className="builder-canvas relative overflow-hidden"
+          style={{ width: '100%' }}
+        >
+          {showGrid && <GridOverlay gridSize={gridSize} />}
 
           {schema.sections.map((section) => (
             <DroppableSection key={section.id} section={section} />
@@ -251,7 +192,6 @@ const BuilderCanvas = () => {
         </div>
       </div>
 
-      {/* Controls bar */}
       <CanvasControls />
     </div>
   );

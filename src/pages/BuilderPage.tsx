@@ -35,10 +35,15 @@ import {
 } from '@dnd-kit/core';
 import type { BuilderComponent, PageSchema, ComponentCategory } from '@/types/builder';
 import { componentLibrary } from '@/data/componentLibrary';
-import { Loader2 } from 'lucide-react';
+import {
+  Loader2, Plus, Layers, Image, History, Search, Settings,
+  LayoutGrid, Type, Palette, MousePointerClick,
+} from 'lucide-react';
 
 const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const generateSectionId = () => `section-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+type LeftPanel = 'elements' | 'layers' | 'assets' | 'versions' | 'seo' | null;
 
 const BuilderPage = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -50,7 +55,6 @@ const BuilderPage = () => {
   const actualProjectId = isLocalMode ? null : projectId;
 
   const {
-    leftSidebarOpen,
     rightSidebarOpen,
     codeEditorOpen,
     selectedComponentId,
@@ -63,12 +67,9 @@ const BuilderPage = () => {
   const { data: pages, isLoading } = usePages(actualProjectId ?? null);
   const savePage = useSavePage();
   const [currentPageId, setCurrentPageId] = useState<string | null>(null);
-  const [showAssets, setShowAssets] = useState(false);
-  const [showVersions, setShowVersions] = useState(false);
+  const [activePanel, setActivePanel] = useState<LeftPanel>('elements');
   const [showPublish, setShowPublish] = useState(false);
   const [showAuthGate, setShowAuthGate] = useState(false);
-  const [showLayers, setShowLayers] = useState(false);
-  const [showSEO, setShowSEO] = useState(false);
   const [activeDrag, setActiveDrag] = useState<{ type: string; label: string } | null>(null);
 
   const { isSaving: isAutosaving } = useAutosave(isLocalMode ? null : currentPageId);
@@ -202,23 +203,19 @@ const BuilderPage = () => {
 
     const overData = over.data.current;
 
-    // Dropped on a container component → add as child
     if (overData?.isContainer && overData?.componentId) {
       addComponentToContainer(overData.componentId, newComp);
       return;
     }
 
-    // Dropped on a non-container component → add as sibling in its parent section
     if (overData?.componentId && !overData?.isContainer) {
       const targetId = overData.componentId as string;
-      // Find which section contains this component
       const parentSection = schema.sections.find(s =>
         s.components.some(function check(c: BuilderComponent): boolean {
           return c.id === targetId || (c.children?.some(check) ?? false);
         })
       );
       if (parentSection) {
-        // Find the index of the target component in the section and insert after it
         const idx = parentSection.components.findIndex(c => c.id === targetId);
         if (idx !== -1) {
           addComponent(parentSection.id, newComp, idx + 1);
@@ -229,18 +226,15 @@ const BuilderPage = () => {
       }
     }
 
-    // Dropped on a section
     const targetSectionId = overData?.sectionId || over.id;
     const targetSection = schema.sections.find(s => s.id === targetSectionId);
     const section = targetSection || schema.sections.find(s => s.type === 'body');
-    
+
     if (section) {
       addComponent(section.id, newComp);
     } else if (schema.sections.length > 0) {
-      // Fallback: add to first section
       addComponent(schema.sections[0].id, newComp);
     } else {
-      // No sections at all — create a default body section and add to it
       const newSectionId = generateSectionId();
       const newSchema: PageSchema = {
         ...schema,
@@ -256,6 +250,10 @@ const BuilderPage = () => {
     }
   };
 
+  const togglePanel = (panel: LeftPanel) => {
+    setActivePanel(prev => prev === panel ? null : panel);
+  };
+
   if (!isLocalMode && isLoading) {
     return (
       <div className="h-screen w-screen flex items-center justify-center" style={{ background: 'hsl(var(--builder-bg))' }}>
@@ -263,6 +261,15 @@ const BuilderPage = () => {
       </div>
     );
   }
+
+  // Wix-style icon bar items
+  const iconBarItems: { id: LeftPanel; icon: typeof Plus; label: string }[] = [
+    { id: 'elements', icon: Plus, label: 'Add' },
+    { id: 'layers', icon: Layers, label: 'Layers' },
+    { id: 'assets', icon: Image, label: 'Media' },
+    { id: 'versions', icon: History, label: 'History' },
+    { id: 'seo', icon: Search, label: 'SEO' },
+  ];
 
   return (
     <ClipboardProvider>
@@ -277,22 +284,23 @@ const BuilderPage = () => {
             onSave={handleSave}
             isSaving={savePage.isPending}
             isAutosaving={isAutosaving}
-            onToggleAssets={() => { setShowAssets(!showAssets); setShowVersions(false); setShowLayers(false); setShowSEO(false); }}
-            onToggleVersions={() => { setShowVersions(!showVersions); setShowAssets(false); setShowLayers(false); setShowSEO(false); }}
-            showAssets={showAssets}
-            showVersions={showVersions}
+            onToggleAssets={() => togglePanel('assets')}
+            onToggleVersions={() => togglePanel('versions')}
+            showAssets={activePanel === 'assets'}
+            showVersions={activePanel === 'versions'}
             projectId={actualProjectId ?? undefined}
             onPublish={handlePublishClick}
-            onToggleLayers={() => { setShowLayers(!showLayers); setShowAssets(false); setShowVersions(false); }}
-            showLayers={showLayers}
-            onToggleSEO={() => { setShowSEO(!showSEO); setShowAssets(false); setShowVersions(false); setShowLayers(false); }}
-            showSEO={showSEO}
+            onToggleLayers={() => togglePanel('layers')}
+            showLayers={activePanel === 'layers'}
+            onToggleSEO={() => togglePanel('seo')}
+            showSEO={activePanel === 'seo'}
             isAuthenticated={!!user}
             onExportZip={handleExportZip}
             onExportHTML={handleExportHTML}
             onExportReact={handleExportReact}
             onAuthRequired={handleAuthRequired}
           />
+
           {actualProjectId && (
             <PageManager
               projectId={actualProjectId}
@@ -300,23 +308,60 @@ const BuilderPage = () => {
               onSelectPage={handleSelectPage}
             />
           )}
+
           <div className="flex flex-1 overflow-hidden">
-            {leftSidebarOpen && !showAssets && !showLayers && <ComponentSidebar />}
-            {showLayers && <LayersPanel />}
-            {showAssets && actualProjectId && <AssetPanel projectId={actualProjectId} />}
+            {/* Wix-style dark icon bar */}
+            <div className="builder-icon-bar">
+              {iconBarItems.map(({ id, icon: Icon, label }) => {
+                // Skip assets if no project
+                if (id === 'assets' && !actualProjectId) return null;
+                if (id === 'versions' && !currentPageId) return null;
+                return (
+                  <button
+                    key={id}
+                    onClick={() => togglePanel(id)}
+                    className={`builder-icon-bar-btn ${activePanel === id ? 'active' : ''}`}
+                    title={label}
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span>{label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Flyout panels */}
+            {activePanel === 'elements' && (
+              <ComponentSidebar onClose={() => setActivePanel(null)} />
+            )}
+            {activePanel === 'layers' && <LayersPanel />}
+            {activePanel === 'assets' && actualProjectId && <AssetPanel projectId={actualProjectId} />}
+            {activePanel === 'seo' && <SEOPanel onClose={() => setActivePanel(null)} />}
+            {activePanel === 'versions' && currentPageId && <VersionHistoryPanel pageId={currentPageId} />}
+
+            {/* Main canvas */}
             <CanvasContextMenu>
               <BuilderCanvas />
             </CanvasContextMenu>
-            {rightSidebarOpen && selectedComponentId && !showVersions && !showSEO && <PropertiesPanel />}
-            {showSEO && <SEOPanel onClose={() => setShowSEO(false)} />}
-            {showVersions && currentPageId && <VersionHistoryPanel pageId={currentPageId} />}
+
+            {/* Right properties panel */}
+            {rightSidebarOpen && selectedComponentId && <PropertiesPanel />}
           </div>
+
           {codeEditorOpen && <CodeEditorPanel />}
         </div>
 
         <DragOverlay>
           {activeDrag ? (
-            <div className="component-item shadow-lg opacity-90" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
+            <div
+              className="flex items-center gap-2 px-3 py-2 rounded-md text-xs font-medium shadow-lg"
+              style={{
+                background: 'hsl(var(--builder-sidebar))',
+                border: '1px solid hsl(var(--primary))',
+                color: 'hsl(var(--builder-sidebar-foreground))',
+                boxShadow: '0 8px 24px hsl(210 100% 45% / 0.2)',
+              }}
+            >
               {activeDrag.label}
             </div>
           ) : null}
