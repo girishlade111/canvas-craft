@@ -183,6 +183,15 @@ const BuilderPage = () => {
           </div>
         ) : null}
       </DragOverlay>
+
+      {/* Publish dialog */}
+      {projectId && (
+        <PublishDialog
+          projectId={projectId}
+          isOpen={showPublish}
+          onClose={() => setShowPublish(false)}
+        />
+      )}
     </DndContext>
   );
 };

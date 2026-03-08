@@ -5,4 +5,6 @@
 
 export { generateStaticHTML as exportToStaticHTML } from '@/engine/codegen/staticHtmlGenerator';
 export { generateReactComponent as exportToReact } from '@/engine/codegen/reactGenerator';
+export { generateMultiPageProject as exportMultiPageReact } from '@/engine/codegen/reactGenerator';
+export { generateMultiPageHTML as exportMultiPageHTML } from '@/engine/codegen/staticHtmlGenerator';
 export { downloadFile } from '@/engine/codegen';
