@@ -218,12 +218,19 @@ const EcommercePanel = ({ projectId, onClose }: EcommercePanelProps) => {
   };
 
   const handleAddComponent = (component: any) => {
-    addComponent({
-      type: component.id,
-      props: { label: component.name },
-      children: [],
-    });
-    toast.success(`Added ${component.name}`);
+    const schema = useBuilderStore.getState().schema;
+    const bodySection = schema.sections.find(s => s.type === 'body');
+    if (bodySection) {
+      addComponent(bodySection.id, {
+        id: `${component.id}-${Date.now()}`,
+        type: component.id,
+        props: { label: component.name },
+        children: [],
+      });
+      toast.success(`Added ${component.name}`);
+    } else {
+      toast.error('No body section found');
+    }
   };
 
   const tabs = [
