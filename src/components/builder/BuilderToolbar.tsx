@@ -4,7 +4,7 @@ import { exportToStaticHTML, exportToReact, downloadFile } from '@/lib/exportPro
 import {
   Undo2, Redo2, Eye, Monitor, Tablet, Smartphone, Save, Upload,
   Code2, PanelLeftClose, PanelLeftOpen, Image, History, Loader2,
-  Settings, Download,
+  Settings, Download, Circle,
 } from 'lucide-react';
 import type { DeviceView } from '@/types/builder';
 import { useState } from 'react';
@@ -12,14 +12,16 @@ import { useState } from 'react';
 interface BuilderToolbarProps {
   onSave: () => void;
   isSaving: boolean;
+  isAutosaving?: boolean;
   onToggleAssets: () => void;
   onToggleVersions: () => void;
   showAssets: boolean;
   showVersions: boolean;
   projectId?: string;
+  onPublish?: () => void;
 }
 
-const BuilderToolbar = ({ onSave, isSaving, onToggleAssets, onToggleVersions, showAssets, showVersions, projectId }: BuilderToolbarProps) => {
+const BuilderToolbar = ({ onSave, isSaving, isAutosaving, onToggleAssets, onToggleVersions, showAssets, showVersions, projectId, onPublish }: BuilderToolbarProps) => {
   const {
     schema, deviceView, setDeviceView, undo, redo, historyIndex, history,
     toggleLeftSidebar, leftSidebarOpen,
@@ -89,7 +91,15 @@ const BuilderToolbar = ({ onSave, isSaving, onToggleAssets, onToggleVersions, sh
       </div>
 
       <div className="flex items-center gap-2">
-        <button onClick={() => navigate('/preview')} className="flex items-center gap-1.5 px-3 py-1.5 rounded text-sm hover:bg-white/10 transition-colors">
+        {/* Autosave indicator */}
+        {isAutosaving && (
+          <div className="flex items-center gap-1.5 text-xs opacity-60">
+            <Circle className="w-2 h-2 fill-current animate-pulse" style={{ color: '#22c55e' }} />
+            Saving…
+          </div>
+        )}
+
+        <button onClick={() => navigate(`/preview/${projectId}`)} className="flex items-center gap-1.5 px-3 py-1.5 rounded text-sm hover:bg-white/10 transition-colors">
           <Eye className="w-3.5 h-3.5" /> Preview
         </button>
         {projectId && (
@@ -119,7 +129,11 @@ const BuilderToolbar = ({ onSave, isSaving, onToggleAssets, onToggleVersions, sh
           {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
           Save
         </button>
-        <button className="flex items-center gap-1.5 px-3 py-1.5 rounded text-sm hover:opacity-90 transition-opacity" style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}>
+        <button
+          onClick={onPublish}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded text-sm hover:opacity-90 transition-opacity"
+          style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
+        >
           <Upload className="w-3.5 h-3.5" /> Publish
         </button>
       </div>
