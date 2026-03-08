@@ -36,6 +36,7 @@ const AppMarketPanel = lazy(() => import('@/components/builder/AppMarketPanel'))
 const AIToolsPanel = lazy(() => import('@/components/builder/AIToolsPanel'));
 const ExportDialog = lazy(() => import('@/components/builder/ExportDialog'));
 const TemplatesPanel = lazy(() => import('@/components/builder/TemplatesPanel'));
+const MarketplacePanel = lazy(() => import('@/components/builder/MarketplacePanel'));
 
 import {
   DndContext,
