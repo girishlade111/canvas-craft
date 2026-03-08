@@ -50,6 +50,21 @@ const CodeEditorPanel = () => {
     if (language === 'html') {
       updateComponent(codeEditorComponentId, { content: value });
     }
+    if (language === 'css') {
+      // Parse CSS property declarations back into styles object
+      const styles: Record<string, string> = {};
+      value.split('\n').forEach(line => {
+        const match = line.trim().match(/^\s*([a-z-]+)\s*:\s*(.+?)\s*;?\s*$/i);
+        if (match) {
+          const prop = match[1].replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+          styles[prop] = match[2];
+        }
+      });
+      if (Object.keys(styles).length > 0) {
+        const { updateComponentStyles } = useBuilderStore.getState();
+        updateComponentStyles(codeEditorComponentId, styles);
+      }
+    }
   };
 
   return (
