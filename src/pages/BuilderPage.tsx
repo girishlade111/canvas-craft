@@ -106,6 +106,7 @@ const BuilderPage = () => {
   const [showPublish, setShowPublish] = useState(false);
   const [showAuthGate, setShowAuthGate] = useState(false);
   const [showExportDialog, setShowExportDialog] = useState(false);
+  const [showSaveTemplate, setShowSaveTemplate] = useState(false);
   const [activeDrag, setActiveDrag] = useState<{
     type: string;
     label: string;
