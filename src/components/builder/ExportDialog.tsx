@@ -2,21 +2,24 @@
  * Export Dialog - Comprehensive export options for created websites
  * - Push to GitHub
  * - Download source code (VS Code ready)
+ * - Multiple tech stacks: React + Vite, Next.js
  * - Download static HTML
  */
 
 import { useState } from 'react';
 import { useBuilderStore } from '@/store/builderStore';
 import { generateMultiPageProject, generateReactProject } from '@/engine/codegen/reactGenerator';
+import { generateNextJSProject, generateNextJSProjectSingle } from '@/engine/codegen/nextjsGenerator';
 import { generateStaticHTML, generateMultiPageHTML } from '@/engine/codegen/staticHtmlGenerator';
-import { downloadZip, createProjectZip } from '@/engine/codegen/zipExporter';
+import { downloadZip } from '@/engine/codegen/zipExporter';
 import { downloadFile } from '@/engine/codegen';
 import type { PageSchema } from '@/types/builder';
 import {
   X, Github, Download, Code2, FileArchive, Folder, Check, Copy,
-  ExternalLink, Terminal, ChevronRight, Loader2, Globe, Monitor,
-  FileCode, FolderOpen, Zap, Settings, ArrowRight, CheckCircle2,
-  AlertCircle, Info, Package, GitBranch, Rocket, Eye, Play,
+  ExternalLink, Terminal, Loader2, Globe, Monitor,
+  FileCode, FolderOpen, Zap, Settings, CheckCircle2,
+  AlertCircle, Info, Package, GitBranch, Rocket, Eye,
+  Layers, Sparkles, Box, Server,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -28,19 +31,47 @@ interface ExportDialogProps {
 }
 
 type ExportTab = 'github' | 'vscode' | 'html';
+type TechStack = 'react-vite' | 'nextjs';
 type ExportStatus = 'idle' | 'preparing' | 'downloading' | 'done' | 'error';
+
+const TECH_STACKS = [
+  {
+    id: 'react-vite' as const,
+    name: 'React + Vite',
+    icon: Zap,
+    color: 'hsl(280 100% 70%)',
+    description: 'Fast build, HMR, TypeScript',
+    features: ['Lightning-fast HMR', 'ESBuild bundler', 'React Router DOM', 'Multi-platform configs'],
+  },
+  {
+    id: 'nextjs' as const,
+    name: 'Next.js 14',
+    icon: Box,
+    color: 'hsl(0 0% 0%)',
+    description: 'App Router, SSR, optimized',
+    features: ['App Router (RSC)', 'Image optimization', 'Font optimization', 'SEO metadata API'],
+  },
+];
 
 const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose, projectId, pages }) => {
   const schema = useBuilderStore((s) => s.schema);
   const [activeTab, setActiveTab] = useState<ExportTab>('vscode');
+  const [techStack, setTechStack] = useState<TechStack>('react-vite');
   const [status, setStatus] = useState<ExportStatus>('idle');
   const [copiedCommand, setCopiedCommand] = useState<string | null>(null);
 
   const projectName = schema.name || 'my-website';
   const safeName = projectName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-');
 
-  // Generate files based on pages or current schema
+  // Generate files based on selected tech stack
   const generateFiles = () => {
+    if (techStack === 'nextjs') {
+      if (pages && pages.length > 0) {
+        return generateNextJSProject(pages, projectName);
+      }
+      return generateNextJSProjectSingle(schema);
+    }
+    // Default to React + Vite
     if (pages && pages.length > 0) {
       return generateMultiPageProject(pages, projectName);
     }
@@ -65,7 +96,8 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose, projectId,
       await downloadZip(files, projectName);
       
       setStatus('done');
-      toast.success('ZIP downloaded! Open in VS Code and run npm install');
+      const stackLabel = techStack === 'nextjs' ? 'Next.js' : 'React + Vite';
+      toast.success(`${stackLabel} project downloaded! Open in VS Code and run npm install`);
     } catch (err: any) {
       setStatus('error');
       toast.error('Download failed: ' + err.message);
@@ -114,7 +146,6 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose, projectId,
 
   // Open GitHub to create new repo
   const handlePushToGitHub = () => {
-    // Open GitHub new repo page in new tab
     window.open('https://github.com/new', '_blank');
     toast.info('Create a new repository, then follow the instructions below');
   };
@@ -126,6 +157,8 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose, projectId,
     { id: 'github' as const, label: 'GitHub', icon: Github, description: 'Push to repository' },
     { id: 'html' as const, label: 'HTML', icon: Globe, description: 'Static HTML file' },
   ];
+
+  const selectedStack = TECH_STACKS.find(s => s.id === techStack)!;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
@@ -179,26 +212,97 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose, projectId,
           {/* ════════════════ VS CODE TAB ════════════════ */}
           {activeTab === 'vscode' && (
             <div className="space-y-4">
+              {/* Tech Stack Selector */}
+              <div className="rounded-lg p-4" style={{ background: 'hsl(var(--builder-bg))' }}>
+                <div className="flex items-center gap-2 mb-3">
+                  <Layers className="w-4 h-4" style={{ color: 'hsl(var(--primary))' }} />
+                  <span className="text-sm font-semibold">Choose Tech Stack</span>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {TECH_STACKS.map((stack) => {
+                    const Icon = stack.icon;
+                    const isSelected = techStack === stack.id;
+                    return (
+                      <button
+                        key={stack.id}
+                        onClick={() => setTechStack(stack.id)}
+                        className={`relative p-4 rounded-lg border-2 transition-all text-left ${
+                          isSelected ? 'border-primary' : 'border-transparent hover:border-muted'
+                        }`}
+                        style={{ 
+                          background: isSelected ? 'hsl(var(--primary) / 0.08)' : 'hsl(var(--muted) / 0.3)',
+                        }}
+                      >
+                        {isSelected && (
+                          <div className="absolute top-2 right-2">
+                            <CheckCircle2 className="w-4 h-4" style={{ color: 'hsl(var(--primary))' }} />
+                          </div>
+                        )}
+                        <div className="flex items-center gap-2 mb-2">
+                          <div 
+                            className="w-8 h-8 rounded-lg flex items-center justify-center"
+                            style={{ background: stack.color }}
+                          >
+                            <Icon className="w-4 h-4 text-white" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-semibold">{stack.name}</div>
+                            <div className="text-[10px] opacity-60">{stack.description}</div>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {stack.features.slice(0, 2).map(f => (
+                            <span key={f} className="text-[9px] px-1.5 py-0.5 rounded" style={{ background: 'hsl(var(--muted))' }}>
+                              {f}
+                            </span>
+                          ))}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* What's included */}
               <div className="rounded-lg p-4" style={{ background: 'hsl(var(--builder-bg))' }}>
                 <div className="flex items-center gap-2 mb-3">
                   <Package className="w-4 h-4" style={{ color: 'hsl(var(--primary))' }} />
-                  <span className="text-sm font-semibold">What's Included</span>
+                  <span className="text-sm font-semibold">What's Included ({selectedStack.name})</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  {[
-                    { icon: FileCode, label: 'React + TypeScript source' },
-                    { icon: Zap, label: 'Vite build system' },
-                    { icon: Settings, label: 'ESLint & VS Code config' },
-                    { icon: Globe, label: 'Multi-platform deploy configs' },
-                    { icon: Folder, label: 'Complete project structure' },
-                    { icon: GitBranch, label: 'Git-ready with .gitignore' },
-                  ].map(({ icon: Icon, label }) => (
-                    <div key={label} className="flex items-center gap-2 p-2 rounded" style={{ background: 'hsl(var(--muted) / 0.3)' }}>
-                      <Icon className="w-3.5 h-3.5 shrink-0" style={{ color: 'hsl(var(--primary))' }} />
-                      <span>{label}</span>
-                    </div>
-                  ))}
+                  {techStack === 'nextjs' ? (
+                    <>
+                      {[
+                        { icon: FileCode, label: 'Next.js 14 + TypeScript' },
+                        { icon: Server, label: 'App Router (RSC)' },
+                        { icon: Sparkles, label: 'Tailwind CSS' },
+                        { icon: Zap, label: 'Image & Font optimization' },
+                        { icon: Settings, label: 'ESLint + VS Code config' },
+                        { icon: GitBranch, label: 'Git-ready with .gitignore' },
+                      ].map(({ icon: Icon, label }) => (
+                        <div key={label} className="flex items-center gap-2 p-2 rounded" style={{ background: 'hsl(var(--muted) / 0.3)' }}>
+                          <Icon className="w-3.5 h-3.5 shrink-0" style={{ color: 'hsl(var(--primary))' }} />
+                          <span>{label}</span>
+                        </div>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      {[
+                        { icon: FileCode, label: 'React + TypeScript source' },
+                        { icon: Zap, label: 'Vite build system' },
+                        { icon: Settings, label: 'ESLint & VS Code config' },
+                        { icon: Globe, label: 'Multi-platform deploy configs' },
+                        { icon: Folder, label: 'Complete project structure' },
+                        { icon: GitBranch, label: 'Git-ready with .gitignore' },
+                      ].map(({ icon: Icon, label }) => (
+                        <div key={label} className="flex items-center gap-2 p-2 rounded" style={{ background: 'hsl(var(--muted) / 0.3)' }}>
+                          <Icon className="w-3.5 h-3.5 shrink-0" style={{ color: 'hsl(var(--primary))' }} />
+                          <span>{label}</span>
+                        </div>
+                      ))}
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -209,7 +313,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose, projectId,
                   <span className="text-sm font-semibold">Deploy Anywhere</span>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  {['Vercel', 'Netlify', 'GitHub Pages', 'Cloudflare', 'Docker', 'Railway', 'Render', 'AWS S3'].map(platform => (
+                  {['Vercel', 'Netlify', 'Cloudflare', ...(techStack === 'react-vite' ? ['GitHub Pages', 'Docker', 'Railway', 'Render', 'AWS S3'] : ['Railway', 'Render'])].map(platform => (
                     <span key={platform} className="px-2 py-1 rounded text-[10px] font-medium flex items-center gap-1"
                       style={{ background: 'hsl(var(--primary) / 0.1)', color: 'hsl(var(--primary))' }}>
                       <CheckCircle2 className="w-2.5 h-2.5" /> {platform}
@@ -280,7 +384,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose, projectId,
                   status === 'done' ? 'bg-green-500/10 text-green-500' :
                   status === 'error' ? 'bg-red-500/10 text-red-500' : ''
                 }`} style={status === 'preparing' || status === 'downloading' ? { background: 'hsl(var(--primary) / 0.1)', color: 'hsl(var(--primary))' } : undefined}>
-                  {status === 'preparing' && <><Loader2 className="w-4 h-4 animate-spin" /> Generating files...</>}
+                  {status === 'preparing' && <><Loader2 className="w-4 h-4 animate-spin" /> Generating {selectedStack.name} files...</>}
                   {status === 'downloading' && <><Loader2 className="w-4 h-4 animate-spin" /> Downloading...</>}
                   {status === 'done' && <><CheckCircle2 className="w-4 h-4" /> Download complete!</>}
                   {status === 'error' && <><AlertCircle className="w-4 h-4" /> Download failed</>}
@@ -292,6 +396,32 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose, projectId,
           {/* ════════════════ GITHUB TAB ════════════════ */}
           {activeTab === 'github' && (
             <div className="space-y-4">
+              {/* Tech Stack Selector (mini version) */}
+              <div className="rounded-lg p-3 flex items-center gap-3" style={{ background: 'hsl(var(--builder-bg))' }}>
+                <span className="text-xs font-medium">Stack:</span>
+                <div className="flex gap-2">
+                  {TECH_STACKS.map((stack) => {
+                    const Icon = stack.icon;
+                    return (
+                      <button
+                        key={stack.id}
+                        onClick={() => setTechStack(stack.id)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-2 transition-all ${
+                          techStack === stack.id ? 'opacity-100' : 'opacity-50 hover:opacity-80'
+                        }`}
+                        style={{ 
+                          background: techStack === stack.id ? 'hsl(var(--primary))' : 'hsl(var(--muted))',
+                          color: techStack === stack.id ? 'hsl(var(--primary-foreground))' : 'inherit',
+                        }}
+                      >
+                        <Icon className="w-3.5 h-3.5" />
+                        {stack.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* GitHub workflow */}
               <div className="rounded-lg p-4" style={{ background: 'hsl(var(--builder-bg))' }}>
                 <div className="flex items-center gap-2 mb-3">
@@ -304,7 +434,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose, projectId,
                       style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}>1</span>
                     <div className="flex-1">
                       <div className="font-medium mb-1">Download the source code</div>
-                      <p className="opacity-60 mb-2">Get the complete project files first</p>
+                      <p className="opacity-60 mb-2">Get the complete {selectedStack.name} project files</p>
                       <button onClick={handleDownloadVSCode}
                         className="px-3 py-1.5 rounded text-[11px] font-medium flex items-center gap-1.5"
                         style={{ background: 'hsl(var(--muted))' }}>
@@ -363,17 +493,17 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose, projectId,
                 <div className="flex flex-wrap gap-2">
                   <a href="https://vercel.com/new" target="_blank" rel="noopener noreferrer"
                     className="px-3 py-1.5 rounded text-[11px] font-medium flex items-center gap-1.5 hover:opacity-80"
-                    style={{ background: '#000', color: '#fff' }}>
+                    style={{ background: 'hsl(0 0% 0%)', color: 'hsl(0 0% 100%)' }}>
                     ▲ Vercel <ExternalLink className="w-3 h-3 opacity-50" />
                   </a>
                   <a href="https://app.netlify.com/start" target="_blank" rel="noopener noreferrer"
                     className="px-3 py-1.5 rounded text-[11px] font-medium flex items-center gap-1.5 hover:opacity-80"
-                    style={{ background: '#00AD9F', color: '#fff' }}>
+                    style={{ background: 'hsl(174 100% 34%)', color: 'hsl(0 0% 100%)' }}>
                     Netlify <ExternalLink className="w-3 h-3 opacity-50" />
                   </a>
                   <a href="https://pages.cloudflare.com/" target="_blank" rel="noopener noreferrer"
                     className="px-3 py-1.5 rounded text-[11px] font-medium flex items-center gap-1.5 hover:opacity-80"
-                    style={{ background: '#F48120', color: '#fff' }}>
+                    style={{ background: 'hsl(30 90% 50%)', color: 'hsl(0 0% 100%)' }}>
                     Cloudflare <ExternalLink className="w-3 h-3 opacity-50" />
                   </a>
                 </div>
@@ -464,11 +594,11 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose, projectId,
             {(status === 'preparing' || status === 'downloading') ? (
               <><Loader2 className="w-4 h-4 animate-spin" /> Exporting...</>
             ) : activeTab === 'github' ? (
-              <><FileArchive className="w-4 h-4" /> Download ZIP</>
+              <><FileArchive className="w-4 h-4" /> Download {selectedStack.name}</>
             ) : activeTab === 'html' ? (
               <><Download className="w-4 h-4" /> Download HTML</>
             ) : (
-              <><Download className="w-4 h-4" /> Download for VS Code</>
+              <><Download className="w-4 h-4" /> Download {selectedStack.name}</>
             )}
           </button>
         </div>
