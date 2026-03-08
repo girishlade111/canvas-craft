@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBuilderStore } from '@/store/builderStore';
-import { Code2, ArrowLeft, Search, LayoutGrid, Loader2, Cloud, HardDrive, Plus, Upload } from 'lucide-react';
+import { Code2, ArrowLeft, Search, LayoutGrid, Loader2, Cloud, HardDrive, Upload, Eye, X, Monitor, Tablet, Smartphone } from 'lucide-react';
 import { useTemplates, useIncrementTemplateInstalls, useCreateTemplate } from '@/hooks/useTemplates';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import RecursiveRenderer from '@/engine/renderer/RecursiveRenderer';
 
-import type { Template } from '@/types/builder';
+import type { Template, DeviceView } from '@/types/builder';
 
 const categories = [
   { id: 'all', label: 'All Templates' },
@@ -28,6 +29,8 @@ const TemplateSelection = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [search, setSearch] = useState('');
   const [source, setSource] = useState<'cloud' | 'local'>('cloud');
+  const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
+  const [previewDevice, setPreviewDevice] = useState<DeviceView>('desktop');
 
   // Cloud templates from Supabase
   const { data: cloudTemplates = [], isLoading: cloudLoading } = useTemplates(
@@ -232,7 +235,7 @@ const TemplateSelection = () => {
                 >
                   <div className="h-44 flex items-center justify-center text-6xl bg-muted/30 group-hover:bg-muted/50 transition-colors relative overflow-hidden">
                     <span className="relative z-10">{template.thumbnail}</span>
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center bg-foreground/5">
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 bg-foreground/5">
                       <div className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
                         style={{ background: 'var(--gradient-primary)' }}>
                         Use Template
@@ -250,6 +253,15 @@ const TemplateSelection = () => {
                   </div>
                 </button>
 
+                {/* Preview button */}
+                <button
+                  onClick={(e) => { e.stopPropagation(); setPreviewTemplate(template); setPreviewDevice('desktop'); }}
+                  className="absolute top-3 left-3 p-2 rounded-lg bg-background/90 backdrop-blur-sm border border-border shadow-sm opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-primary-foreground hover:border-primary"
+                  title="Preview Template"
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                </button>
+
                 {/* Upload to cloud button (only for local templates) */}
                 {source === 'local' && user && (
                   <button
@@ -265,6 +277,90 @@ const TemplateSelection = () => {
           </div>
         )}
       </div>
+
+      {/* Template Preview Modal */}
+      {previewTemplate && (
+        <div className="fixed inset-0 z-[100] flex flex-col bg-background">
+          {/* Preview header */}
+          <div className="flex items-center justify-between px-4 h-14 border-b border-border bg-muted/50 shrink-0">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setPreviewTemplate(null)}
+                className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              <div>
+                <h2 className="text-sm font-semibold leading-tight">{previewTemplate.name}</h2>
+                <p className="text-xs text-muted-foreground">{previewTemplate.description}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {/* Device toggles */}
+              <div className="flex items-center gap-1 p-1 rounded-lg bg-background border border-border">
+                {([
+                  { view: 'desktop' as DeviceView, icon: Monitor, label: 'Desktop' },
+                  { view: 'tablet' as DeviceView, icon: Tablet, label: 'Tablet' },
+                  { view: 'mobile' as DeviceView, icon: Smartphone, label: 'Mobile' },
+                ] as const).map(({ view, icon: Icon, label }) => (
+                  <button
+                    key={view}
+                    onClick={() => setPreviewDevice(view)}
+                    className={`p-1.5 rounded-md transition-colors ${
+                      previewDevice === view
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    }`}
+                    title={label}
+                  >
+                    <Icon className="w-4 h-4" />
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => {
+                  handleSelect(previewTemplate);
+                  setPreviewTemplate(null);
+                }}
+                className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                style={{ background: 'var(--gradient-primary)' }}
+              >
+                Use This Template
+              </button>
+            </div>
+          </div>
+
+          {/* Preview canvas */}
+          <div className="flex-1 overflow-auto bg-muted/30 flex justify-center">
+            <div
+              className="bg-background shadow-xl transition-all duration-300 my-6"
+              style={{
+                width: previewDevice === 'desktop' ? '100%' : previewDevice === 'tablet' ? '768px' : '375px',
+                maxWidth: '100%',
+                minHeight: '100vh',
+              }}
+            >
+              {previewTemplate.schema.sections?.map((section) => (
+                <div
+                  key={section.id}
+                  style={{
+                    ...Object.fromEntries(
+                      Object.entries(section.styles || {}).filter(([k]) => !k.startsWith('custom'))
+                    ),
+                  } as React.CSSProperties}
+                  className={(section.styles as any)?.customClasses || undefined}
+                >
+                  {section.components?.map((comp) => (
+                    <RecursiveRenderer key={comp.id} node={comp} deviceView={previewDevice} />
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
