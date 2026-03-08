@@ -3,8 +3,8 @@
  * Converts visual builder schemas into deployable code.
  */
 
-export { generateStaticHTML } from './staticHtmlGenerator';
-export { generateReactComponent, generateReactProject } from './reactGenerator';
+export { generateStaticHTML, generateMultiPageHTML } from './staticHtmlGenerator';
+export { generateReactComponent, generateReactProject, generateMultiPageProject } from './reactGenerator';
 
 /**
  * Download a file to the user's machine.
