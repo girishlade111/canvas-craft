@@ -65,6 +65,39 @@ import {
   FlickrEmbedComponent, PDFViewerComponent,
 } from '@/registry/components/EmbedComponents';
 
+// New component imports
+import {
+  NewsletterComponent, PopupTriggerComponent, AnnouncementBarComponent,
+  CookieConsentComponent, FABComponent, BackToTopComponent,
+  ComparisonTableComponent, BeforeAfterComponent, TeamGridComponent,
+  TimelineComponent, FAQComponent,
+} from '@/registry/components/MarketingComponents';
+import {
+  BlogPostCardComponent, AuthorBioComponent, RelatedPostsComponent,
+  ShareButtonsComponent, TOCComponent, ReadingProgressComponent,
+  CommentItemComponent,
+} from '@/registry/components/BlogComponents';
+import {
+  ToggleSwitchComponent, RangeSliderComponent, StepperComponent,
+  ChipGroupComponent, MegaMenuComponent, NotificationComponent,
+  SkeletonComponent, EmptyStateComponent,
+} from '@/registry/components/InteractiveComponents';
+import {
+  DataTableComponent, MetricCardComponent, ChartPlaceholderComponent,
+  KPIDashboardComponent, FeatureListComponent, PaginationComponent,
+  BreadcrumbTrailComponent, TagListComponent,
+} from '@/registry/components/DataDisplayComponents';
+import {
+  TestimonialCarouselComponent, SocialFeedCardComponent,
+  UserProfileCardComponent, ReviewCardComponent, ChatBubbleComponent,
+} from '@/registry/components/SocialComponents';
+import {
+  FeatureCardComponent, CalloutComponent, NumberedStepsComponent,
+  MarqueeComponent, PricingCardComponent, ImageOverlayCardComponent,
+  DividerWithTextComponent, BlockquoteImageComponent,
+  HorizontalGalleryComponent, ContentSwitcherComponent,
+} from '@/registry/components/ContentBlockComponents';
+
 // ─── Registry Store ────────────────────────────────────────
 
 const registry: Map<string, React.FC<any>> = new Map();
@@ -197,6 +230,71 @@ const defaultComponents: Record<string, React.FC<any>> = {
   html: HtmlComponent,
   'custom-code': CustomCodeComponent,
   'api-placeholder': ApiPlaceholderComponent,
+
+  // ═══════════════════════════════════════════════
+  // NEW 50+ COMPONENTS
+  // ═══════════════════════════════════════════════
+
+  // Marketing
+  newsletter: NewsletterComponent,
+  'popup-trigger': PopupTriggerComponent,
+  'announcement-bar': AnnouncementBarComponent,
+  'cookie-consent': CookieConsentComponent,
+  fab: FABComponent,
+  'back-to-top': BackToTopComponent,
+  'comparison-table': ComparisonTableComponent,
+  'before-after': BeforeAfterComponent,
+  'team-grid': TeamGridComponent,
+  timeline: TimelineComponent,
+  faq: FAQComponent,
+
+  // Blog
+  'blog-post-card': BlogPostCardComponent,
+  'author-bio': AuthorBioComponent,
+  'related-posts': RelatedPostsComponent,
+  'share-buttons': ShareButtonsComponent,
+  toc: TOCComponent,
+  'reading-progress': ReadingProgressComponent,
+  'comment-item': CommentItemComponent,
+
+  // Interactive
+  'toggle-switch': ToggleSwitchComponent,
+  'range-slider': RangeSliderComponent,
+  stepper: StepperComponent,
+  'chip-group': ChipGroupComponent,
+  'mega-menu': MegaMenuComponent,
+  notification: NotificationComponent,
+  skeleton: SkeletonComponent,
+  'empty-state': EmptyStateComponent,
+
+  // Data Display
+  'data-table': DataTableComponent,
+  'metric-card': MetricCardComponent,
+  'chart-placeholder': ChartPlaceholderComponent,
+  'kpi-dashboard': KPIDashboardComponent,
+  'feature-list': FeatureListComponent,
+  pagination: PaginationComponent,
+  'breadcrumb-trail': BreadcrumbTrailComponent,
+  'tag-list': TagListComponent,
+
+  // Social
+  'testimonial-carousel': TestimonialCarouselComponent,
+  'social-feed-card': SocialFeedCardComponent,
+  'user-profile-card': UserProfileCardComponent,
+  'review-card': ReviewCardComponent,
+  'chat-bubble': ChatBubbleComponent,
+
+  // Content Blocks
+  'feature-card': FeatureCardComponent,
+  callout: CalloutComponent,
+  'numbered-steps': NumberedStepsComponent,
+  marquee: MarqueeComponent,
+  'pricing-card': PricingCardComponent,
+  'image-overlay-card': ImageOverlayCardComponent,
+  'divider-text': DividerWithTextComponent,
+  'blockquote-image': BlockquoteImageComponent,
+  'horizontal-gallery': HorizontalGalleryComponent,
+  'content-switcher': ContentSwitcherComponent,
 };
 
 // Initialize registry with defaults
