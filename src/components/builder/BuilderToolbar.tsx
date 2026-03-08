@@ -234,6 +234,22 @@ const BuilderToolbar = ({
           )}
         </div>
 
+        {/* Save as Template */}
+        <button
+          onClick={() => {
+            if (!isAuthenticated) {
+              onAuthRequired?.();
+            } else {
+              onSaveAsTemplate?.();
+            }
+          }}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium hover:bg-muted transition-colors"
+          title="Save as Template"
+        >
+          <Cloud className="w-3.5 h-3.5" />
+          <span className="hidden lg:inline">Template</span>
+        </button>
+
         <button
           onClick={onSave}
           disabled={isSaving}
