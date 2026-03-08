@@ -287,6 +287,11 @@ const BuilderPage = () => {
             showLayers={showLayers}
             onToggleSEO={() => { setShowSEO(!showSEO); setShowAssets(false); setShowVersions(false); setShowLayers(false); }}
             showSEO={showSEO}
+            isAuthenticated={!!user}
+            onExportZip={handleExportZip}
+            onExportHTML={handleExportHTML}
+            onExportReact={handleExportReact}
+            onAuthRequired={handleAuthRequired}
           />
           {actualProjectId && (
             <PageManager
