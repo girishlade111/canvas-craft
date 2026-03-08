@@ -173,17 +173,58 @@ const BuilderPage = () => {
 
     const overData = over.data.current;
 
+    // Dropped on a container component → add as child
     if (overData?.isContainer && overData?.componentId) {
       addComponentToContainer(overData.componentId, newComp);
       return;
     }
 
+    // Dropped on a non-container component → add as sibling in its parent section
+    if (overData?.componentId && !overData?.isContainer) {
+      const targetId = overData.componentId as string;
+      // Find which section contains this component
+      const parentSection = schema.sections.find(s =>
+        s.components.some(function check(c: BuilderComponent): boolean {
+          return c.id === targetId || (c.children?.some(check) ?? false);
+        })
+      );
+      if (parentSection) {
+        // Find the index of the target component in the section and insert after it
+        const idx = parentSection.components.findIndex(c => c.id === targetId);
+        if (idx !== -1) {
+          addComponent(parentSection.id, newComp, idx + 1);
+        } else {
+          addComponent(parentSection.id, newComp);
+        }
+        return;
+      }
+    }
+
+    // Dropped on a section
     const targetSectionId = overData?.sectionId || over.id;
     const targetSection = schema.sections.find(s => s.id === targetSectionId);
     const section = targetSection || schema.sections.find(s => s.type === 'body');
-    if (!section) return;
-
-    addComponent(section.id, newComp);
+    
+    if (section) {
+      addComponent(section.id, newComp);
+    } else if (schema.sections.length > 0) {
+      // Fallback: add to first section
+      addComponent(schema.sections[0].id, newComp);
+    } else {
+      // No sections at all — create a default body section and add to it
+      const newSectionId = generateSectionId();
+      const newSchema: PageSchema = {
+        ...schema,
+        sections: [{
+          id: newSectionId,
+          type: 'body',
+          label: 'Body',
+          components: [newComp],
+          styles: { padding: '40px 20px', width: '100%', minHeight: '200px' },
+        }],
+      };
+      setSchema(newSchema);
+    }
   };
 
   if (!isLocalMode && isLoading) {
