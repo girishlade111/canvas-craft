@@ -123,6 +123,17 @@
   }
 }
 
+/* ── Performance: GPU acceleration & paint containment ── */
+@layer base {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  img, video, iframe {
+    content-visibility: auto;
+  }
+}
+
 @layer components {
   /* ===== Wix-style Builder Layout ===== */
   .builder-layout {
