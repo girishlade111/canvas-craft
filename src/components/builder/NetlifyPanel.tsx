@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   ArrowLeft, Rocket, Loader2, Check, ExternalLink, BarChart3,
-  Globe, Clock, Download, FileArchive, Shield, Key, Eye, EyeOff,
+  Globe, Clock, FileArchive, Shield, Key, Eye, EyeOff,
   Activity, Users, MonitorSmartphone, TrendingUp, Zap, Code,
   RefreshCw, Settings, Copy, AlertCircle, Search,
 } from 'lucide-react';
