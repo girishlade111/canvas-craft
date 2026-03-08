@@ -132,7 +132,7 @@ const SEO_COMPONENTS = {
     { id: 'image-optimize', name: 'Image Optimization', icon: Image, description: 'WebP, compression', preview: '🖼️' },
     { id: 'minification', name: 'Minification', icon: FileCode, description: 'CSS/JS compression', preview: '📦' },
     { id: 'caching', name: 'Browser Caching', icon: Database, description: 'Cache headers', preview: '💾' },
-    { id: 'cdn', name: 'CDN Setup', icon: Wifi, description: 'Content delivery', preview: '🌐' },
+    { id: 'cdn', name: 'CDN Setup', icon: Globe, description: 'Content delivery', preview: '🌐' },
     { id: 'mobile-first', name: 'Mobile-First', icon: Smartphone, description: 'Responsive design', preview: '📱' },
   ],
 };
