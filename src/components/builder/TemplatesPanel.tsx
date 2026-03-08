@@ -4,15 +4,35 @@
 
 import { useState, useMemo } from 'react';
 import {
-  X, Search, Grid3x3, List, ChevronRight, Sparkles, Eye,
-  LayoutTemplate, Layers, FileCode, PanelTop, PanelBottom,
-  Users, ShoppingBag, Mail, Calendar, Image, MessageSquare,
-  CreditCard, Award, Star, Zap, Building, Phone, Map,
-  Check, Copy, GripVertical,
+  X, Search, ChevronRight, Sparkles,
+  LayoutTemplate, Layers, PanelTop, PanelBottom,
+  Users, Mail, MessageSquare,
+  CreditCard, Zap,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useBuilderStore } from '@/store/builderStore';
-import type { BuilderComponent } from '@/types/builder';
+import type { BuilderComponent, ComponentStyles } from '@/types/builder';
+
+// Template type definition
+interface TemplateComponent {
+  id: string;
+  type: string;
+  category: string;
+  label: string;
+  content?: string;
+  styles?: ComponentStyles;
+  props?: Record<string, any>;
+  children?: TemplateComponent[];
+}
+
+interface Template {
+  id: string;
+  name: string;
+  description: string;
+  preview: string;
+  components: TemplateComponent[];
+  sectionStyles?: ComponentStyles;
+}
 
 // Template categories with pre-built sections
 const TEMPLATE_CATEGORIES = {
