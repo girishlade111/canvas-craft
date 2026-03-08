@@ -1967,20 +1967,33 @@ const AppMarketPanel = ({ projectId, onClose, onOpenVercel }: AppMarketPanelProp
     }
   };
 
+  // Special handling: Vercel opens its dedicated panel
+  if (selectedApp === 'vercel' && onOpenVercel) {
+    onOpenVercel();
+    setSelectedApp(null);
+    return null;
+  }
+
   const detailApp = selectedApp ? APP_CATALOG.find(a => a.key === selectedApp) : null;
   if (detailApp) {
-    return (
-      <div className="builder-flyout overflow-hidden flex flex-col">
-        <AppDetailView
-          app={detailApp}
-          installed={installedKeys.has(detailApp.key)}
-          onBack={() => setSelectedApp(null)}
-          onToggle={() => handleToggle(detailApp.key)}
-          isPending={installApp.isPending || uninstallApp.isPending}
-          projectId={projectId}
-        />
-      </div>
-    );
+    // Vercel fallback if no onOpenVercel callback
+    if (detailApp.key === 'vercel' && onOpenVercel) {
+      onOpenVercel();
+      setSelectedApp(null);
+    } else {
+      return (
+        <div className="builder-flyout overflow-hidden flex flex-col">
+          <AppDetailView
+            app={detailApp}
+            installed={installedKeys.has(detailApp.key)}
+            onBack={() => setSelectedApp(null)}
+            onToggle={() => handleToggle(detailApp.key)}
+            isPending={installApp.isPending || uninstallApp.isPending}
+            projectId={projectId}
+          />
+        </div>
+      );
+    }
   }
 
   if (!projectId) {
