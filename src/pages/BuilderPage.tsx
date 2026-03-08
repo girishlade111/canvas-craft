@@ -110,6 +110,8 @@ const BuilderPage = () => {
 
   // Preload component library when builder mounts (lazy from main bundle)
   useEffect(() => { getComponentLibrary(); }, []);
+
+  useEffect(() => {
     if (!isLocalMode && pages?.length && !currentPageId) {
       const page = pages[0];
       setCurrentPageId(page.id);
