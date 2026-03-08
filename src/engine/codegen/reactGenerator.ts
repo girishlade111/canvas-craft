@@ -791,13 +791,63 @@ coverage/
   files['.node-version'] = `20
 `;
 
-  // robots.txt
-  files['public/robots.txt'] = `# Allow all crawlers
+  // robots.txt - SEO optimized
+  files['public/robots.txt'] = `# robots.txt — ${projectName}
+# Allow all crawlers full access
+
 User-agent: *
+Allow: /
+Disallow:
+
+# Specific crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Applebot
 Allow: /
 
 # Sitemap (update with your domain)
-# Sitemap: https://example.com/sitemap.xml
+Sitemap: https://your-domain.com/sitemap.xml
+
+# Host (update with your domain)
+Host: https://your-domain.com
+`;
+
+  // sitemap.xml - Dynamic sitemap based on pages
+  const today = new Date().toISOString().split('T')[0];
+  const sitemapUrls = pages.map(({ slug }, index) => {
+    const loc = slug === 'index' ? '/' : `/${slug}`;
+    const priority = slug === 'index' ? '1.0' : (index === 1 ? '0.9' : '0.8');
+    return `  <url>
+    <loc>https://your-domain.com${loc}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>${priority}</priority>
+  </url>`;
+  }).join('\n');
+
+  files['public/sitemap.xml'] = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${sitemapUrls}
+</urlset>
 `;
 
   // README.md with comprehensive deployment instructions
