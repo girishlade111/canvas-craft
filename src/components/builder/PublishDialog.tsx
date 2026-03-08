@@ -3,9 +3,11 @@ import { useBuilderStore } from '@/store/builderStore';
 import { usePages, useSavePage } from '@/hooks/usePages';
 import { useCreateDeployment, useUpdateDeployment, useDeployments } from '@/hooks/useDeployments';
 import { generateProjectFiles } from '@/engine/deploy/vercelDeploy';
+import { downloadZip } from '@/engine/codegen/zipExporter';
 import type { PageSchema } from '@/types/builder';
 import {
   Upload, Check, X, Loader2, Globe, Clock, ExternalLink, Rocket,
+  FileArchive, Download,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -49,7 +51,6 @@ const PublishDialog: React.FC<PublishDialogProps> = ({ projectId, isOpen, onClos
 
   const handlePublish = async () => {
     try {
-      // Step 1: Save current page
       setStatus('saving');
       const currentPage = pages?.find((p) =>
         (p.schema as unknown as PageSchema)?.id === schema.id
@@ -58,12 +59,10 @@ const PublishDialog: React.FC<PublishDialogProps> = ({ projectId, isOpen, onClos
         await savePage.mutateAsync({ pageId: currentPage.id, schema });
       }
 
-      // Step 2: Generate code
       setStatus('generating');
       const files = generateProjectFiles(schema);
       setGeneratedFiles(files);
 
-      // Step 3: Create deployment record
       setStatus('deploying');
       const versionNumber = (deployments?.length ?? 0) + 1;
       const deployment = await createDeployment.mutateAsync({
@@ -71,9 +70,6 @@ const PublishDialog: React.FC<PublishDialogProps> = ({ projectId, isOpen, onClos
         versionNumber,
       });
 
-      // Step 4: Update with generated status
-      // In production this would call Vercel API via edge function
-      // For now we mark as completed with generated files
       await updateDeployment.mutateAsync({
         deploymentId: deployment.id,
         updates: {
@@ -90,18 +86,15 @@ const PublishDialog: React.FC<PublishDialogProps> = ({ projectId, isOpen, onClos
     }
   };
 
-  const handleDownloadBuild = () => {
+  const handleDownloadZip = async () => {
     if (!generatedFiles) return;
-    Object.entries(generatedFiles).forEach(([filename, content]) => {
-      const blob = new Blob([content], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-    toast.success('Files downloaded');
+    try {
+      const projectName = schema.name || 'my-website';
+      await downloadZip(generatedFiles, projectName);
+      toast.success('ZIP downloaded — open in VS Code and run `npm install && npm run dev`');
+    } catch (err: any) {
+      toast.error('Download failed: ' + err.message);
+    }
   };
 
   if (!isOpen) return null;
@@ -137,7 +130,7 @@ const PublishDialog: React.FC<PublishDialogProps> = ({ projectId, isOpen, onClos
               <p className="text-sm font-medium">{statusLabels[status]}</p>
               {generatedFiles && status === 'done' && (
                 <p className="text-xs opacity-60 mt-0.5">
-                  {Object.keys(generatedFiles).length} files generated
+                  {Object.keys(generatedFiles).length} files generated • Vercel-ready
                 </p>
               )}
             </div>
@@ -183,6 +176,21 @@ const PublishDialog: React.FC<PublishDialogProps> = ({ projectId, isOpen, onClos
             </a>
           )}
 
+          {/* Download ZIP info when done */}
+          {status === 'done' && generatedFiles && (
+            <div className="p-3 rounded-lg text-xs space-y-2" style={{ background: 'hsl(var(--primary) / 0.08)' }}>
+              <p className="font-medium" style={{ color: 'hsl(var(--primary))' }}>
+                🚀 Ready for Vercel deployment
+              </p>
+              <ol className="space-y-1 opacity-70 list-decimal list-inside">
+                <li>Download the ZIP and extract it</li>
+                <li>Open the folder in VS Code</li>
+                <li>Run <code className="px-1 py-0.5 rounded text-[10px]" style={{ background: 'hsl(var(--muted))' }}>npm install && npm run dev</code></li>
+                <li>Push to GitHub and import on Vercel</li>
+              </ol>
+            </div>
+          )}
+
           {/* Previous deployments */}
           {deployments && deployments.length > 0 && (
             <div>
@@ -220,10 +228,11 @@ const PublishDialog: React.FC<PublishDialogProps> = ({ projectId, isOpen, onClos
         <div className="flex items-center justify-end gap-2 p-5 border-t" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
           {status === 'done' && generatedFiles && (
             <button
-              onClick={handleDownloadBuild}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm hover:bg-white/10 transition-colors"
+              onClick={handleDownloadZip}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition-colors"
             >
-              Download Build
+              <FileArchive className="w-3.5 h-3.5" style={{ color: 'hsl(var(--primary))' }} />
+              Download ZIP
             </button>
           )}
           <button

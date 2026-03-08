@@ -6,6 +6,10 @@ import { useAutosave } from '@/hooks/useAutosave';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useAuth } from '@/hooks/useAuth';
 import { useCreateProject } from '@/hooks/useProjects';
+import { exportToStaticHTML, exportToReact, downloadFile } from '@/lib/exportProject';
+import { downloadZip } from '@/engine/codegen/zipExporter';
+import { generateProjectFiles } from '@/engine/deploy/vercelDeploy';
+import { toast } from 'sonner';
 import BuilderToolbar from '@/components/builder/BuilderToolbar';
 import ComponentSidebar from '@/components/builder/ComponentSidebar';
 import PropertiesPanel from '@/components/builder/PropertiesPanel';
@@ -32,7 +36,6 @@ import {
 import type { BuilderComponent, PageSchema, ComponentCategory } from '@/types/builder';
 import { componentLibrary } from '@/data/componentLibrary';
 import { Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
 
 const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const generateSectionId = () => `section-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -107,6 +110,32 @@ const BuilderPage = () => {
     } else {
       setShowPublish(true);
     }
+  };
+
+  const handleExportZip = async () => {
+    try {
+      const files = generateProjectFiles(schema);
+      await downloadZip(files, schema.name || 'my-website');
+      toast.success('ZIP downloaded — open in VS Code and run npm install');
+    } catch (err: any) {
+      toast.error('Export failed: ' + err.message);
+    }
+  };
+
+  const handleExportHTML = () => {
+    const html = exportToStaticHTML(schema);
+    downloadFile(`${schema.name || 'page'}.html`, html);
+  };
+
+  const handleExportReact = () => {
+    const files = exportToReact(schema);
+    Object.entries(files).forEach(([filename, content]) => {
+      downloadFile(filename, content, 'text/typescript');
+    });
+  };
+
+  const handleAuthRequired = () => {
+    setShowAuthGate(true);
   };
 
   const handleCreateProjectAndPublish = async () => {
@@ -258,6 +287,11 @@ const BuilderPage = () => {
             showLayers={showLayers}
             onToggleSEO={() => { setShowSEO(!showSEO); setShowAssets(false); setShowVersions(false); setShowLayers(false); }}
             showSEO={showSEO}
+            isAuthenticated={!!user}
+            onExportZip={handleExportZip}
+            onExportHTML={handleExportHTML}
+            onExportReact={handleExportReact}
+            onAuthRequired={handleAuthRequired}
           />
           {actualProjectId && (
             <PageManager
