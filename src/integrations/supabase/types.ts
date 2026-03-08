@@ -14,7 +14,197 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      assets: {
+        Row: {
+          created_at: string
+          file_path: string
+          file_size: number | null
+          file_type: string
+          file_url: string
+          id: string
+          name: string
+          project_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_path: string
+          file_size?: number | null
+          file_type: string
+          file_url: string
+          id?: string
+          name: string
+          project_id: string
+        }
+        Update: {
+          created_at?: string
+          file_path?: string
+          file_size?: number | null
+          file_type?: string
+          file_url?: string
+          id?: string
+          name?: string
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      page_versions: {
+        Row: {
+          created_at: string
+          id: string
+          page_id: string
+          schema: Json
+          version_number: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          page_id: string
+          schema?: Json
+          version_number?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          page_id?: string
+          schema?: Json
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_versions_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pages: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          project_id: string
+          schema: Json
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name?: string
+          project_id: string
+          schema?: Json
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          project_id?: string
+          schema?: Json
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pages_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_settings: {
+        Row: {
+          analytics_scripts: string | null
+          created_at: string
+          custom_domain: string | null
+          custom_head_code: string | null
+          favicon_url: string | null
+          id: string
+          meta_description: string | null
+          og_image_url: string | null
+          project_id: string
+          site_title: string | null
+          updated_at: string
+        }
+        Insert: {
+          analytics_scripts?: string | null
+          created_at?: string
+          custom_domain?: string | null
+          custom_head_code?: string | null
+          favicon_url?: string | null
+          id?: string
+          meta_description?: string | null
+          og_image_url?: string | null
+          project_id: string
+          site_title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          analytics_scripts?: string | null
+          created_at?: string
+          custom_domain?: string | null
+          custom_head_code?: string | null
+          favicon_url?: string | null
+          id?: string
+          meta_description?: string | null
+          og_image_url?: string | null
+          project_id?: string
+          site_title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_settings_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: true
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
