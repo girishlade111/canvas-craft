@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useBuilderStore } from '@/store/builderStore';
 import { usePages, useSavePage, type Page } from '@/hooks/usePages';
 import { useAutosave } from '@/hooks/useAutosave';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useAuth } from '@/hooks/useAuth';
+import { useCreateProject } from '@/hooks/useProjects';
 import BuilderToolbar from '@/components/builder/BuilderToolbar';
 import ComponentSidebar from '@/components/builder/ComponentSidebar';
 import PropertiesPanel from '@/components/builder/PropertiesPanel';
@@ -13,6 +15,7 @@ import AssetPanel from '@/components/builder/AssetPanel';
 import VersionHistoryPanel from '@/components/builder/VersionHistoryPanel';
 import PageManager from '@/components/builder/PageManager';
 import PublishDialog from '@/components/builder/PublishDialog';
+import AuthGateDialog from '@/components/builder/AuthGateDialog';
 import {
   DndContext,
   DragOverlay,
@@ -32,6 +35,13 @@ const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(
 
 const BuilderPage = () => {
   const { projectId } = useParams<{ projectId: string }>();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const createProject = useCreateProject();
+
+  const isLocalMode = projectId === 'local';
+  const actualProjectId = isLocalMode ? null : projectId;
+
   const {
     leftSidebarOpen,
     rightSidebarOpen,
@@ -43,24 +53,25 @@ const BuilderPage = () => {
     setSchema,
   } = useBuilderStore();
 
-  const { data: pages, isLoading } = usePages(projectId ?? null);
+  const { data: pages, isLoading } = usePages(actualProjectId ?? null);
   const savePage = useSavePage();
   const [currentPageId, setCurrentPageId] = useState<string | null>(null);
   const [showAssets, setShowAssets] = useState(false);
   const [showVersions, setShowVersions] = useState(false);
   const [showPublish, setShowPublish] = useState(false);
+  const [showAuthGate, setShowAuthGate] = useState(false);
   const [activeDrag, setActiveDrag] = useState<{ type: string; label: string } | null>(null);
 
-  // Autosave
-  const { isSaving: isAutosaving } = useAutosave(currentPageId);
+  // Autosave only in project mode
+  const { isSaving: isAutosaving } = useAutosave(isLocalMode ? null : currentPageId);
 
   useEffect(() => {
-    if (pages?.length && !currentPageId) {
+    if (!isLocalMode && pages?.length && !currentPageId) {
       const page = pages[0];
       setCurrentPageId(page.id);
       setSchema(page.schema as unknown as PageSchema);
     }
-  }, [pages, currentPageId, setSchema]);
+  }, [pages, currentPageId, setSchema, isLocalMode]);
 
   const handleSelectPage = (page: Page) => {
     setCurrentPageId(page.id);
@@ -72,17 +83,58 @@ const BuilderPage = () => {
   );
 
   const handleSave = useCallback(async () => {
-    if (!currentPageId) return;
+    if (isLocalMode || !currentPageId) return;
     try {
       await savePage.mutateAsync({ pageId: currentPageId, schema });
       toast.success('Page saved!');
     } catch (err: any) {
       toast.error('Failed to save: ' + err.message);
     }
-  }, [currentPageId, savePage, schema]);
+  }, [currentPageId, savePage, schema, isLocalMode]);
 
-  // Keyboard shortcuts (Ctrl+Z, Ctrl+S, Delete, etc.)
   useKeyboardShortcuts({ onSave: handleSave });
+
+  const handlePublishClick = () => {
+    if (!user) {
+      setShowAuthGate(true);
+    } else if (isLocalMode) {
+      // User is authenticated but in local mode — create a project first, then publish
+      handleCreateProjectAndPublish();
+    } else {
+      setShowPublish(true);
+    }
+  };
+
+  const handleCreateProjectAndPublish = async () => {
+    try {
+      const project = await createProject.mutateAsync({
+        name: schema.name || 'My Website',
+        description: 'Created from template',
+        templateSchema: schema,
+      });
+      navigate(`/builder/${project.id}`, { replace: true });
+      // Small delay to let the page load before opening publish
+      setTimeout(() => setShowPublish(true), 500);
+    } catch (err: any) {
+      toast.error('Failed to create project: ' + err.message);
+    }
+  };
+
+  const handleAuthComplete = async () => {
+    setShowAuthGate(false);
+    // After auth, create a project from the current schema and redirect
+    try {
+      const project = await createProject.mutateAsync({
+        name: schema.name || 'My Website',
+        description: 'Created from template',
+        templateSchema: schema,
+      });
+      navigate(`/builder/${project.id}`, { replace: true });
+      setTimeout(() => setShowPublish(true), 500);
+    } catch (err: any) {
+      toast.error('Failed to create project: ' + err.message);
+    }
+  };
 
   const handleDragStart = (event: DragStartEvent) => {
     const data = event.active.data.current;
@@ -119,13 +171,11 @@ const BuilderPage = () => {
 
     const overData = over.data.current;
 
-    // Dropped on a container component
     if (overData?.isContainer && overData?.componentId) {
       addComponentToContainer(overData.componentId, newComp);
       return;
     }
 
-    // Dropped on a section
     const targetSectionId = overData?.sectionId || over.id;
     const targetSection = schema.sections.find(s => s.id === targetSectionId);
     const section = targetSection || schema.sections.find(s => s.type === 'body');
@@ -134,7 +184,7 @@ const BuilderPage = () => {
     addComponent(section.id, newComp);
   };
 
-  if (isLoading) {
+  if (!isLocalMode && isLoading) {
     return (
       <div className="h-screen w-screen flex items-center justify-center" style={{ background: 'hsl(var(--builder-bg))' }}>
         <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'hsl(var(--primary))' }} />
@@ -158,19 +208,19 @@ const BuilderPage = () => {
           onToggleVersions={() => { setShowVersions(!showVersions); setShowAssets(false); }}
           showAssets={showAssets}
           showVersions={showVersions}
-          projectId={projectId}
-          onPublish={() => setShowPublish(true)}
+          projectId={actualProjectId ?? undefined}
+          onPublish={handlePublishClick}
         />
-        {projectId && (
+        {actualProjectId && (
           <PageManager
-            projectId={projectId}
+            projectId={actualProjectId}
             currentPageId={currentPageId}
             onSelectPage={handleSelectPage}
           />
         )}
         <div className="flex flex-1 overflow-hidden">
           {leftSidebarOpen && !showAssets && <ComponentSidebar />}
-          {showAssets && projectId && <AssetPanel projectId={projectId} />}
+          {showAssets && actualProjectId && <AssetPanel projectId={actualProjectId} />}
           <BuilderCanvas />
           {rightSidebarOpen && selectedComponentId && !showVersions && <PropertiesPanel />}
           {showVersions && currentPageId && <VersionHistoryPanel pageId={currentPageId} />}
@@ -186,10 +236,17 @@ const BuilderPage = () => {
         ) : null}
       </DragOverlay>
 
-      {/* Publish dialog */}
-      {projectId && (
+      {/* Auth gate modal */}
+      <AuthGateDialog
+        isOpen={showAuthGate}
+        onClose={() => setShowAuthGate(false)}
+        onAuthenticated={handleAuthComplete}
+      />
+
+      {/* Publish dialog — only when we have a real project */}
+      {actualProjectId && (
         <PublishDialog
-          projectId={projectId}
+          projectId={actualProjectId}
           isOpen={showPublish}
           onClose={() => setShowPublish(false)}
         />
