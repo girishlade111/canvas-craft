@@ -527,7 +527,7 @@ const BuilderPage = () => {
               {activePanel === 'store' && <EcommercePanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'marketing' && <MarketingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'booking' && <BookingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
-              {activePanel === 'apps' && <AppMarketPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
+              {activePanel === 'apps' && <AppMarketPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} onOpenVercel={() => setActivePanel('vercel')} />}
               {activePanel === 'ai' && <AIToolsPanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'marketplace' && <MarketplacePanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'members' && <MemberAreaPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
