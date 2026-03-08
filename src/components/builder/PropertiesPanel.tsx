@@ -182,7 +182,7 @@ const PropertiesPanel = () => {
   };
 
   return (
-    <div className="builder-sidebar w-72 border-l overflow-y-auto">
+    <div className="builder-properties-panel overflow-y-auto">
       {/* Header */}
       <div className="p-3 border-b flex items-center justify-between" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
         <h2 className="text-xs font-semibold uppercase tracking-wider opacity-60">Properties</h2>

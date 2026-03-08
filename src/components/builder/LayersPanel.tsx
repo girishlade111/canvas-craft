@@ -103,7 +103,7 @@ const LayersPanel = () => {
   const { schema, selectComponent } = useBuilderStore();
 
   return (
-    <div className="builder-sidebar w-60 border-r overflow-y-auto">
+    <div className="builder-flyout overflow-y-auto">
       <div className="p-3 border-b" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
         <div className="flex items-center gap-2">
           <Layers className="w-4 h-4" style={{ color: 'hsl(var(--primary))' }} />

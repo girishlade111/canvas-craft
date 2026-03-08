@@ -9,7 +9,7 @@ import {
   PanelTop, ChevronDown, TextCursorInput, FileText, CheckSquare, LogIn, UserPlus,
   Mail, ShoppingCart, CreditCard, Wallet, Menu, PanelLeft, ChevronRight,
   Terminal, Globe, LayoutGrid, MousePointerClick, Circle, DollarSign,
-  MessageSquareQuote, Search,
+  MessageSquareQuote, Search, X, GripVertical,
 } from 'lucide-react';
 
 const iconMap: Record<string, any> = {
@@ -35,18 +35,30 @@ const DraggableItem = ({ type, label, icon, isContainer }: { type: string; label
       ref={setNodeRef}
       {...listeners}
       {...attributes}
-      className={`component-item ${isDragging ? 'opacity-50' : ''}`}
+      className={`component-item group ${isDragging ? 'opacity-50 scale-95' : ''}`}
     >
-      <Icon className="w-4 h-4 shrink-0" />
-      <span className="truncate flex-1">{label}</span>
-      {isContainer && (
-        <span className="text-[10px] px-1 py-0.5 rounded opacity-50" style={{ background: 'hsl(var(--primary) / 0.2)' }}>⊞</span>
-      )}
+      <div
+        className="w-8 h-8 rounded-md flex items-center justify-center shrink-0"
+        style={{ background: 'hsl(var(--builder-component-bg))' }}
+      >
+        <Icon className="w-4 h-4" style={{ color: 'hsl(var(--primary))' }} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <span className="text-xs font-medium truncate block">{label}</span>
+        {isContainer && (
+          <span className="text-[9px]" style={{ color: 'hsl(var(--muted-foreground))' }}>Container</span>
+        )}
+      </div>
+      <GripVertical className="w-3 h-3 opacity-0 group-hover:opacity-30 shrink-0" />
     </div>
   );
 };
 
-const ComponentSidebar = () => {
+interface ComponentSidebarProps {
+  onClose?: () => void;
+}
+
+const ComponentSidebar = ({ onClose }: ComponentSidebarProps) => {
   const [openCategory, setOpenCategory] = useState<ComponentCategory | null>('Basic');
   const [search, setSearch] = useState('');
   const categories = Object.keys(componentLibrary) as ComponentCategory[];
@@ -54,71 +66,86 @@ const ComponentSidebar = () => {
   const filteredCategories = search.trim()
     ? categories.map(cat => ({
         cat,
-        items: componentLibrary[cat].filter(c => c.label.toLowerCase().includes(search.toLowerCase()) || c.type.toLowerCase().includes(search.toLowerCase())),
+        items: componentLibrary[cat].filter(c =>
+          c.label.toLowerCase().includes(search.toLowerCase()) ||
+          c.type.toLowerCase().includes(search.toLowerCase())
+        ),
       })).filter(c => c.items.length > 0)
     : null;
 
   return (
-    <div className="builder-sidebar w-60 border-r overflow-y-auto">
-      <div className="p-3 border-b" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
-        <h2 className="text-xs font-semibold uppercase tracking-wider opacity-60 mb-2">
-          Components
-        </h2>
+    <div className="builder-flyout">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
+        <h2 className="text-sm font-semibold">Add Elements</h2>
+        {onClose && (
+          <button onClick={onClose} className="p-1 rounded hover:bg-muted transition-colors">
+            <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+
+      {/* Search */}
+      <div className="px-3 py-2 border-b" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
         <div className="relative">
-          <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 opacity-40" />
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: 'hsl(var(--muted-foreground))' }} />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search components..."
-            className="property-input pl-7 text-xs"
+            placeholder="Search elements..."
+            className="property-input pl-8 text-xs"
           />
         </div>
       </div>
 
-      {filteredCategories ? (
-        <div className="py-1">
-          {filteredCategories.map(({ cat, items }) => (
-            <div key={cat}>
-              <div className="px-3 py-1.5 text-xs font-semibold opacity-50 uppercase">{cat}</div>
-              <div className="px-2 pb-2 space-y-1">
-                {items.map((comp) => (
-                  <DraggableItem key={comp.type} type={comp.type} label={comp.label} icon={comp.icon} isContainer={comp.isContainer} />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="py-1">
-          {categories.map((cat) => {
-            const CatIcon = iconMap[categoryIcons[cat]] || Square;
-            const isOpen = openCategory === cat;
-            return (
+      {/* Component list */}
+      <div className="flex-1 overflow-y-auto">
+        {filteredCategories ? (
+          <div className="py-1">
+            {filteredCategories.map(({ cat, items }) => (
               <div key={cat}>
-                <button
-                  onClick={() => setOpenCategory(isOpen ? null : cat)}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors"
-                  style={{ color: 'inherit' }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = 'hsl(var(--builder-component-hover))')}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                >
-                  <CatIcon className="w-4 h-4" style={{ color: 'hsl(var(--primary))' }} />
-                  <span className="flex-1 text-left font-medium">{cat}</span>
-                  <span className="text-xs opacity-40">{componentLibrary[cat].length}</span>
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {isOpen && (
-                  <div className="px-2 pb-2 space-y-1">
-                    {componentLibrary[cat].map((comp) => (
-                      <DraggableItem key={comp.type} type={comp.type} label={comp.label} icon={comp.icon} isContainer={comp.isContainer} />
-                    ))}
-                  </div>
-                )}
+                <div className="px-4 py-1.5 text-[10px] font-semibold uppercase tracking-widest" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                  {cat}
+                </div>
+                <div className="px-2 pb-2 space-y-0.5">
+                  {items.map((comp) => (
+                    <DraggableItem key={comp.type} type={comp.type} label={comp.label} icon={comp.icon} isContainer={comp.isContainer} />
+                  ))}
+                </div>
               </div>
-            );
-          })}
-        </div>
-      )}
+            ))}
+          </div>
+        ) : (
+          <div className="py-1">
+            {categories.map((cat) => {
+              const CatIcon = iconMap[categoryIcons[cat]] || Square;
+              const isOpen = openCategory === cat;
+              return (
+                <div key={cat}>
+                  <button
+                    onClick={() => setOpenCategory(isOpen ? null : cat)}
+                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors hover:bg-muted"
+                  >
+                    <CatIcon className="w-4 h-4" style={{ color: 'hsl(var(--primary))' }} />
+                    <span className="flex-1 text-left text-xs font-medium">{cat}</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full" style={{ background: 'hsl(var(--builder-component-bg))', color: 'hsl(var(--muted-foreground))' }}>
+                      {componentLibrary[cat].length}
+                    </span>
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isOpen ? 'rotate-180' : ''}`} style={{ color: 'hsl(var(--muted-foreground))' }} />
+                  </button>
+                  {isOpen && (
+                    <div className="px-2 pb-2 space-y-0.5">
+                      {componentLibrary[cat].map((comp) => (
+                        <DraggableItem key={comp.type} type={comp.type} label={comp.label} icon={comp.icon} isContainer={comp.isContainer} />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
