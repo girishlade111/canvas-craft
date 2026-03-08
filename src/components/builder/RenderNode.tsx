@@ -1,5 +1,6 @@
-import React, { memo, useState, useCallback, useRef } from 'react';
+import React, { memo, useState, useCallback, useRef, useEffect } from 'react';
 import { getComponent } from '@/engine/registry';
+import { onRegistryUpdate } from '@/engine/registry/componentRegistry';
 import { useBuilderStore } from '@/store/builderStore';
 import { useDroppable, useDraggable } from '@dnd-kit/core';
 import { isContainerType, type BuilderComponent } from '@/types/builder';
