@@ -28,6 +28,7 @@ interface BuilderToolbarProps {
   onExportReact?: () => void;
   onAuthRequired?: () => void;
   onOpenExportDialog?: () => void;
+  onSaveAsTemplate?: () => void;
 }
 
 const BuilderToolbar = ({
