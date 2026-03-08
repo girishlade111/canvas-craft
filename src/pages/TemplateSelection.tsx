@@ -256,7 +256,17 @@ const TemplateSelection = () => {
                         </span>
                       )}
                     </div>
-                    <span className="relative z-10">{template.thumbnail}</span>
+                    {/* Preview image or emoji fallback */}
+                    {template.preview_image_url ? (
+                      <img
+                        src={template.preview_image_url}
+                        alt={`${template.name} preview`}
+                        className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <span className="relative z-10">{template.thumbnail}</span>
+                    )}
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 bg-foreground/5">
                       <div className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
                         style={{ background: 'var(--gradient-primary)' }}>
