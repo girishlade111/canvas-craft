@@ -6,7 +6,7 @@ import {
   X, ChevronDown, ChevronRight, Layers, LayoutDashboard, Smartphone,
   Sparkles, Link2, Accessibility, Palette, Upload, Image as ImageIcon, Trash2, ExternalLink,
 } from 'lucide-react';
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import AutoLayoutPanel from './AutoLayoutPanel';
 import ResponsivePanel from './ResponsivePanel';
 import AnimationPanel from './AnimationPanel';
@@ -411,8 +411,18 @@ const PageSettingsPanel = () => {
 // ─── Link Tab ──────────────────────────────────────────────
 
 const LinkPanel: React.FC<{ componentId: string }> = ({ componentId }) => {
-  const { updateComponent } = useBuilderStore();
-  const component = useBuilderStore.getState().getSelectedComponent();
+  const { updateComponent, schema } = useBuilderStore();
+  const component = useMemo(() => {
+    const findRecursive = (components: any[]): any => {
+      for (const comp of components) {
+        if (comp.id === componentId) return comp;
+        if (comp.children) { const f = findRecursive(comp.children); if (f) return f; }
+      }
+      return null;
+    };
+    for (const section of schema.sections) { const f = findRecursive(section.components); if (f) return f; }
+    return null;
+  }, [componentId, schema]);
   if (!component) return null;
 
   const link = component.props?.link || { type: 'none', url: '', target: '_self' };
@@ -488,9 +498,19 @@ const LinkPanel: React.FC<{ componentId: string }> = ({ componentId }) => {
 
 // ─── Accessibility Tab ─────────────────────────────────────
 
-const AccessibilityPanel: React.FC<{ componentId: string }> = ({ componentId }) => {
-  const { updateComponent } = useBuilderStore();
-  const component = useBuilderStore.getState().getSelectedComponent();
+const AccessibilityPanelInner: React.FC<{ componentId: string }> = ({ componentId }) => {
+  const { updateComponent, schema } = useBuilderStore();
+  const component = useMemo(() => {
+    const findRecursive = (components: any[]): any => {
+      for (const comp of components) {
+        if (comp.id === componentId) return comp;
+        if (comp.children) { const f = findRecursive(comp.children); if (f) return f; }
+      }
+      return null;
+    };
+    for (const section of schema.sections) { const f = findRecursive(section.components); if (f) return f; }
+    return null;
+  }, [componentId, schema]);
   if (!component) return null;
 
   const a11y = component.props?.accessibility || {};
@@ -563,16 +583,33 @@ const AccessibilityPanel: React.FC<{ componentId: string }> = ({ componentId }) 
 // ─── Main Properties Panel ─────────────────────────────────
 
 const PropertiesPanel = () => {
-  const { selectedComponentId, updateComponentStyles, updateComponent, toggleRightSidebar } = useBuilderStore();
-  const [openGroups, setOpenGroups] = useState<string[]>(['Auto Layout', 'Component', 'Layout', 'Responsive']);
+  const { selectedComponentId, updateComponentStyles, updateComponent, toggleRightSidebar, schema } = useBuilderStore();
+  const [openGroups, setOpenGroups] = useState<string[]>(['Auto Layout', 'Component', 'Layout', 'Responsive', 'Typography', 'Appearance', 'Background', 'Advanced']);
   const [activeTab, setActiveTab] = useState<'design' | 'layout' | 'animate' | 'link' | 'a11y' | 'responsive'>('design');
 
-  if (!selectedComponentId) {
+  // Use schema from reactive subscription to ensure re-render on changes
+  const selectedComponent = useMemo(() => {
+    if (!selectedComponentId) return null;
+    const findRecursive = (components: any[]): any => {
+      for (const comp of components) {
+        if (comp.id === selectedComponentId) return comp;
+        if (comp.children) {
+          const found = findRecursive(comp.children);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
+    for (const section of schema.sections) {
+      const found = findRecursive(section.components);
+      if (found) return found;
+    }
+    return null;
+  }, [selectedComponentId, schema]);
+
+  if (!selectedComponentId || !selectedComponent) {
     return <PageSettingsPanel />;
   }
-
-  const selectedComponent = useBuilderStore.getState().getSelectedComponent();
-  if (!selectedComponent) return null;
 
   const isContainer = isContainerType(selectedComponent.type);
   const propertyGroups = getPropertyGroups(selectedComponent.type);
@@ -651,17 +688,28 @@ const PropertiesPanel = () => {
       {/* Design tab */}
       {activeTab === 'design' && (
         <>
-          {selectedComponent.content !== undefined && (
-            <div className="property-group">
-              <span className="property-label">Content</span>
-              <textarea
-                value={selectedComponent.content || ''}
-                onChange={(e) => updateComponent(selectedComponentId, { content: e.target.value })}
-                className="property-input resize-y min-h-[60px]"
-                rows={3}
-              />
-            </div>
-          )}
+          {/* Content editor — show for all components that can have content */}
+          <div className="property-group">
+            <span className="property-label">Content</span>
+            <textarea
+              value={selectedComponent.content || ''}
+              onChange={(e) => updateComponent(selectedComponentId, { content: e.target.value })}
+              className="property-input resize-y min-h-[60px]"
+              rows={3}
+              placeholder={`Enter content for ${selectedComponent.label}...`}
+            />
+          </div>
+
+          {/* Label */}
+          <div className="property-group">
+            <span className="property-label">Label</span>
+            <input
+              value={selectedComponent.label || ''}
+              onChange={(e) => updateComponent(selectedComponentId, { label: e.target.value })}
+              className="property-input"
+              placeholder="Component label"
+            />
+          </div>
 
           {Object.entries(propertyGroups).map(([group, fields]) => {
             if (['Layout'].includes(group)) return null;
@@ -798,7 +846,7 @@ const PropertiesPanel = () => {
           <div className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider opacity-60">
             Accessibility
           </div>
-          <AccessibilityPanel componentId={selectedComponentId} />
+          <AccessibilityPanelInner componentId={selectedComponentId} />
         </div>
       )}
 

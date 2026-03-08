@@ -125,9 +125,12 @@ const BuilderPage = () => {
   const { isSaving: isAutosaving } = useAutosave(isLocalMode ? null : currentPageId);
 
   // Preload component library and registry when builder mounts
+  const [componentsReady, setComponentsReady] = useState(false);
   useEffect(() => {
-    getComponentLibrary();
-    import('@/engine/registry/componentRegistry').then(m => m.ensureAllComponentsLoaded());
+    Promise.all([
+      getComponentLibrary(),
+      import('@/engine/registry/componentRegistry').then(m => m.ensureAllComponentsLoaded()),
+    ]).then(() => setComponentsReady(true));
   }, []);
 
   useEffect(() => {
@@ -266,7 +269,7 @@ const BuilderPage = () => {
     setActiveDrag(null);
     setDropTarget(null);
     const { active, over } = event;
-    if (!over) return;
+    if (!over || !componentsReady) return;
 
     const activeData = active.data.current;
 
@@ -351,9 +354,9 @@ const BuilderPage = () => {
         type: compDef.type,
         category: compDef.category,
         label: compDef.label,
-        content: compDef.defaultContent,
+        content: compDef.defaultContent || '',
         styles: compDef.defaultStyles || {},
-        props: compDef.defaultProps,
+        props: compDef.defaultProps || {},
         isContainer: compDef.isContainer,
         children: compDef.isContainer ? [] : undefined,
       };
