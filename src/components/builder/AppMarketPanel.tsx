@@ -2130,9 +2130,12 @@ const AppMarketPanel = ({ projectId, onClose, onOpenVercel, onOpenNetlify }: App
 
   const detailApp = selectedApp ? APP_CATALOG.find(a => a.key === selectedApp) : null;
   if (detailApp) {
-    // Vercel fallback if no onOpenVercel callback
+    // Dedicated panels for Vercel & Netlify
     if (detailApp.key === 'vercel' && onOpenVercel) {
       onOpenVercel();
+      setSelectedApp(null);
+    } else if (detailApp.key === 'netlify' && onOpenNetlify) {
+      onOpenNetlify();
       setSelectedApp(null);
     } else {
       return (
