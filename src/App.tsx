@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import AuthPage from "./pages/AuthPage";
 import ProjectSettingsPage from "./pages/ProjectSettingsPage";
 import PreviewPage from "./pages/PreviewPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import NotFound from "./pages/NotFound";
 import { Loader2 } from "lucide-react";
 
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/builder/:projectId" element={<ProtectedRoute><BuilderPage /></ProtectedRoute>} />
             <Route path="/preview/:projectId" element={<ProtectedRoute><PreviewPage /></ProtectedRoute>} />
             <Route path="/project/:projectId/settings" element={<ProtectedRoute><ProjectSettingsPage /></ProtectedRoute>} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
