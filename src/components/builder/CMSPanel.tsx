@@ -59,9 +59,8 @@ const CMSPanel = ({ onClose }: CMSPanelProps) => {
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState('All');
   const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [editingPost, setEditingPost] = useState<string | null>(null);
   const [showNewPost, setShowNewPost] = useState(false);
-  const [newPost, setNewPost] = useState({ title: '', category: 'Tutorials', status: 'draft' as const });
+  const [newPost, setNewPost] = useState({ title: '', category: 'Tutorials', status: 'draft' as BlogPost['status'] });
   const [showNewCollection, setShowNewCollection] = useState(false);
 
   const filtered = posts.filter(p => {
