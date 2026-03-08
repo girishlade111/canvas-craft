@@ -1,22 +1,21 @@
 import { useState } from 'react';
 import {
-  ShoppingBag, Plus, Search, Package, CreditCard, Tag, Truck,
-  BarChart3, X, Edit3, Trash2, Eye, DollarSign, Gift, Percent,
-  ShoppingCart, Users, TrendingUp, ArrowUpRight, Loader2,
+  Plus, Search, Package, CreditCard, Truck,
+  X, Edit3, Trash2, Eye, DollarSign, Gift, Percent,
+  ShoppingCart, Users, Loader2,
   Store, Layout, Grid3X3, Layers, Image, Star, Heart, Box,
-  Palette, Settings, ChevronRight, Copy, Download, Upload,
-  Globe, MapPin, Phone, Mail, Clock, Calendar, CreditCard as Card,
-  Shield, Lock, Award, Zap, Sparkles, Crown, Gem, Target,
+  Palette, Settings, ChevronRight, Download, Upload,
+  MapPin, Clock,
+  Shield, Lock, Zap, Sparkles, Crown, Gem, Target,
   LayoutGrid, LayoutList, Columns, Rows, SplitSquareHorizontal,
-  MousePointer, Move, Filter, SortAsc, ArrowDown, ArrowUp,
-  CircleDot, CheckCircle2, AlertCircle, Info, HelpCircle,
-  Share2, ExternalLink, RefreshCw, MoreHorizontal, Grip,
-  Wallet, Receipt, FileText, Banknote, PiggyBank, Coins,
-  Ticket, BadgePercent, Timer, Bell, MessageSquare, Send,
-  ListOrdered, ClipboardList, BarChart2, PieChart, LineChart,
-  Megaphone, Newspaper, Bookmark, FolderOpen, Archive,
+  Filter, SortAsc,
+  Share2,
+  Wallet, Receipt, FileText,
+  Ticket, BadgePercent, Timer, Bell, MessageSquare,
+  ListOrdered, ClipboardList, BarChart2,
+  Megaphone, FolderOpen, Archive,
 } from 'lucide-react';
-import { useProducts, useCreateProduct, useDeleteProduct, useOrders, useCoupons, useCreateCoupon } from '@/hooks/useProducts';
+import { useProducts, useCreateProduct, useDeleteProduct, useOrders, useCoupons } from '@/hooks/useProducts';
 import { useBuilderStore } from '@/store/builderStore';
 import { toast } from 'sonner';
 import { ScrollArea } from '@/components/ui/scroll-area';
