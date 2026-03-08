@@ -1443,10 +1443,10 @@ export const useClipboard = () => {
 `;
 
   // public/favicon.svg placeholder
-  files['public/favicon.svg'] = \`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#3b82f6"/><text x="16" y="22" font-size="18" font-family="system-ui" fill="white" text-anchor="middle" font-weight="bold">D</text></svg>\`;
+  files['public/favicon.svg'] = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#3b82f6"/><text x="16" y="22" font-size="18" font-family="system-ui" fill="white" text-anchor="middle" font-weight="bold">D</text></svg>`;
 
   // public/placeholder.svg
-  files['public/placeholder.svg'] = \`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#e5e7eb"/><text x="200" y="150" font-size="16" font-family="system-ui" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle">Image Placeholder</text></svg>\`;
+  files['public/placeholder.svg'] = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#e5e7eb"/><text x="200" y="150" font-size="16" font-family="system-ui" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle">Image Placeholder</text></svg>`;
 
   return files;
 };
