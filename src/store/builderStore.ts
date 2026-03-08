@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { BuilderComponent, ComponentStyles, DeviceView, PageSchema } from '@/types/builder';
+import { isContainerType } from '@/types/builder';
 
 interface HistoryEntry {
   schema: PageSchema;
@@ -16,7 +17,6 @@ interface BuilderState {
   history: HistoryEntry[];
   historyIndex: number;
 
-  // Actions
   setSchema: (schema: PageSchema) => void;
   selectComponent: (id: string | null) => void;
   setDeviceView: (view: DeviceView) => void;
@@ -24,36 +24,36 @@ interface BuilderState {
   toggleRightSidebar: () => void;
   openCodeEditor: (componentId: string) => void;
   closeCodeEditor: () => void;
-  addComponent: (sectionId: string, component: BuilderComponent, index?: number) => void;
+  addComponent: (parentId: string, component: BuilderComponent, index?: number) => void;
+  addComponentToContainer: (containerId: string, component: BuilderComponent, index?: number) => void;
   updateComponent: (componentId: string, updates: Partial<BuilderComponent>) => void;
   updateComponentStyles: (componentId: string, styles: Partial<ComponentStyles>) => void;
   removeComponent: (componentId: string) => void;
-  moveComponent: (componentId: string, targetSectionId: string, targetIndex: number) => void;
+  moveComponent: (componentId: string, targetParentId: string, targetIndex: number) => void;
   undo: () => void;
   redo: () => void;
   getSelectedComponent: () => BuilderComponent | null;
 }
 
+// ---- Tree helpers ----
+
 const findComponent = (sections: PageSchema['sections'], id: string): BuilderComponent | null => {
   for (const section of sections) {
     for (const comp of section.components) {
       if (comp.id === id) return comp;
-      if (comp.children) {
-        const found = findInChildren(comp.children, id);
-        if (found) return found;
-      }
+      const found = findInChildren(comp.children, id);
+      if (found) return found;
     }
   }
   return null;
 };
 
-const findInChildren = (children: BuilderComponent[], id: string): BuilderComponent | null => {
+const findInChildren = (children: BuilderComponent[] | undefined, id: string): BuilderComponent | null => {
+  if (!children) return null;
   for (const child of children) {
     if (child.id === id) return child;
-    if (child.children) {
-      const found = findInChildren(child.children, id);
-      if (found) return found;
-    }
+    const found = findInChildren(child.children, id);
+    if (found) return found;
   }
   return null;
 };
@@ -102,6 +102,39 @@ const removeFromComponents = (
     .map(c => c.children ? { ...c, children: removeFromComponents(c.children, componentId) } : c);
 };
 
+// Add component into a container component's children (nested DnD)
+const addToContainer = (
+  sections: PageSchema['sections'],
+  containerId: string,
+  component: BuilderComponent,
+  index?: number
+): PageSchema['sections'] => {
+  return sections.map(section => ({
+    ...section,
+    components: addToContainerInComponents(section.components, containerId, component, index),
+  }));
+};
+
+const addToContainerInComponents = (
+  components: BuilderComponent[],
+  containerId: string,
+  component: BuilderComponent,
+  index?: number
+): BuilderComponent[] => {
+  return components.map(comp => {
+    if (comp.id === containerId) {
+      const children = [...(comp.children || [])];
+      if (index !== undefined) children.splice(index, 0, component);
+      else children.push(component);
+      return { ...comp, children };
+    }
+    if (comp.children) {
+      return { ...comp, children: addToContainerInComponents(comp.children, containerId, component, index) };
+    }
+    return comp;
+  });
+};
+
 const defaultSchema: PageSchema = {
   id: 'page-1',
   name: 'Home',
@@ -111,7 +144,9 @@ const defaultSchema: PageSchema = {
 const pushHistory = (state: BuilderState): Partial<BuilderState> => {
   const newHistory = state.history.slice(0, state.historyIndex + 1);
   newHistory.push({ schema: JSON.parse(JSON.stringify(state.schema)) });
-  return { history: newHistory, historyIndex: newHistory.length - 1 };
+  // Keep max 50 history entries
+  if (newHistory.length > 50) newHistory.shift();
+  return { history: newHistory, historyIndex: Math.min(newHistory.length - 1, 49) };
 };
 
 export const useBuilderStore = create<BuilderState>((set, get) => ({
@@ -139,6 +174,7 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
 
   closeCodeEditor: () => set({ codeEditorOpen: false, codeEditorComponentId: null }),
 
+  // Add to a section (top-level drop)
   addComponent: (sectionId, component, index) =>
     set(state => {
       const newSchema = {
@@ -150,6 +186,16 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
           else comps.push(component);
           return { ...section, components: comps };
         }),
+      };
+      return { schema: newSchema, ...pushHistory({ ...state, schema: newSchema }) };
+    }),
+
+  // Add into a container component's children (nested drop)
+  addComponentToContainer: (containerId, component, index) =>
+    set(state => {
+      const newSchema = {
+        ...state.schema,
+        sections: addToContainer(state.schema.sections, containerId, component, index),
       };
       return { schema: newSchema, ...pushHistory({ ...state, schema: newSchema }) };
     }),
@@ -188,17 +234,29 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
       };
     }),
 
-  moveComponent: (componentId, targetSectionId, targetIndex) =>
+  moveComponent: (componentId, targetParentId, targetIndex) =>
     set(state => {
       const comp = findComponent(state.schema.sections, componentId);
       if (!comp) return state;
-      const cleaned = removeFromSections(state.schema.sections, componentId);
-      const newSections = cleaned.map(section => {
-        if (section.id !== targetSectionId) return section;
-        const comps = [...section.components];
-        comps.splice(targetIndex, 0, comp);
-        return { ...section, components: comps };
-      });
+
+      // Remove from current position
+      let cleanedSections = removeFromSections(state.schema.sections, componentId);
+
+      // Check if target is a section or a container component
+      const isSection = cleanedSections.some(s => s.id === targetParentId);
+
+      let newSections;
+      if (isSection) {
+        newSections = cleanedSections.map(section => {
+          if (section.id !== targetParentId) return section;
+          const comps = [...section.components];
+          comps.splice(targetIndex, 0, comp);
+          return { ...section, components: comps };
+        });
+      } else {
+        newSections = addToContainer(cleanedSections, targetParentId, comp, targetIndex);
+      }
+
       const newSchema = { ...state.schema, sections: newSections };
       return { schema: newSchema, ...pushHistory({ ...state, schema: newSchema }) };
     }),

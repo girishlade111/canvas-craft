@@ -21,6 +21,7 @@ import {
   type DragEndEvent,
 } from '@dnd-kit/core';
 import type { BuilderComponent, PageSchema } from '@/types/builder';
+import { isContainerType } from '@/types/builder';
 import { componentLibrary } from '@/data/componentLibrary';
 import type { ComponentCategory } from '@/types/builder';
 import { Loader2 } from 'lucide-react';
@@ -36,6 +37,7 @@ const BuilderPage = () => {
     codeEditorOpen,
     selectedComponentId,
     addComponent,
+    addComponentToContainer,
     schema,
     setSchema,
   } = useBuilderStore();
@@ -47,7 +49,6 @@ const BuilderPage = () => {
   const [showVersions, setShowVersions] = useState(false);
   const [activeDrag, setActiveDrag] = useState<{ type: string; label: string } | null>(null);
 
-  // Load first page schema when pages load
   useEffect(() => {
     if (pages?.length && !currentPageId) {
       const page = pages[0];
@@ -96,11 +97,6 @@ const BuilderPage = () => {
     }
     if (!compDef) return;
 
-    const targetSectionId = over.data.current?.sectionId || over.id;
-    const targetSection = schema.sections.find(s => s.id === targetSectionId);
-    const section = targetSection || schema.sections.find(s => s.type === 'body');
-    if (!section) return;
-
     const newComp: BuilderComponent = {
       id: generateId(),
       type: compDef.type,
@@ -109,14 +105,31 @@ const BuilderPage = () => {
       content: compDef.defaultContent,
       styles: compDef.defaultStyles || {},
       props: compDef.defaultProps,
+      isContainer: compDef.isContainer,
+      children: compDef.isContainer ? [] : undefined,
     };
+
+    const overData = over.data.current;
+
+    // Dropped on a container component
+    if (overData?.isContainer && overData?.componentId) {
+      addComponentToContainer(overData.componentId, newComp);
+      return;
+    }
+
+    // Dropped on a section
+    const targetSectionId = overData?.sectionId || over.id;
+    const targetSection = schema.sections.find(s => s.id === targetSectionId);
+    const section = targetSection || schema.sections.find(s => s.type === 'body');
+    if (!section) return;
+
     addComponent(section.id, newComp);
   };
 
   if (isLoading) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center" style={{ background: 'hsl(220 16% 8%)' }}>
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="h-screen w-screen flex items-center justify-center" style={{ background: 'hsl(var(--builder-bg))' }}>
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'hsl(var(--primary))' }} />
       </div>
     );
   }
@@ -157,7 +170,7 @@ const BuilderPage = () => {
 
       <DragOverlay>
         {activeDrag ? (
-          <div className="component-item shadow-lg border border-builder-panel-border opacity-90">
+          <div className="component-item shadow-lg opacity-90" style={{ borderColor: 'hsl(var(--builder-panel-border))' }}>
             {activeDrag.label}
           </div>
         ) : null}
