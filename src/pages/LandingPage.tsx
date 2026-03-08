@@ -434,7 +434,7 @@ const LandingPage = () => {
       </section>
 
       {/* === COMPARISON TABLE === */}
-      <section id="compare" className="py-24 px-6 relative">
+      <section id="compare" className="py-24 px-6 relative" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px' }}>
         <div className="absolute inset-0 pointer-events-none opacity-30" style={{ background: 'var(--gradient-hero)' }} />
         <div className="max-w-3xl mx-auto relative z-10">
           <div className="text-center mb-16">
