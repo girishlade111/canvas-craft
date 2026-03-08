@@ -1,6 +1,8 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { icons } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { icons as lucideIcons } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import * as HeroOutline from '@heroicons/react/24/outline';
+import * as HeroSolid from '@heroicons/react/24/solid';
 
 // ─── Social Icons ──────────────────────────────────────────
 export const SocialIconsComponent: React.FC<{ layout?: string; size?: string }> = ({ layout = 'horizontal', size = '24' }) => {
