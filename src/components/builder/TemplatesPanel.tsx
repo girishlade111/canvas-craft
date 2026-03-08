@@ -551,7 +551,7 @@ const TemplatesPanel: React.FC<TemplatesPanelProps> = ({ onClose }) => {
                       className="w-9 h-9 rounded-lg flex items-center justify-center"
                       style={{ backgroundColor: `${catData.color}20` }}
                     >
-                      <Icon className="w-4.5 h-4.5" style={{ color: catData.color }} />
+                      <Icon className="w-4 h-4" />
                     </div>
                     <div className="flex-1">
                       <div className="text-xs font-semibold">{cat}</div>
