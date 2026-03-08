@@ -34,7 +34,7 @@ interface BuilderToolbarProps {
 const BuilderToolbar = ({
   onSave, isSaving, isAutosaving, projectId, onPublish,
   isAuthenticated, onExportZip, onExportHTML, onExportReact, onAuthRequired,
-  onOpenExportDialog,
+  onOpenExportDialog, onSaveAsTemplate,
 }: BuilderToolbarProps) => {
   const {
     schema, deviceView, setDeviceView, undo, redo, historyIndex, history,
