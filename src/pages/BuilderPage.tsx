@@ -27,17 +27,19 @@ import {
   DndContext,
   DragOverlay,
   closestCenter,
+  pointerWithin,
   PointerSensor,
   useSensor,
   useSensors,
   type DragStartEvent,
   type DragEndEvent,
+  type DragOverEvent,
 } from '@dnd-kit/core';
 import type { BuilderComponent, PageSchema, ComponentCategory } from '@/types/builder';
 import { componentLibrary } from '@/data/componentLibrary';
+import { isContainerType } from '@/types/builder';
 import {
-  Loader2, Plus, Layers, Image, History, Search, Settings,
-  LayoutGrid, Type, Palette, MousePointerClick,
+  Loader2, Plus, Layers, Image, History, Search,
 } from 'lucide-react';
 
 const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -60,6 +62,7 @@ const BuilderPage = () => {
     selectedComponentId,
     addComponent,
     addComponentToContainer,
+    moveComponent,
     schema,
     setSchema,
   } = useBuilderStore();
@@ -70,7 +73,16 @@ const BuilderPage = () => {
   const [activePanel, setActivePanel] = useState<LeftPanel>('elements');
   const [showPublish, setShowPublish] = useState(false);
   const [showAuthGate, setShowAuthGate] = useState(false);
-  const [activeDrag, setActiveDrag] = useState<{ type: string; label: string } | null>(null);
+  const [activeDrag, setActiveDrag] = useState<{
+    type: string;
+    label: string;
+    fromCanvas?: boolean;
+    componentId?: string;
+  } | null>(null);
+  const [dropTarget, setDropTarget] = useState<{
+    id: string;
+    position: 'before' | 'after' | 'inside';
+  } | null>(null);
 
   const { isSaving: isAutosaving } = useAutosave(isLocalMode ? null : currentPageId);
 
@@ -88,7 +100,7 @@ const BuilderPage = () => {
   };
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
   );
 
   const handleSave = useCallback(async () => {
@@ -168,17 +180,92 @@ const BuilderPage = () => {
     }
   };
 
+  // ─── Drag & Drop Handlers ─────────────────────────────
+
   const handleDragStart = (event: DragStartEvent) => {
     const data = event.active.data.current;
-    if (data?.type) setActiveDrag({ type: data.type, label: data.label });
+    if (data?.fromCanvas) {
+      // Dragging existing component on canvas
+      setActiveDrag({
+        type: data.componentType,
+        label: data.label,
+        fromCanvas: true,
+        componentId: data.componentId,
+      });
+    } else if (data?.type) {
+      // Dragging from library
+      setActiveDrag({ type: data.type, label: data.label });
+    }
+  };
+
+  const handleDragOver = (event: DragOverEvent) => {
+    const { over } = event;
+    if (!over) {
+      setDropTarget(null);
+      return;
+    }
+    const overData = over.data.current;
+    if (overData?.isContainer) {
+      setDropTarget({ id: over.id as string, position: 'inside' });
+    } else if (overData?.componentId) {
+      setDropTarget({ id: over.id as string, position: 'after' });
+    } else {
+      setDropTarget({ id: over.id as string, position: 'inside' });
+    }
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     setActiveDrag(null);
+    setDropTarget(null);
     const { active, over } = event;
     if (!over) return;
 
     const activeData = active.data.current;
+
+    // ── CASE 1: Canvas reorder (move existing component) ──
+    if (activeData?.fromCanvas && activeData?.componentId) {
+      const componentId = activeData.componentId as string;
+      const overData = over.data.current;
+
+      // Dropping on a container
+      if (overData?.isContainer && overData?.componentId) {
+        const targetContainerId = overData.componentId as string;
+        if (targetContainerId !== componentId) {
+          moveComponent(componentId, targetContainerId, 0);
+        }
+        return;
+      }
+
+      // Dropping on/near a sibling component
+      if (overData?.componentId) {
+        const targetId = overData.componentId as string;
+        if (targetId === componentId) return;
+
+        // Find the target's parent section
+        const parentSection = schema.sections.find(s =>
+          s.components.some(function check(c: BuilderComponent): boolean {
+            return c.id === targetId || (c.children?.some(check) ?? false);
+          })
+        );
+        if (parentSection) {
+          const idx = parentSection.components.findIndex(c => c.id === targetId);
+          if (idx !== -1) {
+            moveComponent(componentId, parentSection.id, idx + 1);
+          }
+        }
+        return;
+      }
+
+      // Dropping on section
+      const targetSectionId = overData?.sectionId || over.id;
+      const targetSection = schema.sections.find(s => s.id === targetSectionId);
+      if (targetSection) {
+        moveComponent(componentId, targetSection.id, targetSection.components.length);
+      }
+      return;
+    }
+
+    // ── CASE 2: Library to canvas (add new component) ──
     if (!activeData?.fromLibrary) return;
 
     const compType = activeData.type as string;
@@ -203,11 +290,13 @@ const BuilderPage = () => {
 
     const overData = over.data.current;
 
+    // Drop on container
     if (overData?.isContainer && overData?.componentId) {
       addComponentToContainer(overData.componentId, newComp);
       return;
     }
 
+    // Drop on/near existing component (insert as sibling)
     if (overData?.componentId && !overData?.isContainer) {
       const targetId = overData.componentId as string;
       const parentSection = schema.sections.find(s =>
@@ -226,6 +315,7 @@ const BuilderPage = () => {
       }
     }
 
+    // Drop on section or empty canvas
     const targetSectionId = overData?.sectionId || over.id;
     const targetSection = schema.sections.find(s => s.id === targetSectionId);
     const section = targetSection || schema.sections.find(s => s.type === 'body');
@@ -262,7 +352,6 @@ const BuilderPage = () => {
     );
   }
 
-  // Wix-style icon bar items
   const iconBarItems: { id: LeftPanel; icon: typeof Plus; label: string }[] = [
     { id: 'elements', icon: Plus, label: 'Add' },
     { id: 'layers', icon: Layers, label: 'Layers' },
@@ -275,8 +364,9 @@ const BuilderPage = () => {
     <ClipboardProvider>
       <DndContext
         sensors={sensors}
-        collisionDetection={closestCenter}
+        collisionDetection={pointerWithin}
         onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
       >
         <div className="builder-layout">
@@ -313,7 +403,6 @@ const BuilderPage = () => {
             {/* Wix-style dark icon bar */}
             <div className="builder-icon-bar">
               {iconBarItems.map(({ id, icon: Icon, label }) => {
-                // Skip assets if no project
                 if (id === 'assets' && !actualProjectId) return null;
                 if (id === 'versions' && !currentPageId) return null;
                 return (
@@ -351,18 +440,14 @@ const BuilderPage = () => {
           {codeEditorOpen && <CodeEditorPanel />}
         </div>
 
-        <DragOverlay>
+        {/* Drag overlay — ghost preview */}
+        <DragOverlay dropAnimation={{ duration: 200, easing: 'ease' }}>
           {activeDrag ? (
-            <div
-              className="flex items-center gap-2 px-3 py-2 rounded-md text-xs font-medium shadow-lg"
-              style={{
-                background: 'hsl(var(--builder-sidebar))',
-                border: '1px solid hsl(var(--primary))',
-                color: 'hsl(var(--builder-sidebar-foreground))',
-                boxShadow: '0 8px 24px hsl(210 100% 45% / 0.2)',
-              }}
-            >
-              {activeDrag.label}
+            <div className="drag-ghost-preview">
+              <div className="drag-ghost-icon">
+                {activeDrag.fromCanvas ? '↕' : '➕'}
+              </div>
+              <span>{activeDrag.label}</span>
             </div>
           ) : null}
         </DragOverlay>

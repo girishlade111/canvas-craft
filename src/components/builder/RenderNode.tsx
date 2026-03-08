@@ -1,19 +1,20 @@
 import React, { memo, useState, useCallback, useRef } from 'react';
 import { getComponent } from '@/engine/registry';
 import { useBuilderStore } from '@/store/builderStore';
-import { useDroppable } from '@dnd-kit/core';
+import { useDroppable, useDraggable } from '@dnd-kit/core';
 import { isContainerType, type BuilderComponent } from '@/types/builder';
-import { Trash2, Code2, GripVertical } from 'lucide-react';
+import { Trash2, Code2, GripVertical, Copy, Eye, EyeOff, Lock, Unlock } from 'lucide-react';
 
 interface RenderNodeProps {
   node: BuilderComponent;
   depth?: number;
+  parentId?: string;
+  index?: number;
 }
 
 // ─── Resize Handles ────────────────────────────────────────
 
 const HANDLE_SIZE = 8;
-
 type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
 
 const handlePositions: Record<ResizeDirection, React.CSSProperties> = {
@@ -69,49 +70,13 @@ const DimensionBadge: React.FC<{ width: number; height: number }> = ({ width, he
   </div>
 );
 
-// ─── Drop Indicator ────────────────────────────────────────
-
-const DropIndicator: React.FC<{ position: 'before' | 'after' | 'inside' }> = ({ position }) => {
-  if (position === 'inside') {
-    return (
-      <div
-        className="absolute inset-0 pointer-events-none z-10 rounded"
-        style={{
-          border: '2px dashed hsl(var(--primary))',
-          background: 'hsl(var(--primary) / 0.06)',
-        }}
-      />
-    );
-  }
-  return (
-    <div
-      className="absolute left-0 right-0 pointer-events-none z-10"
-      style={{
-        height: '3px',
-        background: 'hsl(var(--primary))',
-        borderRadius: '2px',
-        ...(position === 'before' ? { top: '-2px' } : { bottom: '-2px' }),
-      }}
-    >
-      <div
-        className="absolute w-2 h-2 rounded-full"
-        style={{
-          background: 'hsl(var(--primary))',
-          top: '-2.5px',
-          left: '-1px',
-        }}
-      />
-    </div>
-  );
-};
-
 // ─── Main Render Node ──────────────────────────────────────
 
-const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0 }) => {
+const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId, index = 0 }) => {
   const {
     selectedComponentId, selectComponent, removeComponent,
     openCodeEditor, updateComponentStyles, deviceView,
-    snapToGrid, gridSize,
+    snapToGrid, gridSize, updateComponent,
   } = useBuilderStore();
 
   const isSelected = selectedComponentId === node.id;
@@ -123,15 +88,38 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0 }) => {
   const [isResizing, setIsResizing] = useState(false);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [showDimensions, setShowDimensions] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
-  // ALL components are droppable — containers accept children, others accept siblings
-  const { setNodeRef, isOver } = useDroppable({
+  // Make component DRAGGABLE (for reordering on canvas)
+  const {
+    attributes: dragAttributes,
+    listeners: dragListeners,
+    setNodeRef: setDragRef,
+    isDragging,
+  } = useDraggable({
+    id: `canvas-${node.id}`,
+    data: {
+      type: 'canvas-component',
+      componentId: node.id,
+      parentId,
+      index,
+      fromCanvas: true,
+      label: node.label,
+      componentType: node.type,
+    },
+    disabled: isLocked || isResizing,
+  });
+
+  // Make component DROPPABLE (accepts drops)
+  const { setNodeRef: setDropRef, isOver } = useDroppable({
     id: node.id,
     data: {
       type: 'component',
       componentId: node.id,
       isContainer,
-      accepts: true, // All components accept drops (as sibling or child)
+      parentId,
+      index,
+      accepts: true,
     },
     disabled: isLocked,
   });
@@ -144,7 +132,6 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0 }) => {
     ...(node.responsiveStyles?.[deviceView] as React.CSSProperties),
   };
 
-  // Strip custom keys
   const { customCSS: _css, customClasses, ...renderStyles } = resolvedStyles as any;
 
   const componentProps: Record<string, any> = {
@@ -153,7 +140,9 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0 }) => {
   };
 
   const renderedChildren = node.children?.length
-    ? node.children.map((child) => <RenderNode key={child.id} node={child} depth={depth + 1} />)
+    ? node.children.map((child, i) => (
+        <RenderNode key={child.id} node={child} depth={depth + 1} parentId={node.id} index={i} />
+      ))
     : undefined;
 
   // ─── Resize logic ─────────────────────────────────────
@@ -174,6 +163,8 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0 }) => {
     const startRect = el.getBoundingClientRect();
     const startW = startRect.width;
     const startH = startRect.height;
+    const shiftHeld = e.shiftKey;
+    const aspectRatio = startW / startH;
 
     setDimensions({ width: startW, height: startH });
     setShowDimensions(true);
@@ -189,7 +180,16 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0 }) => {
       if (dir.includes('s')) newH = snapValue(startH + dy);
       if (dir.includes('n')) newH = snapValue(startH - dy);
 
-      newW = Math.max(20, newW);
+      // Aspect ratio lock with Shift
+      if (shiftHeld || me.shiftKey) {
+        if (dir.includes('e') || dir.includes('w')) {
+          newH = newW / aspectRatio;
+        } else {
+          newW = newH * aspectRatio;
+        }
+      }
+
+      newW = Math.max(50, newW);
       newH = Math.max(20, newH);
 
       setDimensions({ width: newW, height: newH });
@@ -214,58 +214,98 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0 }) => {
     document.addEventListener('mouseup', onUp);
   }, [isLocked, snapValue, updateComponentStyles, node.id]);
 
+  // Toggle visibility
+  const toggleVisibility = useCallback(() => {
+    updateComponent(node.id, { hidden: !isHidden });
+  }, [node.id, isHidden, updateComponent]);
+
+  // Toggle lock
+  const toggleLock = useCallback(() => {
+    updateComponent(node.id, { locked: !isLocked });
+  }, [node.id, isLocked, updateComponent]);
+
   if (isHidden) {
     return (
       <div
-        className="canvas-component opacity-20 pointer-events-none"
-        style={{ ...renderStyles, outline: '1px dashed hsl(var(--muted-foreground) / 0.3)' }}
+        className="canvas-component hidden-component"
+        style={{ ...renderStyles, outline: '1px dashed hsl(var(--muted-foreground) / 0.3)', opacity: 0.2, pointerEvents: 'none' }}
       >
         <Component {...componentProps}>{renderedChildren}</Component>
       </div>
     );
   }
 
-  // Determine drop indicator type
-  const showDropIndicator = isOver && !isResizing;
-  const dropPosition = isContainer ? 'inside' : 'after';
+  const showDropIndicator = isOver && !isResizing && !isDragging;
 
   return (
     <div
       ref={(el) => {
         (nodeRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-        if (el) setNodeRef(el);
+        if (el) {
+          setDropRef(el);
+          setDragRef(el);
+        }
       }}
+      {...dragAttributes}
       className={[
         'canvas-component',
         isSelected ? 'selected' : '',
         isContainer && isOver ? 'drop-target' : '',
         isResizing ? 'resizing' : '',
+        isDragging ? 'dragging' : '',
+        isHovered && !isSelected ? 'hovered' : '',
         customClasses || '',
       ].filter(Boolean).join(' ')}
-      style={renderStyles}
+      style={{
+        ...renderStyles,
+        opacity: isDragging ? 0.3 : undefined,
+        transition: isDragging ? 'opacity 0.15s' : undefined,
+      }}
       onClick={(e) => { e.stopPropagation(); if (!isLocked) selectComponent(node.id); }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Drop indicator for non-container components */}
+      {/* Blue insertion line for non-container drops */}
       {showDropIndicator && !isContainer && (
-        <DropIndicator position={dropPosition} />
+        <div className="drop-insertion-line drop-insertion-line--after" />
       )}
 
-      {/* Selected toolbar */}
-      {isSelected && !isResizing && (
+      {/* Container drop overlay */}
+      {showDropIndicator && isContainer && (
+        <div className="drop-container-overlay" />
+      )}
+
+      {/* Selection toolbar */}
+      {isSelected && !isResizing && !isDragging && (
         <div className="component-toolbar">
-          <GripVertical className="w-3 h-3" />
+          <div {...dragListeners} className="cursor-grab active:cursor-grabbing p-0.5">
+            <GripVertical className="w-3 h-3" />
+          </div>
           <span className="truncate max-w-[80px]">{node.label}</span>
+          <button onClick={(e) => { e.stopPropagation(); toggleVisibility(); }} className="hover:opacity-70" title={isHidden ? "Show" : "Hide"}>
+            {isHidden ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+          </button>
+          <button onClick={(e) => { e.stopPropagation(); toggleLock(); }} className="hover:opacity-70" title={isLocked ? "Unlock" : "Lock"}>
+            {isLocked ? <Lock className="w-3 h-3" /> : <Unlock className="w-3 h-3" />}
+          </button>
           <button onClick={(e) => { e.stopPropagation(); openCodeEditor(node.id); }} className="hover:opacity-70" title="Edit code">
             <Code2 className="w-3 h-3" />
           </button>
-          <button onClick={(e) => { e.stopPropagation(); removeComponent(node.id); }} className="hover:opacity-70" title="Delete">
+          <button onClick={(e) => { e.stopPropagation(); removeComponent(node.id); }} className="hover:opacity-70 text-red-200" title="Delete">
             <Trash2 className="w-3 h-3" />
           </button>
         </div>
       )}
 
+      {/* Hover label (when not selected) */}
+      {isHovered && !isSelected && !isDragging && (
+        <div className="component-hover-label">
+          {node.label}
+        </div>
+      )}
+
       {/* Resize handles when selected */}
-      {isSelected && !isLocked && (
+      {isSelected && !isLocked && !isDragging && (
         <ResizeHandles onResizeStart={handleResizeStart} />
       )}
 
