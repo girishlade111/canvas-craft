@@ -2,57 +2,112 @@ import { useState } from 'react';
 import {
   Search, X, Globe, Share2, Code2, FileText, Map, Shield, Zap, CheckCircle2, AlertCircle,
   ChevronDown, Copy, Eye, TrendingUp, BarChart3, Target, Link2, Image, Type, Hash,
-  Smartphone, Monitor, Clock, Users, MousePointerClick, ExternalLink, RefreshCw,
-  Lightbulb, Award, Gauge, ArrowUp, ArrowDown, Minus, Settings, Sparkles, BookOpen,
-  Layout, Layers, PieChart, Activity, Bot, FileCode, Heading1, AlignLeft, List,
-  CircleDot, Languages, Megaphone, Bell, Mail, Rss, Bookmark, Star, HelpCircle,
+  Monitor, Clock, Users, MousePointerClick, ExternalLink, RefreshCw,
+  Lightbulb, Award, Gauge, ArrowUp, ArrowDown, Minus, Settings, Sparkles,
+  Layers, PieChart, Activity, Bot, FileCode, Heading1, AlignLeft, List,
+  CircleDot, Languages, HelpCircle,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface SEOData {
+  // Basic Meta
   title: string;
   description: string;
+  keywords: string;
+  author: string;
+  // Open Graph
   ogTitle: string;
   ogDescription: string;
   ogImage: string;
+  ogType: 'website' | 'article' | 'product' | 'video' | 'music' | 'book' | 'profile';
+  ogSiteName: string;
+  ogLocale: string;
+  // Twitter Cards
   twitterCard: 'summary' | 'summary_large_image' | 'app' | 'player';
   twitterSite: string;
+  twitterCreator: string;
+  twitterImage: string;
+  // LinkedIn
+  linkedinImage: string;
+  // Pinterest
+  pinterestVerification: string;
+  // Technical SEO
   canonicalUrl: string;
   noIndex: boolean;
   noFollow: boolean;
+  noArchive: boolean;
+  noSnippet: boolean;
+  maxSnippet: string;
+  maxImagePreview: 'none' | 'standard' | 'large';
+  maxVideoPreview: string;
   customHead: string;
+  // Keywords & Content
   focusKeyword: string;
   secondaryKeywords: string;
+  keywordDensityTarget: number;
+  // Robots & Crawling
   robotsTxt: string;
+  crawlDelay: string;
+  // Schema / Structured Data
   schemaType: string;
   schemaData: string;
+  // Navigation & Structure
   breadcrumbs: string[];
-  redirects: { from: string; to: string; type: '301' | '302' }[];
+  redirects: { from: string; to: string; type: '301' | '302' | '307' | '308' }[];
   hreflang: { lang: string; url: string }[];
   // Performance
   lazyLoadImages: boolean;
   minifyCSS: boolean;
   minifyJS: boolean;
   preloadFonts: boolean;
+  preconnectDomains: string;
+  prefetchPages: string;
+  criticalCSS: boolean;
   // Accessibility
   altTagsRequired: boolean;
   ariaLabels: boolean;
   skipLinks: boolean;
-  // Analytics
+  focusIndicators: boolean;
+  colorContrast: boolean;
+  // Analytics & Tracking
   googleAnalyticsId: string;
   googleTagManagerId: string;
   facebookPixelId: string;
+  hotjarId: string;
+  clarityId: string;
+  plausibleDomain: string;
+  umamiWebsiteId: string;
   // Sitemap
   sitemapEnabled: boolean;
-  sitemapFrequency: string;
+  sitemapFrequency: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
   sitemapPriority: string;
+  sitemapLastmod: boolean;
+  // Local SEO
+  localBusinessName: string;
+  localBusinessAddress: string;
+  localBusinessPhone: string;
+  localBusinessHours: string;
+  googleMyBusinessId: string;
+  // E-commerce SEO
+  productPrice: string;
+  productCurrency: string;
+  productAvailability: 'InStock' | 'OutOfStock' | 'PreOrder' | 'Discontinued';
+  productBrand: string;
+  productSku: string;
+  // Advanced
+  jsonLdCustom: string;
+  verificationGoogle: string;
+  verificationBing: string;
+  verificationYandex: string;
+  dnsPrefetch: string;
 }
 
 const SCHEMA_TYPES = [
-  'WebSite', 'WebPage', 'Article', 'BlogPosting', 'Product', 'LocalBusiness',
-  'Organization', 'Person', 'Event', 'FAQPage', 'HowTo', 'Recipe',
-  'Review', 'Course', 'BreadcrumbList', 'VideoObject', 'SoftwareApplication',
-  'Service', 'Restaurant', 'MedicalOrganization', 'EducationalOrganization',
+  'WebSite', 'WebPage', 'Article', 'BlogPosting', 'NewsArticle', 'Product', 'LocalBusiness',
+  'Organization', 'Person', 'Event', 'FAQPage', 'HowTo', 'Recipe', 'JobPosting',
+  'Review', 'Course', 'BreadcrumbList', 'VideoObject', 'SoftwareApplication', 'MobileApplication',
+  'Service', 'Restaurant', 'MedicalOrganization', 'EducationalOrganization', 'RealEstateListing',
+  'Book', 'Movie', 'MusicAlbum', 'Podcast', 'PodcastEpisode', 'CollectionPage', 'SearchResultsPage',
 ];
 
 const generateSchema = (type: string, title: string, description: string, url: string): string => {
@@ -158,18 +213,45 @@ const KeywordDensityBar = ({ keyword, density, status }: { keyword: string; dens
 
 const SEOPanel = ({ onClose }: { onClose: () => void }) => {
   const [seo, setSeo] = useState<SEOData>({
-    title: '', description: '', ogTitle: '', ogDescription: '', ogImage: '',
-    twitterCard: 'summary_large_image', twitterSite: '',
-    canonicalUrl: '', noIndex: false, noFollow: false, customHead: '', focusKeyword: '',
-    secondaryKeywords: '', robotsTxt: 'User-agent: *\nAllow: /\n\nSitemap: https://example.com/sitemap.xml',
-    schemaType: 'WebSite', schemaData: '', breadcrumbs: ['Home'],
-    redirects: [], hreflang: [],
+    // Basic Meta
+    title: '', description: '', keywords: '', author: '',
+    // Open Graph
+    ogTitle: '', ogDescription: '', ogImage: '', ogType: 'website', ogSiteName: '', ogLocale: 'en_US',
+    // Twitter Cards
+    twitterCard: 'summary_large_image', twitterSite: '', twitterCreator: '', twitterImage: '',
+    // LinkedIn & Pinterest
+    linkedinImage: '', pinterestVerification: '',
+    // Technical SEO
+    canonicalUrl: '', noIndex: false, noFollow: false, noArchive: false, noSnippet: false,
+    maxSnippet: '', maxImagePreview: 'large', maxVideoPreview: '',
+    customHead: '',
+    // Keywords
+    focusKeyword: '', secondaryKeywords: '', keywordDensityTarget: 2,
+    // Robots
+    robotsTxt: 'User-agent: *\nAllow: /\n\nSitemap: https://example.com/sitemap.xml',
+    crawlDelay: '',
+    // Schema
+    schemaType: 'WebSite', schemaData: '',
+    // Navigation
+    breadcrumbs: ['Home'], redirects: [], hreflang: [],
+    // Performance
     lazyLoadImages: true, minifyCSS: true, minifyJS: true, preloadFonts: true,
-    altTagsRequired: true, ariaLabels: true, skipLinks: false,
+    preconnectDomains: '', prefetchPages: '', criticalCSS: false,
+    // Accessibility
+    altTagsRequired: true, ariaLabels: true, skipLinks: false, focusIndicators: true, colorContrast: true,
+    // Analytics
     googleAnalyticsId: '', googleTagManagerId: '', facebookPixelId: '',
-    sitemapEnabled: true, sitemapFrequency: 'weekly', sitemapPriority: '0.8',
+    hotjarId: '', clarityId: '', plausibleDomain: '', umamiWebsiteId: '',
+    // Sitemap
+    sitemapEnabled: true, sitemapFrequency: 'weekly', sitemapPriority: '0.8', sitemapLastmod: true,
+    // Local SEO
+    localBusinessName: '', localBusinessAddress: '', localBusinessPhone: '', localBusinessHours: '', googleMyBusinessId: '',
+    // E-commerce
+    productPrice: '', productCurrency: 'USD', productAvailability: 'InStock', productBrand: '', productSku: '',
+    // Advanced
+    jsonLdCustom: '', verificationGoogle: '', verificationBing: '', verificationYandex: '', dnsPrefetch: '',
   });
-  const [activeTab, setActiveTab] = useState<'overview' | 'keywords' | 'meta' | 'social' | 'schema' | 'technical' | 'performance' | 'analytics'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'keywords' | 'meta' | 'social' | 'schema' | 'technical' | 'performance' | 'analytics' | 'local' | 'ecommerce'>('overview');
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   const update = (key: keyof SEOData, value: any) => setSeo(prev => ({ ...prev, [key]: value }));
@@ -191,6 +273,8 @@ const SEOPanel = ({ onClose }: { onClose: () => void }) => {
     { id: 'technical' as const, label: 'Technical', icon: Settings },
     { id: 'performance' as const, label: 'Speed', icon: Zap },
     { id: 'analytics' as const, label: 'Tracking', icon: BarChart3 },
+    { id: 'local' as const, label: 'Local', icon: Map },
+    { id: 'ecommerce' as const, label: 'E-com', icon: Globe },
   ];
 
   const toggleSection = (id: string) => setExpandedSection(expandedSection === id ? null : id);
