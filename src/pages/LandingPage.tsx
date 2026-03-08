@@ -641,9 +641,9 @@ const LandingPage = () => {
               <h4 className="font-semibold mb-4 text-sm">Resources</h4>
               <div className="space-y-2.5 text-sm text-muted-foreground">
                 <a href="#faq" className="block hover:text-foreground transition-colors">FAQ</a>
-                <span className="block">Documentation</span>
-                <span className="block">Changelog</span>
-                <span className="block">API Reference</span>
+                <span className="block cursor-pointer hover:text-foreground transition-colors" onClick={() => navigate('/docs')}>Documentation</span>
+                <span className="block cursor-pointer hover:text-foreground transition-colors" onClick={() => navigate('/changelog')}>Changelog</span>
+                <span className="block cursor-pointer hover:text-foreground transition-colors" onClick={() => navigate('/api-reference')}>API Reference</span>
               </div>
             </div>
             <div>
