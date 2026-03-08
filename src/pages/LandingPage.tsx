@@ -7,6 +7,7 @@ import {
   Shield, Clock, Download, Eye, Cpu, PenTool,
   BarChart3, Lock, Webhook, FileCode2, Brush,
   Settings, Box, Figma, Chrome, Rocket,
+  Instagram, Linkedin, Github, CodepenIcon, Mail, ExternalLink,
 } from 'lucide-react';
 
 const LandingPage = () => {
