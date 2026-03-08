@@ -680,11 +680,11 @@
   .stagger-children > *:nth-child(9) { animation-delay: 0.45s; }
   .stagger-children > *:nth-child(10) { animation-delay: 0.5s; }
 
-  /* Glass morphism */
+  /* Glass morphism — lightweight for performance */
   .glass {
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    background: hsl(var(--background) / 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: hsl(var(--background) / 0.85);
     border: 1px solid hsl(var(--border) / 0.5);
   }
 
