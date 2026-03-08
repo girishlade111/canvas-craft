@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  Store, Search, X, Check, Star, HelpCircle, ChevronRight, Copy,
+  Store, Search, X, Check, Star, HelpCircle, ChevronRight, Copy, Sparkles, Award,
   Zap, BarChart3, MessageSquare, Mail, ShoppingBag, Calendar,
   Globe, Shield, Camera, Music, Video, MapPin, Loader2,
   CreditCard, Database, Bell, FileText, Cloud, Lock,
@@ -60,6 +60,8 @@ interface AppDef {
   docsUrl?: string;
   configFields: ConfigField[];
   setupSteps: SetupStep[];
+  isFeatured?: boolean;
+  isNew?: boolean;
 }
 
 /* ── Expanded app catalog ── */
@@ -1775,6 +1777,10 @@ interface AppMarketPanelProps {
   onClose?: () => void;
 }
 
+/* ── Badge helpers ── */
+const FEATURED_APPS = new Set(['supabase', 'stripe', 'chatgpt', 'vercel', 'github', 'slack', 'figma', 'notion', 'auth0', 'clerk']);
+const NEW_APPS = new Set(['twitch', 'reddit', 'pinterest', 'mailgun', 'convertkit', 'supabase-edge-functions', 'vercel-ai-sdk', 'langchain', 'crewai']);
+
 const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState('All');
@@ -1911,19 +1917,38 @@ const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
           {filtered.map(app => {
             const AppIcon = app.icon;
             const installed = installedKeys.has(app.key);
+            const isFeatured = app.isFeatured || FEATURED_APPS.has(app.key);
+            const isNew = app.isNew || NEW_APPS.has(app.key);
             return (
               <div key={app.key}
-                className="p-3 rounded-lg transition-colors hover:bg-muted/30 cursor-pointer group"
-                style={{ background: 'hsl(var(--builder-component-bg))' }}
+                className={`p-3 rounded-lg transition-colors hover:bg-muted/30 cursor-pointer group ${isFeatured ? 'ring-1' : ''}`}
+                style={{
+                  background: 'hsl(var(--builder-component-bg))',
+                  ...(isFeatured ? { ringColor: 'hsl(var(--warning, 45 93% 47%) / 0.3)' } : {}),
+                }}
                 onClick={() => setSelectedApp(app.key)}>
                 <div className="flex items-start gap-2.5">
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'hsl(var(--muted) / 0.3)' }}>
+                  <div className="relative w-9 h-9 rounded-lg flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'hsl(var(--muted) / 0.3)' }}>
                     <AppIcon className="w-5 h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5 mb-0.5">
+                    <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
                       <h3 className="text-xs font-semibold truncate">{app.name}</h3>
                       {installed && <Check className="w-3 h-3 shrink-0" style={{ color: 'hsl(var(--success))' }} />}
+                      {isFeatured && (
+                        <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider"
+                          style={{ background: 'hsl(var(--warning, 45 93% 47%) / 0.15)', color: 'hsl(var(--warning, 45 93% 47%))' }}>
+                          <Award className="w-2.5 h-2.5" />
+                          Featured
+                        </span>
+                      )}
+                      {isNew && (
+                        <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider"
+                          style={{ background: 'hsl(var(--primary) / 0.15)', color: 'hsl(var(--primary))' }}>
+                          <Sparkles className="w-2.5 h-2.5" />
+                          New
+                        </span>
+                      )}
                     </div>
                     <p className="text-[10px] opacity-50 line-clamp-1">{app.description}</p>
                     <div className="flex items-center gap-2 mt-1">
