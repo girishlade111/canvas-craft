@@ -641,9 +641,9 @@ const LandingPage = () => {
               <h4 className="font-semibold mb-4 text-sm">Resources</h4>
               <div className="space-y-2.5 text-sm text-muted-foreground">
                 <a href="#faq" className="block hover:text-foreground transition-colors">FAQ</a>
-                <span className="block">Documentation</span>
-                <span className="block">Changelog</span>
-                <span className="block">API Reference</span>
+                <span className="block cursor-pointer hover:text-foreground transition-colors" onClick={() => navigate('/docs')}>Documentation</span>
+                <span className="block cursor-pointer hover:text-foreground transition-colors" onClick={() => navigate('/changelog')}>Changelog</span>
+                <span className="block cursor-pointer hover:text-foreground transition-colors" onClick={() => navigate('/api-reference')}>API Reference</span>
               </div>
             </div>
             <div>
@@ -669,7 +669,9 @@ const LandingPage = () => {
           </div>
           <div className="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
             <span>© {new Date().getFullYear()} DevBuilder. All rights reserved.</span>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
+              <span className="cursor-pointer hover:text-foreground transition-colors" onClick={() => navigate('/privacy')}>Privacy Policy</span>
+              <span className="cursor-pointer hover:text-foreground transition-colors" onClick={() => navigate('/terms')}>Terms of Service</span>
               <span>Made with ❤️ by <a href="https://ladestack.in" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors font-medium">LadeStack</a></span>
             </div>
           </div>

@@ -14,6 +14,11 @@ import ProjectSettingsPage from "./pages/ProjectSettingsPage";
 import PreviewPage from "./pages/PreviewPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import NotFound from "./pages/NotFound";
+import DocumentationPage from "./pages/DocumentationPage";
+import ChangelogPage from "./pages/ChangelogPage";
+import ApiReferencePage from "./pages/ApiReferencePage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import TermsOfServicePage from "./pages/TermsOfServicePage";
 import { Loader2 } from "lucide-react";
 
 const queryClient = new QueryClient();
@@ -46,6 +51,11 @@ const App = () => (
             <Route path="/builder/:projectId" element={<BuilderPage />} />
             <Route path="/auth" element={<PublicRoute><AuthPage /></PublicRoute>} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
+            <Route path="/docs" element={<DocumentationPage />} />
+            <Route path="/changelog" element={<ChangelogPage />} />
+            <Route path="/api-reference" element={<ApiReferencePage />} />
+            <Route path="/privacy" element={<PrivacyPolicyPage />} />
+            <Route path="/terms" element={<TermsOfServicePage />} />
 
             {/* Protected routes */}
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
