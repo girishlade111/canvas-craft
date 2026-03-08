@@ -203,14 +203,18 @@ export type ComponentCategory =
   | 'Forms'
   | 'Ecommerce'
   | 'Navigation'
-  | 'Advanced';
+  | 'Advanced'
+  | 'Widgets'
+  | 'Theme'
+  | 'Embeds';
 
 // Container types that accept children
 export const CONTAINER_TYPES = [
   'section', 'container', 'grid', 'columns', 'card', 'hero',
   'tabs', 'accordion', 'navbar', 'sidebar-nav',
   'column', 'tab-panel', 'accordion-item',
-  'background-video',
+  'background-video', 'group', 'row', 'stack', 'cover',
+  'media-text', 'template-part', 'query-loop',
 ];
 
 export const isContainerType = (type: string): boolean => CONTAINER_TYPES.includes(type);

@@ -1,7 +1,6 @@
 /**
  * Layer 4 — Component Registry
  * Global registry mapping component type strings to React components.
- * Separated from rendering — registry is data, not UI.
  */
 
 import React from 'react';
@@ -42,6 +41,29 @@ import {
   IconComponent, AvatarComponent, TooltipComponent, CTABannerComponent,
   LogoCloudComponent, StatsComponent,
 } from '@/registry/components/WidgetComponents';
+import {
+  TableComponent, PullQuoteComponent, CodeBlockComponent,
+  PreformattedComponent, VerseComponent, GroupComponent,
+  RowComponent, StackComponent, SeparatorComponent,
+  MoreComponent, PageBreakComponent, CoverComponent,
+  MediaTextComponent, FileComponent, AudioComponent,
+} from '@/registry/components/DesignComponents';
+import {
+  SiteLogoComponent, SiteTitleComponent, SiteTaglineComponent,
+  NavigationMenuComponent, QueryLoopComponent, PostListComponent,
+  PostNavigationComponent, CommentsComponent, CommentFormComponent,
+  LoginOutComponent, TemplatePartComponent, ArchiveTitleComponent,
+  SearchResultsTitleComponent, SearchBarComponent, ArchivesComponent,
+  CalendarWidgetComponent, CategoriesComponent, LatestPostsComponent,
+  LatestCommentsComponent, PageListComponent, RSSComponent,
+  ShortcodeComponent, TagCloudComponent,
+} from '@/registry/components/ThemeComponents';
+import {
+  YouTubeEmbedComponent, TwitterEmbedComponent, InstagramEmbedComponent,
+  SpotifyEmbedComponent, SoundCloudEmbedComponent, VimeoEmbedComponent,
+  TikTokEmbedComponent, PinterestEmbedComponent, RedditEmbedComponent,
+  FlickrEmbedComponent, PDFViewerComponent,
+} from '@/registry/components/EmbedComponents';
 
 // ─── Registry Store ────────────────────────────────────────
 
@@ -57,6 +79,12 @@ const defaultComponents: Record<string, React.FC<any>> = {
   spacer: SpacerComponent,
   grid: GridComponent,
   columns: ColumnsComponent,
+  group: GroupComponent,
+  row: RowComponent,
+  stack: StackComponent,
+  separator: SeparatorComponent,
+  more: MoreComponent,
+  'page-break': PageBreakComponent,
 
   // Text
   heading: HeadingComponent,
@@ -65,11 +93,20 @@ const defaultComponents: Record<string, React.FC<any>> = {
   list: ListComponent,
   quote: QuoteComponent,
   button: ButtonComponent,
+  table: TableComponent,
+  'pull-quote': PullQuoteComponent,
+  'code-block': CodeBlockComponent,
+  preformatted: PreformattedComponent,
+  verse: VerseComponent,
 
   // Media
   image: ImageComponent,
   video: VideoComponent,
   gallery: GalleryComponent,
+  audio: AudioComponent,
+  cover: CoverComponent,
+  file: FileComponent,
+  'media-text': MediaTextComponent,
   'background-video': BackgroundVideoComponent,
 
   // Layout
@@ -117,6 +154,44 @@ const defaultComponents: Record<string, React.FC<any>> = {
   'cta-banner': CTABannerComponent,
   'logo-cloud': LogoCloudComponent,
   stats: StatsComponent,
+  'search-bar': SearchBarComponent,
+  archives: ArchivesComponent,
+  'calendar-widget': CalendarWidgetComponent,
+  categories: CategoriesComponent,
+  'latest-posts': LatestPostsComponent,
+  'latest-comments': LatestCommentsComponent,
+  'page-list': PageListComponent,
+  rss: RSSComponent,
+  shortcode: ShortcodeComponent,
+  'tag-cloud': TagCloudComponent,
+
+  // Theme / Site
+  'site-logo': SiteLogoComponent,
+  'site-title': SiteTitleComponent,
+  'site-tagline': SiteTaglineComponent,
+  'navigation-menu': NavigationMenuComponent,
+  'query-loop': QueryLoopComponent,
+  'post-list': PostListComponent,
+  'post-navigation': PostNavigationComponent,
+  comments: CommentsComponent,
+  'comment-form': CommentFormComponent,
+  'login-out': LoginOutComponent,
+  'template-part': TemplatePartComponent,
+  'archive-title': ArchiveTitleComponent,
+  'search-results-title': SearchResultsTitleComponent,
+
+  // Embeds
+  'youtube-embed': YouTubeEmbedComponent,
+  'twitter-embed': TwitterEmbedComponent,
+  'instagram-embed': InstagramEmbedComponent,
+  'spotify-embed': SpotifyEmbedComponent,
+  'soundcloud-embed': SoundCloudEmbedComponent,
+  'vimeo-embed': VimeoEmbedComponent,
+  'tiktok-embed': TikTokEmbedComponent,
+  'pinterest-embed': PinterestEmbedComponent,
+  'reddit-embed': RedditEmbedComponent,
+  'flickr-embed': FlickrEmbedComponent,
+  'pdf-viewer': PDFViewerComponent,
 
   // Advanced
   html: HtmlComponent,
@@ -160,9 +235,6 @@ export const getRegistrySize = (): number => {
   return registry.size;
 };
 
-/**
- * Register multiple components at once (used by plugins).
- */
 export const registerComponents = (components: Record<string, React.FC<any>>): void => {
   Object.entries(components).forEach(([type, component]) => {
     registry.set(type, component);
