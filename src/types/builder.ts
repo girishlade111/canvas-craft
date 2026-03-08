@@ -206,7 +206,9 @@ export type ComponentCategory =
   | 'Advanced'
   | 'Widgets'
   | 'Theme'
-  | 'Embeds';
+  | 'Embeds'
+  | 'Blog'
+  | 'Social';
 
 // Container types that accept children
 export const CONTAINER_TYPES = [
