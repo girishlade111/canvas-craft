@@ -125,9 +125,12 @@ const BuilderPage = () => {
   const { isSaving: isAutosaving } = useAutosave(isLocalMode ? null : currentPageId);
 
   // Preload component library and registry when builder mounts
+  const [componentsReady, setComponentsReady] = useState(false);
   useEffect(() => {
-    getComponentLibrary();
-    import('@/engine/registry/componentRegistry').then(m => m.ensureAllComponentsLoaded());
+    Promise.all([
+      getComponentLibrary(),
+      import('@/engine/registry/componentRegistry').then(m => m.ensureAllComponentsLoaded()),
+    ]).then(() => setComponentsReady(true));
   }, []);
 
   useEffect(() => {
