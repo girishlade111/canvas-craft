@@ -4,7 +4,7 @@ import { exportToStaticHTML, exportToReact, downloadFile } from '@/lib/exportPro
 import {
   Undo2, Redo2, Eye, Monitor, Tablet, Smartphone, Save, Upload,
   Code2, PanelLeftClose, PanelLeftOpen, Image, History, Loader2,
-  Settings, Download, Circle,
+  Settings, Download, Circle, Layers, Search,
 } from 'lucide-react';
 import type { DeviceView } from '@/types/builder';
 import { useState } from 'react';
@@ -19,9 +19,17 @@ interface BuilderToolbarProps {
   showVersions: boolean;
   projectId?: string;
   onPublish?: () => void;
+  onToggleLayers?: () => void;
+  showLayers?: boolean;
+  onToggleSEO?: () => void;
+  showSEO?: boolean;
 }
 
-const BuilderToolbar = ({ onSave, isSaving, isAutosaving, onToggleAssets, onToggleVersions, showAssets, showVersions, projectId, onPublish }: BuilderToolbarProps) => {
+const BuilderToolbar = ({
+  onSave, isSaving, isAutosaving, onToggleAssets, onToggleVersions,
+  showAssets, showVersions, projectId, onPublish,
+  onToggleLayers, showLayers, onToggleSEO, showSEO,
+}: BuilderToolbarProps) => {
   const {
     schema, deviceView, setDeviceView, undo, redo, historyIndex, history,
     toggleLeftSidebar, leftSidebarOpen,
@@ -51,30 +59,40 @@ const BuilderToolbar = ({ onSave, isSaving, isAutosaving, onToggleAssets, onTogg
 
   return (
     <div className="builder-toolbar">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
         <button onClick={() => navigate('/dashboard')} className="flex items-center gap-1.5 p-1.5 rounded hover:bg-white/10 transition-colors">
           <div className="w-6 h-6 rounded flex items-center justify-center" style={{ background: 'hsl(var(--primary))' }}>
             <Code2 className="w-3 h-3" style={{ color: 'hsl(var(--primary-foreground))' }} />
           </div>
-          <span className="font-semibold text-sm">DevBuilder</span>
+          <span className="font-semibold text-sm hidden md:inline">DevBuilder</span>
         </button>
         <div className="w-px h-5 mx-1" style={{ background: 'hsl(var(--builder-panel-border))' }} />
-        <button onClick={toggleLeftSidebar} className="p-1.5 rounded hover:bg-white/10 transition-colors" title="Toggle sidebar">
+        <button onClick={toggleLeftSidebar} className="p-1.5 rounded hover:bg-white/10 transition-colors" title="Components">
           {leftSidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
         </button>
+        {onToggleLayers && (
+          <button onClick={onToggleLayers} className={`p-1.5 rounded transition-colors ${showLayers ? 'bg-primary text-primary-foreground' : 'hover:bg-white/10'}`} title="Layers">
+            <Layers className="w-4 h-4" />
+          </button>
+        )}
         <button onClick={onToggleAssets} className={`p-1.5 rounded transition-colors ${showAssets ? 'bg-primary text-primary-foreground' : 'hover:bg-white/10'}`} title="Assets">
           <Image className="w-4 h-4" />
         </button>
         <button onClick={onToggleVersions} className={`p-1.5 rounded transition-colors ${showVersions ? 'bg-primary text-primary-foreground' : 'hover:bg-white/10'}`} title="Version History">
           <History className="w-4 h-4" />
         </button>
+        {onToggleSEO && (
+          <button onClick={onToggleSEO} className={`p-1.5 rounded transition-colors ${showSEO ? 'bg-primary text-primary-foreground' : 'hover:bg-white/10'}`} title="SEO & Meta">
+            <Search className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       <div className="flex items-center gap-1">
-        <button onClick={undo} disabled={historyIndex <= 0} className="p-1.5 rounded hover:bg-white/10 transition-colors disabled:opacity-30" title="Undo">
+        <button onClick={undo} disabled={historyIndex <= 0} className="p-1.5 rounded hover:bg-white/10 transition-colors disabled:opacity-30" title="Undo (Ctrl+Z)">
           <Undo2 className="w-4 h-4" />
         </button>
-        <button onClick={redo} disabled={historyIndex >= history.length - 1} className="p-1.5 rounded hover:bg-white/10 transition-colors disabled:opacity-30" title="Redo">
+        <button onClick={redo} disabled={historyIndex >= history.length - 1} className="p-1.5 rounded hover:bg-white/10 transition-colors disabled:opacity-30" title="Redo (Ctrl+Y)">
           <Redo2 className="w-4 h-4" />
         </button>
         <div className="w-px h-5 mx-2" style={{ background: 'hsl(var(--builder-panel-border))' }} />
@@ -90,28 +108,26 @@ const BuilderToolbar = ({ onSave, isSaving, isAutosaving, onToggleAssets, onTogg
         ))}
       </div>
 
-      <div className="flex items-center gap-2">
-        {/* Autosave indicator */}
+      <div className="flex items-center gap-1.5">
         {isAutosaving && (
           <div className="flex items-center gap-1.5 text-xs opacity-60">
             <Circle className="w-2 h-2 fill-current animate-pulse" style={{ color: '#22c55e' }} />
-            Saving…
+            <span className="hidden sm:inline">Saving…</span>
           </div>
         )}
 
-        <button onClick={() => navigate(`/preview/${projectId}`)} className="flex items-center gap-1.5 px-3 py-1.5 rounded text-sm hover:bg-white/10 transition-colors">
-          <Eye className="w-3.5 h-3.5" /> Preview
+        <button onClick={() => navigate(`/preview/${projectId}`)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-xs hover:bg-white/10 transition-colors">
+          <Eye className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Preview</span>
         </button>
         {projectId && (
-          <button onClick={() => navigate(`/project/${projectId}/settings`)} className="flex items-center gap-1.5 px-3 py-1.5 rounded text-sm hover:bg-white/10 transition-colors">
-            <Settings className="w-3.5 h-3.5" /> Settings
+          <button onClick={() => navigate(`/project/${projectId}/settings`)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-xs hover:bg-white/10 transition-colors">
+            <Settings className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Settings</span>
           </button>
         )}
 
-        {/* Export dropdown */}
         <div className="relative">
-          <button onClick={() => setShowExportMenu(!showExportMenu)} className="flex items-center gap-1.5 px-3 py-1.5 rounded text-sm hover:bg-white/10 transition-colors">
-            <Download className="w-3.5 h-3.5" /> Export
+          <button onClick={() => setShowExportMenu(!showExportMenu)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-xs hover:bg-white/10 transition-colors">
+            <Download className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Export</span>
           </button>
           {showExportMenu && (
             <div className="absolute right-0 top-full mt-1 rounded-lg shadow-xl py-1 z-50 min-w-[180px]" style={{ background: 'hsl(var(--builder-sidebar))', border: '1px solid hsl(var(--builder-panel-border))' }}>
@@ -125,13 +141,13 @@ const BuilderToolbar = ({ onSave, isSaving, isAutosaving, onToggleAssets, onTogg
           )}
         </div>
 
-        <button onClick={onSave} disabled={isSaving} className="flex items-center gap-1.5 px-3 py-1.5 rounded text-sm hover:bg-white/10 transition-colors">
+        <button onClick={onSave} disabled={isSaving} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-xs hover:bg-white/10 transition-colors">
           {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-          Save
+          <span className="hidden sm:inline">Save</span>
         </button>
         <button
           onClick={onPublish}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded text-sm hover:opacity-90 transition-opacity"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs hover:opacity-90 transition-opacity"
           style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
         >
           <Upload className="w-3.5 h-3.5" /> Publish
