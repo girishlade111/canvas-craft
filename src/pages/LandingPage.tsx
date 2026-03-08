@@ -475,7 +475,7 @@ const LandingPage = () => {
       </section>
 
       {/* === TESTIMONIALS === */}
-      <section className="py-24 px-6">
+      <section className="py-24 px-6" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 600px' }}>
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-1.5 mb-4">
