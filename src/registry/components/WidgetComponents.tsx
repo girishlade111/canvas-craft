@@ -137,11 +137,74 @@ export const AlertComponent: React.FC<{ content?: string; type?: string }> = ({ 
 };
 
 // ─── Icon Component ────────────────────────────────────────
-export const IconComponent: React.FC<{ icon?: string; size?: string; color?: string }> = ({
-  icon = '⭐', size = '32', color,
-}) => (
-  <span style={{ fontSize: `${size}px`, lineHeight: 1, display: 'inline-block', color: color || 'inherit' }}>{icon}</span>
-);
+export const IconComponent: React.FC<{ 
+  icon?: string; 
+  iconName?: string;
+  size?: string | number; 
+  color?: string;
+  strokeWidth?: number;
+}> = ({
+  icon, iconName, size = 24, color, strokeWidth = 2,
+}) => {
+  // If iconName is provided, try to render a Lucide icon
+  if (iconName) {
+    const LucideIcon = icons[iconName as keyof typeof icons] as LucideIcon | undefined;
+    if (LucideIcon) {
+      return (
+        <LucideIcon 
+          size={typeof size === 'string' ? parseInt(size) : size} 
+          color={color || 'currentColor'} 
+          strokeWidth={strokeWidth}
+        />
+      );
+    }
+  }
+  
+  // Fallback to emoji/text icon
+  return (
+    <span style={{ 
+      fontSize: typeof size === 'string' ? size : `${size}px`, 
+      lineHeight: 1, 
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: color || 'inherit' 
+    }}>
+      {icon || iconName || '⭐'}
+    </span>
+  );
+};
+
+// ─── Lucide Icon Component (for direct Lucide icon rendering) ──
+export const LucideIconComponent: React.FC<{
+  name?: string;
+  size?: number;
+  color?: string;
+  strokeWidth?: number;
+}> = ({ name = 'Star', size = 24, color, strokeWidth = 2 }) => {
+  const Icon = icons[name as keyof typeof icons] as LucideIcon | undefined;
+  
+  if (!Icon) {
+    return (
+      <span style={{ 
+        fontSize: `${size}px`, 
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        ⭐
+      </span>
+    );
+  }
+
+  return (
+    <Icon 
+      size={size} 
+      color={color || 'currentColor'} 
+      strokeWidth={strokeWidth}
+    />
+  );
+};
 
 // ─── Avatar ────────────────────────────────────────────────
 export const AvatarComponent: React.FC<{ src?: string; name?: string; size?: string }> = ({
