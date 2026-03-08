@@ -1775,7 +1775,9 @@ const AppDetailView = ({ app, installed, onBack, onToggle, isPending }: {
 interface AppMarketPanelProps {
   projectId?: string | null;
   onClose?: () => void;
-}
+/* ── Badge helpers ── */
+const FEATURED_APPS = new Set(['supabase', 'stripe', 'chatgpt', 'vercel', 'github', 'slack', 'figma', 'notion', 'auth0', 'clerk']);
+const NEW_APPS = new Set(['twitch', 'reddit', 'pinterest', 'mailgun', 'convertkit', 'supabase-edge-functions', 'vercel-ai-sdk', 'langchain', 'crewai']);
 
 const AppMarketPanel = ({ projectId, onClose }: AppMarketPanelProps) => {
   const [search, setSearch] = useState('');
