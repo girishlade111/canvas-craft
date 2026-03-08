@@ -16,8 +16,8 @@ import { downloadFile } from '@/engine/codegen';
 import type { PageSchema } from '@/types/builder';
 import {
   X, Github, Download, Code2, FileArchive, Folder, Check, Copy,
-  ExternalLink, Terminal, Loader2, Globe, Monitor,
-  FileCode, FolderOpen, Zap, Settings, CheckCircle2,
+  ExternalLink, Terminal, Loader2, Globe,
+  FileCode, Zap, Settings, CheckCircle2,
   AlertCircle, Info, Package, GitBranch, Rocket, Eye,
   Layers, Sparkles, Box, Server,
 } from 'lucide-react';
