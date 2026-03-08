@@ -393,6 +393,28 @@ propertySchemas.set('lucide-icon', [
   { key: 'strokeWidth', label: 'Stroke Width', type: 'number', group: 'Component', defaultValue: 2, min: 0.5, max: 4, step: 0.5 },
   ...allStyleProps,
 ]);
+propertySchemas.set('hero-icon', [
+  { key: 'name', label: 'Icon Name', type: 'string', group: 'Component', placeholder: 'HomeIcon', defaultValue: 'HomeIcon' },
+  { key: 'variant', label: 'Variant', type: 'select', group: 'Component', options: [
+    { label: 'Outline', value: 'outline' },
+    { label: 'Solid', value: 'solid' },
+  ], defaultValue: 'outline' },
+  { key: 'size', label: 'Size (px)', type: 'number', group: 'Component', defaultValue: 24, min: 12, max: 128 },
+  { key: 'color', label: 'Color', type: 'color', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('universal-icon', [
+  { key: 'name', label: 'Icon Name', type: 'string', group: 'Component', placeholder: 'Star', defaultValue: 'Star' },
+  { key: 'library', label: 'Library', type: 'select', group: 'Component', options: [
+    { label: 'Lucide', value: 'lucide' },
+    { label: 'Heroicons (Outline)', value: 'heroicons-outline' },
+    { label: 'Heroicons (Solid)', value: 'heroicons-solid' },
+  ], defaultValue: 'lucide' },
+  { key: 'size', label: 'Size (px)', type: 'number', group: 'Component', defaultValue: 24, min: 12, max: 128 },
+  { key: 'color', label: 'Color', type: 'color', group: 'Component' },
+  { key: 'strokeWidth', label: 'Stroke Width', type: 'number', group: 'Component', defaultValue: 2, min: 0.5, max: 4, step: 0.5 },
+  ...allStyleProps,
+]);
 propertySchemas.set('avatar', [
   { key: 'src', label: 'Image URL', type: 'image', group: 'Component' },
   { key: 'name', label: 'Name', type: 'string', group: 'Component', defaultValue: 'User' },

@@ -404,16 +404,16 @@ const ICON_CATEGORIES = {
   ],
 };
 
-// Icon libraries info
+// Icon libraries info - Updated with integrated status
 const ICON_LIBRARIES = [
-  { name: 'Lucide', count: '1000+', description: 'Beautiful & consistent icons', url: 'https://lucide.dev', color: 'hsl(var(--destructive))' },
-  { name: 'Heroicons', count: '450+', description: 'By the makers of Tailwind CSS', url: 'https://heroicons.com', color: 'hsl(var(--primary))' },
-  { name: 'Phosphor', count: '6000+', description: 'Flexible icon family', url: 'https://phosphoricons.com', color: 'hsl(142 71% 45%)' },
-  { name: 'Tabler', count: '4500+', description: 'Free and open source', url: 'https://tabler-icons.io', color: 'hsl(217 91% 60%)' },
-  { name: 'Feather', count: '287', description: 'Simply beautiful', url: 'https://feathericons.com', color: 'hsl(187 92% 41%)' },
-  { name: 'Ionicons', count: '1300+', description: 'Premium designed icons', url: 'https://ionic.io/ionicons', color: 'hsl(239 84% 67%)' },
-  { name: 'Bootstrap', count: '1800+', description: 'Official Bootstrap icons', url: 'https://icons.getbootstrap.com', color: 'hsl(263 70% 50%)' },
-  { name: 'Font Awesome', count: '16000+', description: 'The iconic library', url: 'https://fontawesome.com', color: 'hsl(38 92% 50%)' },
+  { name: 'Lucide', count: '1000+', description: 'Beautiful & consistent icons', url: 'https://lucide.dev', color: 'hsl(var(--destructive))', integrated: true },
+  { name: 'Heroicons', count: '450+', description: 'By the makers of Tailwind CSS', url: 'https://heroicons.com', color: 'hsl(var(--primary))', integrated: true },
+  { name: 'Phosphor', count: '6000+', description: 'Flexible icon family', url: 'https://phosphoricons.com', color: 'hsl(142 71% 45%)', integrated: false },
+  { name: 'Tabler', count: '4500+', description: 'Free and open source', url: 'https://tabler-icons.io', color: 'hsl(217 91% 60%)', integrated: false },
+  { name: 'Feather', count: '287', description: 'Simply beautiful', url: 'https://feathericons.com', color: 'hsl(187 92% 41%)', integrated: false },
+  { name: 'Ionicons', count: '1300+', description: 'Premium designed icons', url: 'https://ionic.io/ionicons', color: 'hsl(239 84% 67%)', integrated: false },
+  { name: 'Bootstrap', count: '1800+', description: 'Official Bootstrap icons', url: 'https://icons.getbootstrap.com', color: 'hsl(263 70% 50%)', integrated: false },
+  { name: 'Font Awesome', count: '16000+', description: 'The iconic library', url: 'https://fontawesome.com', color: 'hsl(38 92% 50%)', integrated: false },
 ];
 
 interface IconsPanelProps {
@@ -555,9 +555,12 @@ const IconsPanel: React.FC<IconsPanelProps> = ({ onClose }) => {
                 href={lib.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 p-2 rounded-lg hover:bg-muted transition-colors"
+                className="relative flex items-center gap-2 p-2 rounded-lg hover:bg-muted transition-colors"
                 style={{ background: 'hsl(var(--builder-bg))' }}
               >
+                {lib.integrated && (
+                  <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full flex items-center justify-center text-[8px]" style={{ background: 'hsl(142 71% 45%)', color: 'white' }}>✓</span>
+                )}
                 <div
                   className="w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold"
                   style={{ background: lib.color, color: 'hsl(var(--primary-foreground))' }}
@@ -566,17 +569,14 @@ const IconsPanel: React.FC<IconsPanelProps> = ({ onClose }) => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-[11px] font-medium truncate">{lib.name}</div>
-                  <div className="text-[9px] opacity-50">{lib.count} icons</div>
+                  <div className="text-[9px]" style={{ color: 'hsl(var(--muted-foreground))' }}>{lib.count} icons</div>
                 </div>
               </a>
             ))}
           </div>
-          <button
-            className="w-full mt-2 py-1.5 text-[10px] text-center rounded-lg hover:bg-muted transition-colors"
-            style={{ color: 'hsl(var(--primary))' }}
-          >
-            View all 8 libraries →
-          </button>
+          <div className="text-[9px] mt-2 px-1" style={{ color: 'hsl(var(--muted-foreground))' }}>
+            <span style={{ color: 'hsl(142 71% 45%)' }}>✓</span> = Ready to use • Others via copy/paste
+          </div>
         </div>
       )}
 
