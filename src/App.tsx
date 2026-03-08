@@ -40,6 +40,7 @@ const App = () => (
             <Route path="/auth" element={<PublicRoute><AuthPage /></PublicRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/templates/:projectId" element={<ProtectedRoute><TemplateSelection /></ProtectedRoute>} />
+            <Route path="/builder" element={<ProtectedRoute><Navigate to="/dashboard" replace /></ProtectedRoute>} />
             <Route path="/builder/:projectId" element={<ProtectedRoute><BuilderPage /></ProtectedRoute>} />
             <Route path="/project/:projectId/settings" element={<ProtectedRoute><ProjectSettingsPage /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
