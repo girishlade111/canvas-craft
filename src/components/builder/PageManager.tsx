@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { usePages, useCreatePage, useUpdatePage, useDeletePage, type Page } from '@/hooks/usePages';
-import { Plus, FileText, Trash2, Pencil, Check, X, Loader2, GripVertical } from 'lucide-react';
+import { Plus, FileText, Trash2, Pencil, Check, X, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import type { PageSchema } from '@/types/builder';
 
 interface PageManagerProps {
   projectId: string;
