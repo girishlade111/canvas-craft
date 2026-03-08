@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  Store, Search, X, Check, Star, HelpCircle, ChevronRight, Copy,
+  Store, Search, X, Check, Star, HelpCircle, ChevronRight, Copy, Sparkles, Award,
   Zap, BarChart3, MessageSquare, Mail, ShoppingBag, Calendar,
   Globe, Shield, Camera, Music, Video, MapPin, Loader2,
   CreditCard, Database, Bell, FileText, Cloud, Lock,
