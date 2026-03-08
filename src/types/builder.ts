@@ -208,7 +208,8 @@ export type ComponentCategory =
   | 'Theme'
   | 'Embeds'
   | 'Blog'
-  | 'Social';
+  | 'Social'
+  | 'Icons';
 
 // Container types that accept children
 export const CONTAINER_TYPES = [
