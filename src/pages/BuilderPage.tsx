@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useBuilderStore } from '@/store/builderStore';
 import { usePages, useSavePage, type Page } from '@/hooks/usePages';
 import { useAutosave } from '@/hooks/useAutosave';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import BuilderToolbar from '@/components/builder/BuilderToolbar';
 import ComponentSidebar from '@/components/builder/ComponentSidebar';
 import PropertiesPanel from '@/components/builder/PropertiesPanel';
@@ -22,10 +23,8 @@ import {
   type DragStartEvent,
   type DragEndEvent,
 } from '@dnd-kit/core';
-import type { BuilderComponent, PageSchema } from '@/types/builder';
-import { isContainerType } from '@/types/builder';
+import type { BuilderComponent, PageSchema, ComponentCategory } from '@/types/builder';
 import { componentLibrary } from '@/data/componentLibrary';
-import type { ComponentCategory } from '@/types/builder';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -72,7 +71,7 @@ const BuilderPage = () => {
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (!currentPageId) return;
     try {
       await savePage.mutateAsync({ pageId: currentPageId, schema });
@@ -80,7 +79,10 @@ const BuilderPage = () => {
     } catch (err: any) {
       toast.error('Failed to save: ' + err.message);
     }
-  };
+  }, [currentPageId, savePage, schema]);
+
+  // Keyboard shortcuts (Ctrl+Z, Ctrl+S, Delete, etc.)
+  useKeyboardShortcuts({ onSave: handleSave });
 
   const handleDragStart = (event: DragStartEvent) => {
     const data = event.active.data.current;
