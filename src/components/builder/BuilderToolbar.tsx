@@ -1,10 +1,9 @@
 import { useBuilderStore } from '@/store/builderStore';
 import { useNavigate } from 'react-router-dom';
-import { exportToStaticHTML, exportToReact, downloadFile } from '@/lib/exportProject';
 import {
   Undo2, Redo2, Eye, Monitor, Tablet, Smartphone, Save, Upload,
   Code2, PanelLeftClose, PanelLeftOpen, Image, History, Loader2,
-  Settings, Download, Circle, Layers, Search,
+  Settings, Download, Circle, Layers, Search, FileArchive, Lock,
 } from 'lucide-react';
 import type { DeviceView } from '@/types/builder';
 import { useState } from 'react';
@@ -23,12 +22,18 @@ interface BuilderToolbarProps {
   showLayers?: boolean;
   onToggleSEO?: () => void;
   showSEO?: boolean;
+  isAuthenticated?: boolean;
+  onExportZip?: () => void;
+  onExportHTML?: () => void;
+  onExportReact?: () => void;
+  onAuthRequired?: () => void;
 }
 
 const BuilderToolbar = ({
   onSave, isSaving, isAutosaving, onToggleAssets, onToggleVersions,
   showAssets, showVersions, projectId, onPublish,
   onToggleLayers, showLayers, onToggleSEO, showSEO,
+  isAuthenticated, onExportZip, onExportHTML, onExportReact, onAuthRequired,
 }: BuilderToolbarProps) => {
   const {
     schema, deviceView, setDeviceView, undo, redo, historyIndex, history,
@@ -43,17 +48,13 @@ const BuilderToolbar = ({
     { view: 'mobile', icon: Smartphone, label: 'Mobile' },
   ];
 
-  const handleExportHTML = () => {
-    const html = exportToStaticHTML(schema);
-    downloadFile(`${schema.name || 'page'}.html`, html);
-    setShowExportMenu(false);
-  };
-
-  const handleExportReact = () => {
-    const files = exportToReact(schema);
-    Object.entries(files).forEach(([filename, content]) => {
-      downloadFile(filename, content, 'text/typescript');
-    });
+  const handleExportAction = (action: (() => void) | undefined) => {
+    if (!isAuthenticated) {
+      onAuthRequired?.();
+      setShowExportMenu(false);
+      return;
+    }
+    action?.();
     setShowExportMenu(false);
   };
 
@@ -125,19 +126,53 @@ const BuilderToolbar = ({
           </button>
         )}
 
+        {/* Export Dropdown */}
         <div className="relative">
           <button onClick={() => setShowExportMenu(!showExportMenu)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-xs hover:bg-white/10 transition-colors">
             <Download className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Export</span>
           </button>
           {showExportMenu && (
-            <div className="absolute right-0 top-full mt-1 rounded-lg shadow-xl py-1 z-50 min-w-[180px]" style={{ background: 'hsl(var(--builder-sidebar))', border: '1px solid hsl(var(--builder-panel-border))' }}>
-              <button onClick={handleExportHTML} className="w-full text-left px-4 py-2 text-sm hover:bg-white/10 transition-colors">
-                Static HTML
-              </button>
-              <button onClick={handleExportReact} className="w-full text-left px-4 py-2 text-sm hover:bg-white/10 transition-colors">
-                React Component
-              </button>
-            </div>
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setShowExportMenu(false)} />
+              <div className="absolute right-0 top-full mt-1 rounded-lg shadow-xl py-1 z-50 min-w-[220px]" style={{ background: 'hsl(var(--builder-sidebar))', border: '1px solid hsl(var(--builder-panel-border))' }}>
+                {!isAuthenticated && (
+                  <div className="px-4 py-2 text-xs flex items-center gap-1.5 border-b" style={{ borderColor: 'hsl(var(--builder-panel-border))', color: 'hsl(var(--muted-foreground))' }}>
+                    <Lock className="w-3 h-3" />
+                    Sign in to export
+                  </div>
+                )}
+                <button
+                  onClick={() => handleExportAction(onExportZip)}
+                  className="w-full text-left px-4 py-2.5 text-sm hover:bg-white/10 transition-colors flex items-center gap-2.5"
+                >
+                  <FileArchive className="w-4 h-4" style={{ color: 'hsl(var(--primary))' }} />
+                  <div>
+                    <div className="font-medium">Download ZIP</div>
+                    <div className="text-[10px] opacity-50">Vercel-ready, VS Code editable</div>
+                  </div>
+                </button>
+                <button
+                  onClick={() => handleExportAction(onExportHTML)}
+                  className="w-full text-left px-4 py-2.5 text-sm hover:bg-white/10 transition-colors flex items-center gap-2.5"
+                >
+                  <Code2 className="w-4 h-4" style={{ color: 'hsl(var(--primary))' }} />
+                  <div>
+                    <div className="font-medium">Static HTML</div>
+                    <div className="text-[10px] opacity-50">Single HTML file</div>
+                  </div>
+                </button>
+                <button
+                  onClick={() => handleExportAction(onExportReact)}
+                  className="w-full text-left px-4 py-2.5 text-sm hover:bg-white/10 transition-colors flex items-center gap-2.5"
+                >
+                  <Code2 className="w-4 h-4" style={{ color: 'hsl(var(--primary))' }} />
+                  <div>
+                    <div className="font-medium">React Components</div>
+                    <div className="text-[10px] opacity-50">TSX page files</div>
+                  </div>
+                </button>
+              </div>
+            </>
           )}
         </div>
 
@@ -146,7 +181,13 @@ const BuilderToolbar = ({
           <span className="hidden sm:inline">Save</span>
         </button>
         <button
-          onClick={onPublish}
+          onClick={() => {
+            if (!isAuthenticated) {
+              onAuthRequired?.();
+            } else {
+              onPublish?.();
+            }
+          }}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs hover:opacity-90 transition-opacity"
           style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
         >
