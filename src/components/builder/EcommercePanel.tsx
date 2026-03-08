@@ -12,7 +12,7 @@ import {
   Share2,
   Wallet, Receipt, FileText,
   Ticket, BadgePercent, Timer, Bell, MessageSquare,
-  ListOrdered, ClipboardList, BarChart2,
+  ListOrdered, ClipboardList, BarChart2, MoreHorizontal, Bookmark,
   Megaphone, FolderOpen, Archive,
 } from 'lucide-react';
 import { useProducts, useCreateProduct, useDeleteProduct, useOrders, useCoupons } from '@/hooks/useProducts';
