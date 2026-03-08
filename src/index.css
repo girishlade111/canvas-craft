@@ -504,6 +504,87 @@
     opacity: 1 !important;
   }
 
+  /* ===== Inline Text Editing ===== */
+  .canvas-component.inline-editing {
+    outline: 2px solid hsl(142 70% 45%);
+    z-index: 10;
+  }
+  .inline-editable-content {
+    cursor: text;
+    min-height: 1em;
+    word-break: break-word;
+  }
+  .inline-editable-content:focus {
+    outline: none;
+  }
+
+  /* Inline text formatting toolbar */
+  .inline-text-toolbar {
+    @apply absolute -top-10 left-0 flex items-center gap-0.5 text-xs px-1.5 py-1 rounded z-30;
+    background: hsl(142 70% 35%);
+    color: hsl(0 0% 100%);
+    font-size: 11px;
+    font-weight: 500;
+    box-shadow: 0 2px 8px hsl(142 70% 35% / 0.3);
+    white-space: nowrap;
+  }
+  .inline-text-toolbar button {
+    @apply px-1.5 py-0.5 rounded transition-colors;
+    font-size: 11px;
+  }
+  .inline-text-toolbar button:hover {
+    background: hsl(0 0% 100% / 0.2);
+  }
+  .inline-toolbar-divider {
+    width: 1px;
+    height: 14px;
+    margin: 0 2px;
+    background: hsl(0 0% 100% / 0.3);
+  }
+  .inline-toolbar-select {
+    background: hsl(0 0% 100% / 0.15);
+    border: none;
+    border-radius: 3px;
+    color: white;
+    font-size: 10px;
+    padding: 1px 4px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* ===== Section Toolbar ===== */
+  .section-toolbar {
+    @apply absolute -top-7 left-0 flex items-center px-2 py-1 rounded z-20;
+    background: hsl(var(--builder-icon-bar));
+    color: hsl(var(--builder-icon-bar-foreground));
+    font-size: 10px;
+    box-shadow: 0 2px 8px hsl(0 0% 0% / 0.15);
+    animation: flyout-in 0.1s ease-out;
+  }
+
+  /* Section background editor */
+  .section-bg-editor {
+    @apply absolute top-0 right-0 p-3 rounded-lg z-30;
+    width: 260px;
+    background: hsl(var(--builder-sidebar));
+    border: 1px solid hsl(var(--builder-panel-border));
+    box-shadow: 0 8px 30px hsl(0 0% 0% / 0.15);
+    animation: flyout-in 0.15s ease-out;
+  }
+
+  /* Add section button */
+  .add-section-btn {
+    @apply flex items-center justify-center gap-2 w-full py-3 mt-2 rounded-lg text-xs font-medium transition-all;
+    border: 2px dashed hsl(var(--builder-panel-border));
+    color: hsl(var(--muted-foreground));
+    background: transparent;
+  }
+  .add-section-btn:hover {
+    border-color: hsl(var(--primary));
+    color: hsl(var(--primary));
+    background: hsl(var(--primary) / 0.03);
+  }
+
   /* ===== Animations ===== */
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
