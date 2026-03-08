@@ -1,0 +1,2 @@
+// Extension plugin definitions
+export {};
