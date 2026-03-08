@@ -26,6 +26,12 @@ import GlobalDesignPanel from '@/components/builder/GlobalDesignPanel';
 import PopupBuilderPanel from '@/components/builder/PopupBuilderPanel';
 import FormBuilderPanel from '@/components/builder/FormBuilderPanel';
 import PhotoStudioPanel from '@/components/builder/PhotoStudioPanel';
+import CMSPanel from '@/components/builder/CMSPanel';
+import EcommercePanel from '@/components/builder/EcommercePanel';
+import MarketingPanel from '@/components/builder/MarketingPanel';
+import BookingPanel from '@/components/builder/BookingPanel';
+import AppMarketPanel from '@/components/builder/AppMarketPanel';
+import AIToolsPanel from '@/components/builder/AIToolsPanel';
 import { CanvasContextMenu, ClipboardProvider } from '@/components/builder/CanvasContextMenu';
 import {
   DndContext,
@@ -43,13 +49,14 @@ import { componentLibrary } from '@/data/componentLibrary';
 
 import {
   Loader2, Plus, Layers, Image, History, Search,
-  Palette, Megaphone, FileText, Camera,
+  Palette, Megaphone, FileText, Camera, ShoppingBag,
+  CalendarDays, Store, Sparkles, BookOpen,
 } from 'lucide-react';
 
 const generateId = () => `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const generateSectionId = () => `section-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-type LeftPanel = 'elements' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | null;
+type LeftPanel = 'elements' | 'layers' | 'assets' | 'versions' | 'seo' | 'design' | 'popups' | 'forms' | 'photo-studio' | 'cms' | 'store' | 'marketing' | 'booking' | 'apps' | 'ai' | null;
 
 const BuilderPage = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -355,6 +362,12 @@ const BuilderPage = () => {
     { id: 'elements', icon: Plus, label: 'Add' },
     { id: 'layers', icon: Layers, label: 'Layers' },
     { id: 'design', icon: Palette, label: 'Design' },
+    { id: 'cms', icon: BookOpen, label: 'CMS' },
+    { id: 'store', icon: ShoppingBag, label: 'Store' },
+    { id: 'booking', icon: CalendarDays, label: 'Book' },
+    { id: 'marketing', icon: Megaphone, label: 'Market' },
+    { id: 'ai', icon: Sparkles, label: 'AI' },
+    { id: 'apps', icon: Store, label: 'Apps' },
     { id: 'assets', icon: Image, label: 'Media', show: !!actualProjectId },
     { id: 'forms', icon: FileText, label: 'Forms' },
     { id: 'popups', icon: Megaphone, label: 'Popups' },
@@ -435,6 +448,12 @@ const BuilderPage = () => {
             {activePanel === 'photo-studio' && selectedComponentId && (
               <PhotoStudioPanel componentId={selectedComponentId} onClose={() => setActivePanel(null)} />
             )}
+            {activePanel === 'cms' && <CMSPanel onClose={() => setActivePanel(null)} />}
+            {activePanel === 'store' && <EcommercePanel onClose={() => setActivePanel(null)} />}
+            {activePanel === 'marketing' && <MarketingPanel onClose={() => setActivePanel(null)} />}
+            {activePanel === 'booking' && <BookingPanel onClose={() => setActivePanel(null)} />}
+            {activePanel === 'apps' && <AppMarketPanel onClose={() => setActivePanel(null)} />}
+            {activePanel === 'ai' && <AIToolsPanel onClose={() => setActivePanel(null)} />}
 
             {/* Main canvas */}
             <CanvasContextMenu>

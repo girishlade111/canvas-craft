@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import {
-  FileText, Plus, Search, Calendar, Tag, FolderOpen, Eye, EyeOff,
-  Clock, Edit3, Trash2, ChevronDown, ChevronRight, Filter, X,
-  BookOpen, Hash, Star, Archive, BarChart3,
+  FileText, Plus, Search, Tag, FolderOpen, Eye, EyeOff,
+  Edit3, Trash2, X,
+  BookOpen, Hash, Star, BarChart3,
 } from 'lucide-react';
 
 interface BlogPost {
