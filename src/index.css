@@ -231,6 +231,8 @@
     transition: width 0.3s ease;
     box-shadow: 0 2px 20px hsl(220 13% 70% / 0.25);
     border-radius: 0;
+    contain: layout style;
+    will-change: transform;
   }
 
   /* ===== Droppable Section ===== */
