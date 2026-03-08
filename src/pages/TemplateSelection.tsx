@@ -143,12 +143,14 @@ const TemplateSelection = () => {
           ))}
         </div>
 
-        {filtered.length === 0 && (
+        {!loading && filtered.length === 0 && (
           <div className="text-center py-20 text-muted-foreground">
             <LayoutGrid className="w-12 h-12 mx-auto mb-3 opacity-30" />
             <p>No templates match your search.</p>
           </div>
         )}
+        {loading ? null : null}
+        {/* close loading ternary */}
       </div>
     </div>
   );
