@@ -2128,15 +2128,23 @@ const AppMarketPanel = ({ projectId, onClose, onOpenVercel, onOpenNetlify, onOpe
     setSelectedApp(null);
     return null;
   }
+  if (selectedApp === 'railway' && onOpenRailway) {
+    onOpenRailway();
+    setSelectedApp(null);
+    return null;
+  }
 
   const detailApp = selectedApp ? APP_CATALOG.find(a => a.key === selectedApp) : null;
   if (detailApp) {
-    // Dedicated panels for Vercel & Netlify
+    // Dedicated panels for Vercel, Netlify & Railway
     if (detailApp.key === 'vercel' && onOpenVercel) {
       onOpenVercel();
       setSelectedApp(null);
     } else if (detailApp.key === 'netlify' && onOpenNetlify) {
       onOpenNetlify();
+      setSelectedApp(null);
+    } else if (detailApp.key === 'railway' && onOpenRailway) {
+      onOpenRailway();
       setSelectedApp(null);
     } else {
       return (
