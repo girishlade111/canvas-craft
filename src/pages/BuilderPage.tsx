@@ -112,6 +112,32 @@ const BuilderPage = () => {
     }
   };
 
+  const handleExportZip = async () => {
+    try {
+      const files = generateProjectFiles(schema);
+      await downloadZip(files, schema.name || 'my-website');
+      toast.success('ZIP downloaded — open in VS Code and run npm install');
+    } catch (err: any) {
+      toast.error('Export failed: ' + err.message);
+    }
+  };
+
+  const handleExportHTML = () => {
+    const html = exportToStaticHTML(schema);
+    downloadFile(`${schema.name || 'page'}.html`, html);
+  };
+
+  const handleExportReact = () => {
+    const files = exportToReact(schema);
+    Object.entries(files).forEach(([filename, content]) => {
+      downloadFile(filename, content, 'text/typescript');
+    });
+  };
+
+  const handleAuthRequired = () => {
+    setShowAuthGate(true);
+  };
+
   const handleCreateProjectAndPublish = async () => {
     try {
       const project = await createProject.mutateAsync({
