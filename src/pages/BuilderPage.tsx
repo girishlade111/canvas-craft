@@ -384,6 +384,7 @@ const BuilderPage = () => {
 
   const iconBarItems: { id: LeftPanel; icon: typeof Plus; label: string; show?: boolean }[] = [
     { id: 'elements', icon: Plus, label: 'Add' },
+    { id: 'templates', icon: LayoutTemplate, label: 'Templates' },
     { id: 'layers', icon: Layers, label: 'Layers' },
     { id: 'design', icon: Palette, label: 'Design' },
     { id: 'cms', icon: BookOpen, label: 'CMS' },
