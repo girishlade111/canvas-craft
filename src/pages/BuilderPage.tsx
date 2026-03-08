@@ -39,6 +39,7 @@ const TemplatesPanel = lazy(() => import('@/components/builder/TemplatesPanel'))
 const MarketplacePanel = lazy(() => import('@/components/builder/MarketplacePanel'));
 const MemberAreaPanel = lazy(() => import('@/components/builder/MemberAreaPanel'));
 const InteractionsPanel = lazy(() => import('@/components/builder/InteractionsPanel'));
+const InteractiveElementsPanel = lazy(() => import('@/components/builder/InteractiveElementsPanel'));
 const MultiLanguagePanel = lazy(() => import('@/components/builder/MultiLanguagePanel'));
 const DomainPanel = lazy(() => import('@/components/builder/DomainPanel'));
 const AccessibilityPanel = lazy(() => import('@/components/builder/AccessibilityPanel'));
