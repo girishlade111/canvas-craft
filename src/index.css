@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
@@ -123,6 +123,17 @@
   }
 }
 
+/* ── Performance: GPU acceleration & paint containment ── */
+@layer base {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  img, video, iframe {
+    content-visibility: auto;
+  }
+}
+
 @layer components {
   /* ===== Wix-style Builder Layout ===== */
   .builder-layout {
@@ -220,6 +231,8 @@
     transition: width 0.3s ease;
     box-shadow: 0 2px 20px hsl(220 13% 70% / 0.25);
     border-radius: 0;
+    contain: layout style;
+    will-change: transform;
   }
 
   /* ===== Droppable Section ===== */

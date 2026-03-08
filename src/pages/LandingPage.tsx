@@ -10,71 +10,72 @@ import {
   Instagram, Linkedin, Github, CodepenIcon, Mail, ExternalLink,
 } from 'lucide-react';
 
+// Static data defined outside component to avoid re-creation on renders
+const features = [
+  { icon: MousePointerClick, title: 'Drag & Drop Editor', desc: 'Build visually with an intuitive canvas. Click, drag, and place components exactly where you want them.' },
+  { icon: Palette, title: '100+ Components', desc: 'Buttons, forms, galleries, navbars, footers, hero sections, pricing tables, and more.' },
+  { icon: Monitor, title: 'Responsive Design', desc: 'Pixel-perfect on every device. Preview and tweak desktop, tablet, and mobile layouts in real time.' },
+  { icon: Globe, title: 'One-Click Publish', desc: 'Deploy to a live URL instantly with built-in hosting, SSL, and custom domain support.' },
+  { icon: Layout, title: 'Pro Templates', desc: '10+ professionally designed templates for blogs, stores, portfolios, restaurants, and SaaS.' },
+  { icon: Code2, title: 'Export Source Code', desc: 'Download clean React, Next.js, or static HTML. You own 100% of everything you build.' },
+  { icon: Zap, title: 'Auto-Save', desc: 'Your progress is automatically saved every 3 seconds. Never lose a single change, ever.' },
+  { icon: ShoppingCart, title: 'E-commerce Ready', desc: 'Product cards, shopping carts, checkout flows, and pricing tables — all built in.' },
+];
+
+const advancedFeatures = [
+  { icon: PenTool, title: 'Visual Style Editor', desc: 'Edit fonts, colors, shadows, borders, spacing, and more with a visual property panel.' },
+  { icon: Layers, title: 'Layer Management', desc: 'Organize elements with sections, containers, and nested component trees like Figma.' },
+  { icon: Clock, title: 'Version History', desc: 'Every publish creates a snapshot. Roll back to any previous version with one click.' },
+  { icon: FileCode2, title: 'Code Editor', desc: 'Switch to code view anytime. Edit component properties with a built-in Monaco editor.' },
+  { icon: Shield, title: 'Secure & Private', desc: 'Enterprise-grade security with row-level access control. Your data stays yours.' },
+  { icon: Download, title: 'Multi-Format Export', desc: 'Export as React components, Next.js pages, or static HTML/CSS for any hosting provider.' },
+];
+
+const stats = [
+  { value: '50+', label: 'Components' },
+  { value: '10+', label: 'Templates' },
+  { value: '3', label: 'Export Formats' },
+  { value: '∞', label: 'Possibilities' },
+];
+
+const steps = [
+  { num: '01', title: 'Choose a Template', desc: 'Browse professionally designed templates for blogs, stores, portfolios, agencies, SaaS and more. Or start from a blank canvas.', icon: Layout },
+  { num: '02', title: 'Customize Everything', desc: 'Drag & drop components, edit text, change colors, adjust spacing. The visual editor makes it effortless.', icon: Brush },
+  { num: '03', title: 'Publish & Share', desc: 'Go live with one click. Get a shareable URL, connect a custom domain, and track your deployments.', icon: Rocket },
+];
+
+const comparisons = [
+  { feature: 'Visual Drag & Drop', devbuilder: true, others: true },
+  { feature: 'No Account to Start', devbuilder: true, others: false },
+  { feature: 'Export Source Code', devbuilder: true, others: false },
+  { feature: 'React/Next.js Export', devbuilder: true, others: false },
+  { feature: 'Built-in Code Editor', devbuilder: true, others: false },
+  { feature: 'Version History', devbuilder: true, others: true },
+  { feature: 'Responsive Preview', devbuilder: true, others: true },
+  { feature: '100% Free to Start', devbuilder: true, others: false },
+];
+
+const useCases = [
+  { emoji: '💼', title: 'Business Websites', desc: 'Professional sites for companies of all sizes with contact forms, team sections, and service pages.' },
+  { emoji: '🛒', title: 'Online Stores', desc: 'Beautiful e-commerce stores with product grids, pricing, and checkout-ready layouts.' },
+  { emoji: '🎨', title: 'Portfolios', desc: 'Showcase your creative work with stunning gallery layouts and project case studies.' },
+  { emoji: '📝', title: 'Blogs & Content', desc: 'Clean, readable blog layouts with post grids, categories, and author pages.' },
+  { emoji: '🚀', title: 'Landing Pages', desc: 'High-converting landing pages with hero sections, CTAs, and social proof blocks.' },
+  { emoji: '🍽️', title: 'Restaurants & Food', desc: 'Menu displays, reservation info, and atmospheric designs for food businesses.' },
+];
+
+const faqs = [
+  { q: 'Do I need coding skills?', a: 'Not at all! DevBuilder is designed for everyone. Drag, drop, and click to build your website. If you know code, you can switch to the code editor anytime.' },
+  { q: 'Is it really free?', a: 'Yes! You can start building immediately without an account or payment. Only sign in when you want to save and publish your project.' },
+  { q: 'Can I export my code?', a: 'Absolutely. Export your project as clean React components, Next.js pages, or static HTML/CSS. You own everything you build.' },
+  { q: 'What about hosting?', a: 'We handle hosting for you with one-click publish. You get a live URL instantly, or connect your own custom domain.' },
+  { q: 'Can I use my own domain?', a: 'Yes. Connect any custom domain to your published site through the project settings panel.' },
+  { q: 'How is this different from Wix or WordPress?', a: 'DevBuilder gives you full source code ownership, a cleaner interface, React/Next.js exports, and you can start building without any account. No vendor lock-in.' },
+];
+
 const LandingPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-
-  const features = [
-    { icon: MousePointerClick, title: 'Drag & Drop Editor', desc: 'Build visually with an intuitive canvas. Click, drag, and place components exactly where you want them.' },
-    { icon: Palette, title: '100+ Components', desc: 'Buttons, forms, galleries, navbars, footers, hero sections, pricing tables, and more.' },
-    { icon: Monitor, title: 'Responsive Design', desc: 'Pixel-perfect on every device. Preview and tweak desktop, tablet, and mobile layouts in real time.' },
-    { icon: Globe, title: 'One-Click Publish', desc: 'Deploy to a live URL instantly with built-in hosting, SSL, and custom domain support.' },
-    { icon: Layout, title: 'Pro Templates', desc: '10+ professionally designed templates for blogs, stores, portfolios, restaurants, and SaaS.' },
-    { icon: Code2, title: 'Export Source Code', desc: 'Download clean React, Next.js, or static HTML. You own 100% of everything you build.' },
-    { icon: Zap, title: 'Auto-Save', desc: 'Your progress is automatically saved every 3 seconds. Never lose a single change, ever.' },
-    { icon: ShoppingCart, title: 'E-commerce Ready', desc: 'Product cards, shopping carts, checkout flows, and pricing tables — all built in.' },
-  ];
-
-  const advancedFeatures = [
-    { icon: PenTool, title: 'Visual Style Editor', desc: 'Edit fonts, colors, shadows, borders, spacing, and more with a visual property panel.' },
-    { icon: Layers, title: 'Layer Management', desc: 'Organize elements with sections, containers, and nested component trees like Figma.' },
-    { icon: Clock, title: 'Version History', desc: 'Every publish creates a snapshot. Roll back to any previous version with one click.' },
-    { icon: FileCode2, title: 'Code Editor', desc: 'Switch to code view anytime. Edit component properties with a built-in Monaco editor.' },
-    { icon: Shield, title: 'Secure & Private', desc: 'Enterprise-grade security with row-level access control. Your data stays yours.' },
-    { icon: Download, title: 'Multi-Format Export', desc: 'Export as React components, Next.js pages, or static HTML/CSS for any hosting provider.' },
-  ];
-
-  const stats = [
-    { value: '50+', label: 'Components' },
-    { value: '10+', label: 'Templates' },
-    { value: '3', label: 'Export Formats' },
-    { value: '∞', label: 'Possibilities' },
-  ];
-
-  const steps = [
-    { num: '01', title: 'Choose a Template', desc: 'Browse professionally designed templates for blogs, stores, portfolios, agencies, SaaS and more. Or start from a blank canvas.', icon: Layout },
-    { num: '02', title: 'Customize Everything', desc: 'Drag & drop components, edit text, change colors, adjust spacing. The visual editor makes it effortless.', icon: Brush },
-    { num: '03', title: 'Publish & Share', desc: 'Go live with one click. Get a shareable URL, connect a custom domain, and track your deployments.', icon: Rocket },
-  ];
-
-  const comparisons = [
-    { feature: 'Visual Drag & Drop', devbuilder: true, others: true },
-    { feature: 'No Account to Start', devbuilder: true, others: false },
-    { feature: 'Export Source Code', devbuilder: true, others: false },
-    { feature: 'React/Next.js Export', devbuilder: true, others: false },
-    { feature: 'Built-in Code Editor', devbuilder: true, others: false },
-    { feature: 'Version History', devbuilder: true, others: true },
-    { feature: 'Responsive Preview', devbuilder: true, others: true },
-    { feature: '100% Free to Start', devbuilder: true, others: false },
-  ];
-
-  const useCases = [
-    { emoji: '💼', title: 'Business Websites', desc: 'Professional sites for companies of all sizes with contact forms, team sections, and service pages.' },
-    { emoji: '🛒', title: 'Online Stores', desc: 'Beautiful e-commerce stores with product grids, pricing, and checkout-ready layouts.' },
-    { emoji: '🎨', title: 'Portfolios', desc: 'Showcase your creative work with stunning gallery layouts and project case studies.' },
-    { emoji: '📝', title: 'Blogs & Content', desc: 'Clean, readable blog layouts with post grids, categories, and author pages.' },
-    { emoji: '🚀', title: 'Landing Pages', desc: 'High-converting landing pages with hero sections, CTAs, and social proof blocks.' },
-    { emoji: '🍽️', title: 'Restaurants & Food', desc: 'Menu displays, reservation info, and atmospheric designs for food businesses.' },
-  ];
-
-  const faqs = [
-    { q: 'Do I need coding skills?', a: 'Not at all! DevBuilder is designed for everyone. Drag, drop, and click to build your website. If you know code, you can switch to the code editor anytime.' },
-    { q: 'Is it really free?', a: 'Yes! You can start building immediately without an account or payment. Only sign in when you want to save and publish your project.' },
-    { q: 'Can I export my code?', a: 'Absolutely. Export your project as clean React components, Next.js pages, or static HTML/CSS. You own everything you build.' },
-    { q: 'What about hosting?', a: 'We handle hosting for you with one-click publish. You get a live URL instantly, or connect your own custom domain.' },
-    { q: 'Can I use my own domain?', a: 'Yes. Connect any custom domain to your published site through the project settings panel.' },
-    { q: 'How is this different from Wix or WordPress?', a: 'DevBuilder gives you full source code ownership, a cleaner interface, React/Next.js exports, and you can start building without any account. No vendor lock-in.' },
-  ];
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
