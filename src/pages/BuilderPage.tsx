@@ -428,6 +428,7 @@ const BuilderPage = () => {
             onExportHTML={handleExportHTML}
             onExportReact={handleExportReact}
             onAuthRequired={handleAuthRequired}
+            onOpenExportDialog={() => setShowExportDialog(true)}
           />
 
           {actualProjectId && (
