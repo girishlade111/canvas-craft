@@ -269,7 +269,7 @@ const BuilderPage = () => {
     setActiveDrag(null);
     setDropTarget(null);
     const { active, over } = event;
-    if (!over) return;
+    if (!over || !componentsReady) return;
 
     const activeData = active.data.current;
 
