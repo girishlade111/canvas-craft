@@ -1223,11 +1223,230 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 </p>
 `;
 
+  // LICENSE file (MIT)
+  const currentYear = new Date().getFullYear();
+  files['LICENSE'] = `MIT License
+
+Copyright (c) ${currentYear} ${projectName}
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+`;
+
+  // .gitignore additions for security
+  files['.gitignore'] += `
+# Additional security exclusions
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+`;
+
+  // CONTRIBUTING.md for open source projects
+  files['CONTRIBUTING.md'] = `# Contributing to ${projectName}
+
+Thank you for your interest in contributing! 🎉
+
+## Getting Started
+
+1. Fork the repository
+2. Clone your fork: \`git clone YOUR_FORK_URL\`
+3. Install dependencies: \`npm install\`
+4. Create a branch: \`git checkout -b feature/your-feature-name\`
+
+## Development
+
+\`\`\`bash
+# Start development server
+npm run dev
+
+# Run tests (if available)
+npm test
+
+# Build for production
+npm run build
+\`\`\`
+
+## Pull Request Process
+
+1. Ensure your code follows the existing style
+2. Update documentation if needed
+3. Test your changes thoroughly
+4. Create a Pull Request with a clear description
+
+## Code Style
+
+- Use TypeScript for type safety
+- Follow existing naming conventions
+- Keep components small and focused
+- Write meaningful commit messages
+
+## Questions?
+
+Open an issue for any questions or concerns.
+`;
+
+  // src/components/shared/index.ts - Shared component exports
+  files['src/components/shared/index.ts'] = `// Shared components - Add your reusable components here
+// Example: export { Button } from './Button';
+// Example: export { Card } from './Card';
+// Example: export { Modal } from './Modal';
+
+// This file serves as the central export point for shared components
+// Import in pages like: import { Button, Card } from '@/components/shared';
+`;
+
+  // src/components/shared/README.md - Component documentation
+  files['src/components/shared/README.md'] = `# Shared Components
+
+This directory contains reusable UI components used across the application.
+
+## Usage
+
+Import components from the shared index:
+
+\`\`\`tsx
+import { Button, Card, Modal } from '@/components/shared';
+\`\`\`
+
+## Adding New Components
+
+1. Create a new file: \`src/components/shared/MyComponent.tsx\`
+2. Export from index: Add to \`src/components/shared/index.ts\`
+
+## Component Guidelines
+
+- Keep components focused and single-purpose
+- Use TypeScript for props
+- Include JSDoc comments
+- Support dark mode via CSS variables
+`;
+
+  // src/utils/index.ts - Utility functions
+  files['src/utils/index.ts'] = `// Utility functions - Add your helpers here
+
+/**
+ * Combines class names conditionally
+ */
+export const cn = (...classes: (string | boolean | undefined)[]) => 
+  classes.filter(Boolean).join(' ');
+
+/**
+ * Formats a date to a readable string
+ */
+export const formatDate = (date: Date | string): string => {
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
+
+/**
+ * Debounce function for performance optimization
+ */
+export const debounce = <T extends (...args: any[]) => any>(
+  fn: T,
+  delay: number
+): ((...args: Parameters<T>) => void) => {
+  let timeoutId: ReturnType<typeof setTimeout>;
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), delay);
+  };
+};
+
+/**
+ * Capitalizes the first letter of a string
+ */
+export const capitalize = (str: string): string => 
+  str.charAt(0).toUpperCase() + str.slice(1);
+`;
+
+  // src/hooks/index.ts - Custom hooks
+  files['src/hooks/index.ts'] = `// Custom React hooks - Add your hooks here
+import { useState, useEffect, useCallback } from 'react';
+
+/**
+ * Hook for managing localStorage state
+ */
+export const useLocalStorage = <T>(key: string, initialValue: T) => {
+  const [value, setValue] = useState<T>(() => {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch {
+      return initialValue;
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue] as const;
+};
+
+/**
+ * Hook for detecting screen size
+ */
+export const useMediaQuery = (query: string): boolean => {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    setMatches(media.matches);
+    const listener = (e: MediaQueryListEvent) => setMatches(e.matches);
+    media.addEventListener('change', listener);
+    return () => media.removeEventListener('change', listener);
+  }, [query]);
+
+  return matches;
+};
+
+/**
+ * Hook for detecting mobile devices
+ */
+export const useIsMobile = () => useMediaQuery('(max-width: 768px)');
+
+/**
+ * Hook for clipboard operations
+ */
+export const useClipboard = () => {
+  const [copied, setCopied] = useState(false);
+
+  const copy = useCallback(async (text: string) => {
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }, []);
+
+  return { copy, copied };
+};
+`;
+
   // public/favicon.svg placeholder
-  files['public/favicon.svg'] = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#3b82f6"/><text x="16" y="22" font-size="18" font-family="system-ui" fill="white" text-anchor="middle" font-weight="bold">D</text></svg>`;
+  files['public/favicon.svg'] = \`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#3b82f6"/><text x="16" y="22" font-size="18" font-family="system-ui" fill="white" text-anchor="middle" font-weight="bold">D</text></svg>\`;
 
   // public/placeholder.svg
-  files['public/placeholder.svg'] = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#e5e7eb"/><text x="200" y="150" font-size="16" font-family="system-ui" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle">Image Placeholder</text></svg>`;
+  files['public/placeholder.svg'] = \`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#e5e7eb"/><text x="200" y="150" font-size="16" font-family="system-ui" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle">Image Placeholder</text></svg>\`;
 
   return files;
 };
