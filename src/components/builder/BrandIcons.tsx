@@ -425,3 +425,344 @@ export const N8NIcon = createIcon(
   </>,
   '0 0 24 24'
 );
+
+// ─── Claude Code ──────────────────────────────────────────
+export const ClaudeCodeIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#CC9B7A" />
+    <path d="M6 8h12M6 12h8M6 16h10" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+    <rect x="16" y="14" width="4" height="4" rx="1" fill="white" fillOpacity="0.5" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Google Gemini ────────────────────────────────────────
+export const GeminiIcon = createIcon(
+  <>
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#8E75B2" />
+    <path d="M12 4c2.5 0 4.5 1.5 5.5 3.5L12 12 6.5 7.5C7.5 5.5 9.5 4 12 4z" fill="#4285F4" />
+    <path d="M17.5 7.5L12 12l5.5 4.5c1-2 1-5 0-9z" fill="#EA4335" />
+    <path d="M12 20c-2.5 0-4.5-1.5-5.5-3.5L12 12l5.5 4.5C16.5 18.5 14.5 20 12 20z" fill="#34A853" />
+    <path d="M6.5 16.5L12 12 6.5 7.5c-1 2-1 5 0 9z" fill="#FBBC05" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Mistral AI ───────────────────────────────────────────
+export const MistralIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#000000" />
+    <rect x="4" y="4" width="4" height="4" fill="#F7D046" />
+    <rect x="10" y="4" width="4" height="4" fill="#F7D046" />
+    <rect x="16" y="4" width="4" height="4" fill="#F7D046" />
+    <rect x="4" y="10" width="4" height="4" fill="#FF8C00" />
+    <rect x="10" y="10" width="4" height="4" fill="#FF8C00" />
+    <rect x="16" y="10" width="4" height="4" fill="#FF8C00" />
+    <rect x="4" y="16" width="4" height="4" fill="#FF4500" />
+    <rect x="16" y="16" width="4" height="4" fill="#FF4500" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Hugging Face ─────────────────────────────────────────
+export const HuggingFaceIcon = createIcon(
+  <>
+    <circle cx="12" cy="12" r="11" fill="#FFD21E" />
+    <circle cx="8.5" cy="10" r="1.5" fill="#4A2800" />
+    <circle cx="15.5" cy="10" r="1.5" fill="#4A2800" />
+    <path d="M8 15c1.5 2 6.5 2 8 0" stroke="#4A2800" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Stability AI ─────────────────────────────────────────
+export const StabilityIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#7C3AED" />
+    <path d="M7 12l3-6 2 4 2-4 3 6" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    <path d="M7 16h10" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Netlify ──────────────────────────────────────────────
+export const NetlifyIcon = createIcon(
+  <path d="M17.3 6.3L12.7 1.7c-.4-.4-1-.4-1.4 0L8.5 4.5l2.3 2.3c.5-.2 1.1-.1 1.5.3.4.4.5 1 .3 1.5l2.2 2.2c.5-.2 1.1-.1 1.5.3.6.6.6 1.5 0 2.1-.6.6-1.5.6-2.1 0-.4-.4-.5-1.1-.3-1.6L11.8 9.5v5.3c.1.1.3.2.4.3.6.6.6 1.5 0 2.1-.6.6-1.5.6-2.1 0-.6-.6-.6-1.5 0-2.1.2-.2.3-.3.5-.3V9.3c-.2-.1-.4-.2-.5-.3-.6-.6-.6-1.5 0-2.1.2-.2.4-.3.6-.4L8.5 4.5 1.7 11.3c-.4.4-.4 1 0 1.4l10.6 10.6c.4.4 1 .4 1.4 0l10.6-10.6c.4-.4.4-1 0-1.4L17.3 6.3z" fill="#00C7B7" />,
+  '0 0 26 26'
+);
+
+// ─── Railway ──────────────────────────────────────────────
+export const RailwayIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#0B0D0E" />
+    <path d="M6 6h12v2H6zM8 10h8v2H8zM10 14h4v2h-4zM11 18h2v2h-2z" fill="white" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Cloudflare ───────────────────────────────────────────
+export const CloudflareIcon = createIcon(
+  <>
+    <path d="M16.51 14.47l.78-2.71c.07-.24.04-.46-.08-.63-.12-.17-.31-.27-.54-.3l-8.13-.35c-.05 0-.09-.03-.11-.07-.02-.04-.01-.08.01-.12.03-.03.07-.06.11-.06l8.2-.35c.78-.05 1.63-.68 1.91-1.43l.36-1c.02-.05.03-.11.01-.16A5.5 5.5 0 0013.5 3.5a5.49 5.49 0 00-5.1 3.42A3.74 3.74 0 005 6.5a3.75 3.75 0 00-.5 7.47v.03h11.68c.18 0 .35-.11.4-.29l-.07-.24z" fill="#F6821F" />
+    <path d="M18.42 8.6c-.1 0-.21 0-.31.02a.17.17 0 00-.14.11l-.27.92c-.07.24-.04.46.08.63.12.17.31.27.54.3l1.47.06c.05 0 .09.03.11.07.02.04.01.08-.01.12-.03.03-.07.06-.11.06l-1.53.07c-.78.05-1.63.68-1.91 1.43l-.11.32c-.02.06.02.12.08.12H21c.09 0 .17-.07.19-.15A3.58 3.58 0 0018.42 8.6z" fill="#FBAD41" />
+  </>,
+  '0 0 24 18'
+);
+
+// ─── PayPal ───────────────────────────────────────────────
+export const PayPalIcon = createIcon(
+  <>
+    <path d="M7.076 21.337H2.47a.641.641 0 01-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106z" fill="#253B80" />
+    <path d="M20.16 7.047c-.01.06-.01.12-.02.18-1.08 5.53-4.77 7.43-9.48 7.43h-2.4c-.58 0-1.06.42-1.15.99l-1.23 7.77-.35 2.2a.596.596 0 00.59.69h4.15c.5 0 .93-.37 1.01-.86l.04-.21.8-5.07.05-.28c.08-.5.51-.86 1.01-.86h.64c4.12 0 7.35-1.67 8.29-6.52.39-2.03.19-3.72-.85-4.91a4.09 4.09 0 00-1.17-.87z" fill="#179BD7" />
+  </>,
+  '0 0 24 26'
+);
+
+// ─── Razorpay ─────────────────────────────────────────────
+export const RazorpayIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#072654" />
+    <path d="M9.5 5L7 19h3l1-5.5h3L16.5 5h-3L12 11.5 13.5 5H9.5z" fill="white" />
+    <path d="M14 13.5L11.5 19h3l2.5-5.5h-3z" fill="#3395FF" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── LemonSqueezy ─────────────────────────────────────────
+export const LemonSqueezyIcon = createIcon(
+  <>
+    <circle cx="12" cy="12" r="11" fill="#FFC233" />
+    <ellipse cx="12" cy="11" rx="5" ry="7" fill="#8DB600" />
+    <ellipse cx="12" cy="11" rx="3.5" ry="5" fill="#A4D65E" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Discord ──────────────────────────────────────────────
+export const DiscordIcon = createIcon(
+  <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" fill="#5865F2" />,
+  '0 0 24 24'
+);
+
+// ─── Telegram ─────────────────────────────────────────────
+export const TelegramIcon = createIcon(
+  <path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0h-.056zm5.654 7.304c.11-.064.464-.037.604.222.07.13.184.805.288 1.46.21 1.32.453 2.806.563 3.316l1.275 6.727c.045.238-.06.438-.18.544-.12.106-.36.18-.576.088l-3.87-1.52-2.114 2.1c-.18.18-.456.252-.696.15-.24-.102-.396-.342-.396-.606v-2.496l6.39-7.842c.114-.144.018-.36-.156-.3L9.12 14.848l-3.624-1.296a.57.57 0 01-.378-.546c0-.228.126-.432.342-.516l11.556-5.16c.108-.048.414-.09.582-.026z" fill="#229ED9" />,
+  '0 0 24 24'
+);
+
+// ─── Microsoft Teams ──────────────────────────────────────
+export const TeamsIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#5059C9" />
+    <circle cx="16" cy="7" r="2.5" fill="white" />
+    <path d="M13 11h8v5a3 3 0 01-3 3h-2a3 3 0 01-3-3v-5z" fill="white" fillOpacity="0.8" />
+    <circle cx="10" cy="8" r="3" fill="white" />
+    <path d="M5 12h10v6a3 3 0 01-3 3H8a3 3 0 01-3-3v-6z" fill="white" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Zoom ─────────────────────────────────────────────────
+export const ZoomIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#2D8CFF" />
+    <path d="M4 8.5a2 2 0 012-2h7a2 2 0 012 2v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5z" fill="white" />
+    <path d="M15 9.5l4-2v7l-4-2v-3z" fill="white" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── WordPress ────────────────────────────────────────────
+export const WordPressIcon = createIcon(
+  <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM3.009 12c0-1.36.313-2.648.867-3.8L8.29 20.264A8.984 8.984 0 013.009 12zm8.991 9c-.635 0-1.252-.072-1.846-.2l1.962-5.696 2.01 5.508c.013.032.03.061.046.092A8.92 8.92 0 0112 21zm1.27-13.22c.394-.02.749-.062.749-.062.352-.04.311-.558-.042-.538 0 0-1.06.083-1.744.083-.642 0-1.722-.083-1.722-.083-.353-.02-.394.518-.042.538 0 0 .334.042.687.062l1.02 2.794-1.433 4.298-2.385-7.092c.394-.02.749-.062.749-.062.352-.04.311-.558-.042-.538 0 0-1.06.083-1.744.083-.123 0-.268-.003-.42-.01A8.962 8.962 0 0112 3.009c2.277 0 4.354.848 5.936 2.242-.038-.002-.074-.01-.114-.01-1.06 0-1.702.748-1.702 1.552 0 .538.31.994.642 1.532.248.434.538.994.538 1.8 0 .558-.214 1.204-.498 2.105l-.652 2.18L13.27 7.78zm4.714 10.76l1.978-5.72c.37-.92.49-1.656.49-2.314 0-.238-.016-.458-.044-.664A8.963 8.963 0 0120.991 12c0 2.47-1.002 4.706-2.62 6.334l-.387.206z" fill="#21759B" />,
+  '0 0 24 24'
+);
+
+// ─── Ghost CMS ────────────────────────────────────────────
+export const GhostIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#15171A" />
+    <path d="M12 4a5 5 0 00-5 5v5.5c0 .28.22.5.5.5s.5-.22.5-.5S7.72 14 7.5 14s.5.22.5.5v1c0 .28.22.5.5.5s.5-.22.5-.5v-1c0-.28.22-.5.5-.5s.5.22.5.5v1c0 .28.22.5.5.5s.5-.22.5-.5v-1c0-.28.22-.5.5-.5s.5.22.5.5v1c0 .28.22.5.5.5s.5-.22.5-.5v-1c0-.28.22-.5.5-.5s.5.22.5.5.22.5.5.5.5-.22.5-.5V9a5 5 0 00-5-5z" fill="white" />
+    <circle cx="10" cy="9.5" r="1" fill="#15171A" />
+    <circle cx="14" cy="9.5" r="1" fill="#15171A" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Strapi ───────────────────────────────────────────────
+export const StrapiIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#4945FF" />
+    <path d="M8 5h8v5h-3v3H8V5z" fill="white" />
+    <path d="M16 10v5H8v-2h5v-3h3z" fill="white" fillOpacity="0.5" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Auth0 ────────────────────────────────────────────────
+export const Auth0Icon = createIcon(
+  <path d="M16.285 8.22h-4.462l1.383 4.257L12 15.378l-1.206-2.901 1.383-4.257H7.715L4 19.48l4.154.003L12 8.952l3.846 10.531L20 19.48 16.285 8.22zM12 4l-2.808 4.22h5.616L12 4z" fill="#EB5424" />,
+  '0 0 24 24'
+);
+
+// ─── Clerk ────────────────────────────────────────────────
+export const ClerkIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#6C47FF" />
+    <circle cx="12" cy="9" r="3" fill="white" />
+    <path d="M7 17c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Algolia ──────────────────────────────────────────────
+export const AlgoliaIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#003DFF" />
+    <circle cx="11" cy="11" r="4" stroke="white" strokeWidth="2" fill="none" />
+    <line x1="14" y1="14" x2="18" y2="18" stroke="white" strokeWidth="2" strokeLinecap="round" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Pinecone ─────────────────────────────────────────────
+export const PineconeIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#000000" />
+    <path d="M12 4v8M8 7l4 5 4-5M12 12v4M10 16l2 4 2-4" stroke="#00B4A0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Sentry ───────────────────────────────────────────────
+export const SentryIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#362D59" />
+    <path d="M13.47 5.18a1.5 1.5 0 00-2.59 0l-2.2 3.81a8.5 8.5 0 014.83 7.51h-1.75a6.75 6.75 0 00-3.05-5.63L7 13.72a3.75 3.75 0 011.82 3.28H7.32a2.25 2.25 0 00-.63-1.43l-.87 1.5a.56.56 0 01-.97-.56L8.14 11A10.5 10.5 0 0115.5 17h-1.75a8.5 8.5 0 00-3.45-6.35l2.9-5.02.97.56-2.9 5.02A10.44 10.44 0 0117.25 17H19a.56.56 0 010 1.12H9.82a3.31 3.31 0 01-2.6-1.27" fill="white" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Render ───────────────────────────────────────────────
+export const RenderIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#46E3B7" />
+    <path d="M7 7h4v4H7zM13 7h4v4h-4zM7 13h4v4H7zM13 13h4v4h-4z" fill="white" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── DigitalOcean ─────────────────────────────────────────
+export const DigitalOceanIcon = createIcon(
+  <>
+    <circle cx="12" cy="12" r="11" fill="#0080FF" />
+    <path d="M12 17v-3.5h3.5A3.5 3.5 0 0012 7v-3a6.5 6.5 0 016.5 6.5H15V14h-3v3h-3v-2.5H6.5v-3H12z" fill="white" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Framer ───────────────────────────────────────────────
+export const FramerIcon = createIcon(
+  <>
+    <path d="M5 2h14v7H12l7 7H5v-7h7L5 2z" fill="#0055FF" />
+    <path d="M5 16h7v7L5 16z" fill="#0055FF" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Webflow ──────────────────────────────────────────────
+export const WebflowIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#4353FF" />
+    <path d="M17.5 8.5c0 0-1.5 5-1.6 5.3-.1-.4-2.3-7.8-2.3-7.8-1.5 0-2.3 1-2.7 2.1 0 0-1.4 3.6-1.5 3.8-.01-.3-.3-3.8-.3-3.8-.15-1.2-1.3-2.1-2.6-2.1l1.3 10c1.6 0 2.5-1.1 2.9-2.1l1.2-3.1 2.1 5.2c1.6 0 2.5-1 2.9-2.1L19 8.5h-1.5z" fill="white" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Paddle ───────────────────────────────────────────────
+export const PaddleIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#243B53" />
+    <path d="M8 12c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4" stroke="#FED766" strokeWidth="2" fill="none" strokeLinecap="round" />
+    <circle cx="12" cy="12" r="1.5" fill="#FED766" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Gumroad ──────────────────────────────────────────────
+export const GumroadIcon = createIcon(
+  <>
+    <circle cx="12" cy="12" r="11" fill="#FF90E8" />
+    <text x="12" y="17" textAnchor="middle" fill="#000" fontSize="14" fontWeight="bold" fontFamily="sans-serif">G</text>
+  </>,
+  '0 0 24 24'
+);
+
+// ─── WooCommerce ──────────────────────────────────────────
+export const WooCommerceIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#96588A" />
+    <text x="12" y="16" textAnchor="middle" fill="white" fontSize="9" fontWeight="bold" fontFamily="sans-serif">Woo</text>
+  </>,
+  '0 0 24 24'
+);
+
+// ─── PostHog ──────────────────────────────────────────────
+export const PostHogIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#1D4AFF" />
+    <circle cx="9" cy="10" r="2" fill="#F9BD2B" />
+    <circle cx="15" cy="10" r="2" fill="#F9BD2B" />
+    <path d="M8 14.5c1.5 2 6.5 2 8 0" stroke="#F9BD2B" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Upstash ──────────────────────────────────────────────
+export const UpstashIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#00E9A3" />
+    <path d="M12 5c-3.86 0-7 3.14-7 7h3c0-2.21 1.79-4 4-4V5z" fill="white" />
+    <path d="M12 9c-1.66 0-3 1.34-3 3h3V9z" fill="white" />
+    <circle cx="12" cy="12" r="1.5" fill="white" />
+    <path d="M12 19c3.86 0 7-3.14 7-7h-3c0 2.21-1.79 4-4 4v3z" fill="white" fillOpacity="0.6" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Neon Database ────────────────────────────────────────
+export const NeonIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#0A0A0A" />
+    <path d="M6 18V6l4 6 4-6 4 12" stroke="#00E599" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Plausible Analytics ──────────────────────────────────
+export const PlausibleIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#5850EC" />
+    <path d="M6 17l3-5 3 3 3-7 3 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Deno ─────────────────────────────────────────────────
+export const DenoIcon = createIcon(
+  <>
+    <circle cx="12" cy="12" r="11" fill="#000000" />
+    <circle cx="12" cy="10" r="6" fill="none" stroke="white" strokeWidth="1.5" />
+    <circle cx="14" cy="9" r="1.5" fill="white" />
+  </>,
+  '0 0 24 24'
+);
+
+// ─── Turso ────────────────────────────────────────────────
+export const TursoIcon = createIcon(
+  <>
+    <rect width="24" height="24" rx="5" fill="#4FF8D2" />
+    <path d="M8 8l4-3 4 3v4l-4 5-4-5V8z" fill="#0B1222" />
+  </>,
+  '0 0 24 24'
+);
