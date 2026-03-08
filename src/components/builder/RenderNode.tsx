@@ -291,7 +291,7 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
           <button onClick={(e) => { e.stopPropagation(); openCodeEditor(node.id); }} className="hover:opacity-70" title="Edit code">
             <Code2 className="w-3 h-3" />
           </button>
-          <button onClick={(e) => { e.stopPropagation(); removeComponent(node.id); }} className="hover:opacity-70 text-red-200" title="Delete">
+          <button onClick={(e) => { e.stopPropagation(); removeComponent(node.id); }} className="hover:opacity-70" style={{ color: 'hsl(0 80% 80%)' }} title="Delete">
             <Trash2 className="w-3 h-3" />
           </button>
         </div>

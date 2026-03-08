@@ -78,7 +78,7 @@ const BuilderPage = () => {
     fromCanvas?: boolean;
     componentId?: string;
   } | null>(null);
-  const [dropTarget, setDropTarget] = useState<{
+  const [_dropTarget, setDropTarget] = useState<{
     id: string;
     position: 'before' | 'after' | 'inside';
   } | null>(null);
