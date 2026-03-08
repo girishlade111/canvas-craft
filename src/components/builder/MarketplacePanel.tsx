@@ -1,10 +1,10 @@
 import { useState, useMemo } from 'react';
 import {
-  Store, Search, X, Download, Star, Heart, Eye, ChevronRight, ChevronDown,
-  Sparkles, Zap, Palette, Layout, Box, Type, Image, Play, Code, Gift,
-  Crown, Verified, TrendingUp, Clock, Filter, Grid3X3, List, ExternalLink,
-  Layers, MousePointerClick, Wand2, Paintbrush, Blocks, Component, Package,
-  ArrowRight, Check, Plus, Bookmark, Share2, Info, Award, Flame,
+  Store, Search, X, Download, Star, Heart, Eye,
+  Sparkles, Zap, Box, Play, Gift,
+  Crown, Verified, TrendingUp, Filter, Grid3X3,
+  Layers, Component, Package,
+  Check, Plus, Award, Flame,
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
