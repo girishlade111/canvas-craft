@@ -443,6 +443,66 @@ export type Database = {
           },
         ]
       }
+      interactive_elements: {
+        Row: {
+          animation_type: string
+          author_id: string | null
+          category: string
+          compatible_sections: string[]
+          created_at: string
+          description: string
+          element_schema: Json
+          id: string
+          installs: number
+          is_premium: boolean
+          is_public: boolean
+          name: string
+          preview_css: string | null
+          subcategory: string
+          tags: string[]
+          thumbnail: string
+          updated_at: string
+        }
+        Insert: {
+          animation_type?: string
+          author_id?: string | null
+          category?: string
+          compatible_sections?: string[]
+          created_at?: string
+          description?: string
+          element_schema?: Json
+          id?: string
+          installs?: number
+          is_premium?: boolean
+          is_public?: boolean
+          name: string
+          preview_css?: string | null
+          subcategory?: string
+          tags?: string[]
+          thumbnail?: string
+          updated_at?: string
+        }
+        Update: {
+          animation_type?: string
+          author_id?: string | null
+          category?: string
+          compatible_sections?: string[]
+          created_at?: string
+          description?: string
+          element_schema?: Json
+          id?: string
+          installs?: number
+          is_premium?: boolean
+          is_public?: boolean
+          name?: string
+          preview_css?: string | null
+          subcategory?: string
+          tags?: string[]
+          thumbnail?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           created_at: string
