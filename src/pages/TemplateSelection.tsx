@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { templates } from '@/data/templates';
 import { useBuilderStore } from '@/store/builderStore';
-import { Code2, ArrowLeft, Search, Layers, Grid3X3, LayoutGrid } from 'lucide-react';
+import { Code2, ArrowLeft, Search, Layers, Grid3X3, LayoutGrid, Loader2 } from 'lucide-react';
+
+import type { Template } from '@/data/templates';
 
 const categories = [
   { id: 'all', label: 'All Templates' },
@@ -22,6 +23,16 @@ const TemplateSelection = () => {
   const setSchema = useBuilderStore((s) => s.setSchema);
   const [activeCategory, setActiveCategory] = useState('all');
   const [search, setSearch] = useState('');
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Lazy-load templates data only when this page is visited
+  useEffect(() => {
+    import('@/data/templates').then((mod) => {
+      setTemplates(mod.templates);
+      setLoading(false);
+    });
+  }, []);
 
   const filtered = templates.filter(t => {
     const matchesCategory = activeCategory === 'all' || t.category === activeCategory;
