@@ -429,11 +429,13 @@ const BuilderPage = () => {
           />
 
           {actualProjectId && (
-            <PageManager
-              projectId={actualProjectId}
-              currentPageId={currentPageId}
-              onSelectPage={handleSelectPage}
-            />
+            <Suspense fallback={null}>
+              <PageManager
+                projectId={actualProjectId}
+                currentPageId={currentPageId}
+                onSelectPage={handleSelectPage}
+              />
+            </Suspense>
           )}
 
           <div className="flex flex-1 overflow-hidden">
@@ -506,19 +508,23 @@ const BuilderPage = () => {
           ) : null}
         </DragOverlay>
 
-        <AuthGateDialog
-          isOpen={showAuthGate}
-          onClose={() => setShowAuthGate(false)}
-          onAuthenticated={handleAuthComplete}
-        />
+        <Suspense fallback={null}>
+          {showAuthGate && (
+            <AuthGateDialog
+              isOpen={showAuthGate}
+              onClose={() => setShowAuthGate(false)}
+              onAuthenticated={handleAuthComplete}
+            />
+          )}
 
-        {actualProjectId && (
-          <PublishDialog
-            projectId={actualProjectId}
-            isOpen={showPublish}
-            onClose={() => setShowPublish(false)}
-          />
-        )}
+          {actualProjectId && showPublish && (
+            <PublishDialog
+              projectId={actualProjectId}
+              isOpen={showPublish}
+              onClose={() => setShowPublish(false)}
+            />
+          )}
+        </Suspense>
       </DndContext>
     </ClipboardProvider>
   );

@@ -1,4 +1,4 @@
-import { lazy, Suspense, memo } from "react";
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -68,13 +68,13 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 // ── App ──────────────────────────────────────────────────
-const App = memo(() => (
+const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <TooltipProvider delayDuration={300} skipDelayDuration={100}>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <Suspense fallback={<PageLoader />}>
             <Routes>
               {/* Public routes */}
@@ -103,7 +103,6 @@ const App = memo(() => (
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>
-));
+);
 
-App.displayName = "App";
 export default App;
