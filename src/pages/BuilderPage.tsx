@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useBuilderStore } from '@/store/builderStore';
-import { usePages, useSavePage } from '@/hooks/usePages';
+import { usePages, useSavePage, type Page } from '@/hooks/usePages';
 import BuilderToolbar from '@/components/builder/BuilderToolbar';
 import ComponentSidebar from '@/components/builder/ComponentSidebar';
 import PropertiesPanel from '@/components/builder/PropertiesPanel';
@@ -9,6 +9,7 @@ import BuilderCanvas from '@/components/builder/BuilderCanvas';
 import CodeEditorPanel from '@/components/builder/CodeEditorPanel';
 import AssetPanel from '@/components/builder/AssetPanel';
 import VersionHistoryPanel from '@/components/builder/VersionHistoryPanel';
+import PageManager from '@/components/builder/PageManager';
 import {
   DndContext,
   DragOverlay,
@@ -54,6 +55,11 @@ const BuilderPage = () => {
       setSchema(page.schema as unknown as PageSchema);
     }
   }, [pages, currentPageId, setSchema]);
+
+  const handleSelectPage = (page: Page) => {
+    setCurrentPageId(page.id);
+    setSchema(page.schema as unknown as PageSchema);
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
@@ -132,6 +138,13 @@ const BuilderPage = () => {
           showVersions={showVersions}
           projectId={projectId}
         />
+        {projectId && (
+          <PageManager
+            projectId={projectId}
+            currentPageId={currentPageId}
+            onSelectPage={handleSelectPage}
+          />
+        )}
         <div className="flex flex-1 overflow-hidden">
           {leftSidebarOpen && !showAssets && <ComponentSidebar />}
           {showAssets && projectId && <AssetPanel projectId={projectId} />}
