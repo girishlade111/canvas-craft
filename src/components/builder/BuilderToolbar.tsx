@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Undo2, Redo2, Eye, Monitor, Tablet, Smartphone, Save, Upload,
   Code2, Download, Lock, Loader2, FileArchive, Github, Globe,
-  ChevronDown, ExternalLink, FolderOpen,
+  ChevronDown, ExternalLink, FolderOpen, Cloud,
 } from 'lucide-react';
 import type { DeviceView } from '@/types/builder';
 import { useState } from 'react';
