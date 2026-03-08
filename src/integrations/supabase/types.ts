@@ -55,6 +55,100 @@ export type Database = {
           },
         ]
       }
+      components: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_global: boolean
+          name: string
+          project_id: string | null
+          schema: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_global?: boolean
+          name: string
+          project_id?: string | null
+          schema?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_global?: boolean
+          name?: string
+          project_id?: string | null
+          schema?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "components_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deployments: {
+        Row: {
+          build_log: string | null
+          created_at: string
+          deployment_url: string | null
+          id: string
+          project_id: string
+          provider: string
+          status: string
+          updated_at: string
+          user_id: string
+          version_number: number
+        }
+        Insert: {
+          build_log?: string | null
+          created_at?: string
+          deployment_url?: string | null
+          id?: string
+          project_id: string
+          provider?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+          version_number?: number
+        }
+        Update: {
+          build_log?: string | null
+          created_at?: string
+          deployment_url?: string | null
+          id?: string
+          project_id?: string
+          provider?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deployments_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       page_versions: {
         Row: {
           created_at: string
