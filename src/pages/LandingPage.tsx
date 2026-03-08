@@ -289,7 +289,7 @@ const LandingPage = () => {
       </section>
 
       {/* === ADVANCED FEATURES (2-col highlight) === */}
-      <section className="py-24 px-6 relative">
+      <section className="py-24 px-6 relative" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 800px' }}>
         <div className="absolute inset-0 pointer-events-none opacity-50" style={{ background: 'var(--gradient-hero)' }} />
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
