@@ -27,6 +27,9 @@ import {
   PostHogIcon, UpstashIcon, NeonIcon, PlausibleIcon, DenoIcon, TursoIcon,
   TwitchIcon, RedditIcon, PinterestIcon, MailgunIcon, ConvertKitIcon,
   SupabaseEdgeFnIcon, VercelAIIcon, LangChainIcon, CrewAIIcon,
+  CohereIcon, TogetherAIIcon, GroqIcon, XAIIcon, OpenRouterIcon,
+  FireworksAIIcon, AssemblyAIIcon, RunwayIcon, AI21Icon, AnthropicAPIIcon,
+  MetaLlamaIcon, CerebrasIcon,
 } from './BrandIcons';
 import { useInstalledApps, useInstallApp, useUninstallApp } from '@/hooks/useInstalledApps';
 import { useAppConfig } from '@/hooks/useAppConfig';
