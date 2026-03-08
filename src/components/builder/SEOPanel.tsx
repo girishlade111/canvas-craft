@@ -5,7 +5,7 @@ import {
   Monitor, Clock, Users, MousePointerClick, ExternalLink, RefreshCw,
   Lightbulb, Award, Gauge, ArrowUp, ArrowDown, Minus, Settings, Sparkles,
   Layers, PieChart, Activity, Bot, FileCode, Heading1, AlignLeft, List,
-  CircleDot, Languages, HelpCircle, Store, MapPin, Building2, DollarSign,
+  CircleDot, Languages, HelpCircle,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
