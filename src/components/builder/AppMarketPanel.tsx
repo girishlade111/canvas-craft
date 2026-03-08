@@ -29,6 +29,7 @@ import {
   SupabaseEdgeFnIcon, VercelAIIcon, LangChainIcon, CrewAIIcon,
 } from './BrandIcons';
 import { useInstalledApps, useInstallApp, useUninstallApp } from '@/hooks/useInstalledApps';
+import { useAppConfig } from '@/hooks/useAppConfig';
 import { toast } from 'sonner';
 
 /* ── Config field types ── */
