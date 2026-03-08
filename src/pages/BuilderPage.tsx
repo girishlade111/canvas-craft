@@ -108,7 +108,8 @@ const BuilderPage = () => {
 
   const { isSaving: isAutosaving } = useAutosave(isLocalMode ? null : currentPageId);
 
-  useEffect(() => {
+  // Preload component library when builder mounts (lazy from main bundle)
+  useEffect(() => { getComponentLibrary(); }, []);
     if (!isLocalMode && pages?.length && !currentPageId) {
       const page = pages[0];
       setCurrentPageId(page.id);
