@@ -262,17 +262,8 @@ const loadExtendedComponents = async () => {
   });
 };
 
-// Eagerly start loading extended components (non-blocking)
-// This triggers the async load immediately but doesn't block rendering
-if (typeof window !== 'undefined') {
-  // Use requestIdleCallback to load during browser idle time
-  const load = () => loadExtendedComponents();
-  if ('requestIdleCallback' in window) {
-    (window as any).requestIdleCallback(load, { timeout: 2000 });
-  } else {
-    setTimeout(load, 100);
-  }
-}
+// Extended components are NOT eagerly loaded — they load on first demand
+// via getComponent() or ensureAllComponentsLoaded() from the builder page.
 
 // ─── Public API ────────────────────────────────────────────
 
