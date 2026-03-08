@@ -10,8 +10,18 @@ const CodeEditorPanel = () => {
 
   const component = useMemo(() => {
     if (!codeEditorComponentId) return null;
+    const findRecursive = (components: any[]): any => {
+      for (const comp of components) {
+        if (comp.id === codeEditorComponentId) return comp;
+        if (comp.children) {
+          const found = findRecursive(comp.children);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
     for (const section of schema.sections) {
-      const found = section.components.find(c => c.id === codeEditorComponentId);
+      const found = findRecursive(section.components);
       if (found) return found;
     }
     return null;
@@ -39,6 +49,21 @@ const CodeEditorPanel = () => {
     if (!value || !codeEditorComponentId) return;
     if (language === 'html') {
       updateComponent(codeEditorComponentId, { content: value });
+    }
+    if (language === 'css') {
+      // Parse CSS property declarations back into styles object
+      const styles: Record<string, string> = {};
+      value.split('\n').forEach(line => {
+        const match = line.trim().match(/^\s*([a-z-]+)\s*:\s*(.+?)\s*;?\s*$/i);
+        if (match) {
+          const prop = match[1].replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+          styles[prop] = match[2];
+        }
+      });
+      if (Object.keys(styles).length > 0) {
+        const { updateComponentStyles } = useBuilderStore.getState();
+        updateComponentStyles(codeEditorComponentId, styles);
+      }
     }
   };
 

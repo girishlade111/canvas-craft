@@ -438,7 +438,260 @@ propertySchemas.set('stats', [
   ...allStyleProps,
 ]);
 
-// ─── Public API ────────────────────────────────────────────
+// Marketing
+propertySchemas.set('newsletter', [
+  { key: 'title', label: 'Title', type: 'string', group: 'Component', defaultValue: 'Subscribe to our newsletter' },
+  { key: 'buttonText', label: 'Button Text', type: 'string', group: 'Component', defaultValue: 'Subscribe' },
+  ...allStyleProps,
+]);
+propertySchemas.set('popup-trigger', [
+  { key: 'triggerText', label: 'Trigger Text', type: 'string', group: 'Component', defaultValue: 'Open Popup' },
+  ...allStyleProps,
+]);
+propertySchemas.set('announcement-bar', [
+  { key: 'dismissible', label: 'Dismissible', type: 'boolean', group: 'Component', defaultValue: true },
+  ...allStyleProps,
+]);
+propertySchemas.set('cookie-consent', allStyleProps);
+propertySchemas.set('fab', [
+  { key: 'icon', label: 'Icon', type: 'string', group: 'Component', defaultValue: '+' },
+  ...allStyleProps,
+]);
+propertySchemas.set('back-to-top', allStyleProps);
+propertySchemas.set('comparison-table', [
+  { key: 'columns', label: 'Columns', type: 'number', group: 'Component', defaultValue: 3, min: 2, max: 5 },
+  ...allStyleProps,
+]);
+propertySchemas.set('before-after', allStyleProps);
+propertySchemas.set('team-grid', [
+  { key: 'columns', label: 'Columns', type: 'number', group: 'Component', defaultValue: 3, min: 1, max: 6 },
+  ...allStyleProps,
+]);
+propertySchemas.set('timeline', allStyleProps);
+propertySchemas.set('faq', [
+  { key: 'allowMultiple', label: 'Allow Multiple', type: 'boolean', group: 'Component', defaultValue: false },
+  ...allStyleProps,
+]);
+
+// Blog
+propertySchemas.set('blog-post-card', [
+  { key: 'title', label: 'Title', type: 'string', group: 'Component', defaultValue: 'Blog Post Title' },
+  { key: 'excerpt', label: 'Excerpt', type: 'string', group: 'Component' },
+  { key: 'imageUrl', label: 'Image', type: 'image', group: 'Component' },
+  { key: 'author', label: 'Author', type: 'string', group: 'Component', defaultValue: 'Author' },
+  { key: 'date', label: 'Date', type: 'string', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('author-bio', [
+  { key: 'name', label: 'Name', type: 'string', group: 'Component', defaultValue: 'Author Name' },
+  { key: 'bio', label: 'Bio', type: 'string', group: 'Component' },
+  { key: 'avatarUrl', label: 'Avatar', type: 'image', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('related-posts', allStyleProps);
+propertySchemas.set('share-buttons', allStyleProps);
+propertySchemas.set('toc', allStyleProps);
+propertySchemas.set('reading-progress', [
+  { key: 'color', label: 'Bar Color', type: 'color', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('comment-item', allStyleProps);
+
+// Interactive
+propertySchemas.set('toggle-switch', [
+  { key: 'label', label: 'Label', type: 'string', group: 'Component', defaultValue: 'Toggle' },
+  { key: 'defaultChecked', label: 'Default On', type: 'boolean', group: 'Component', defaultValue: false },
+  ...allStyleProps,
+]);
+propertySchemas.set('range-slider', [
+  { key: 'label', label: 'Label', type: 'string', group: 'Component', defaultValue: 'Range' },
+  { key: 'min', label: 'Min', type: 'number', group: 'Component', defaultValue: 0 },
+  { key: 'max', label: 'Max', type: 'number', group: 'Component', defaultValue: 100 },
+  { key: 'value', label: 'Value', type: 'number', group: 'Component', defaultValue: 50 },
+  ...allStyleProps,
+]);
+propertySchemas.set('stepper', [
+  { key: 'label', label: 'Label', type: 'string', group: 'Component', defaultValue: 'Quantity' },
+  { key: 'value', label: 'Value', type: 'number', group: 'Component', defaultValue: 1 },
+  ...allStyleProps,
+]);
+propertySchemas.set('chip-group', [
+  { key: 'items', label: 'Items (comma-sep)', type: 'string', group: 'Component', defaultValue: 'Tag 1, Tag 2, Tag 3' },
+  ...allStyleProps,
+]);
+propertySchemas.set('mega-menu', allStyleProps);
+propertySchemas.set('notification', [
+  { key: 'type', label: 'Type', type: 'select', group: 'Component', options: [
+    { label: 'Info', value: 'info' }, { label: 'Success', value: 'success' },
+    { label: 'Warning', value: 'warning' }, { label: 'Error', value: 'error' },
+  ], defaultValue: 'info' },
+  ...allStyleProps,
+]);
+propertySchemas.set('skeleton', [
+  { key: 'variant', label: 'Variant', type: 'select', group: 'Component', options: [
+    { label: 'Card', value: 'card' }, { label: 'Text', value: 'text' },
+  ], defaultValue: 'card' },
+  ...allStyleProps,
+]);
+propertySchemas.set('empty-state', [
+  { key: 'title', label: 'Title', type: 'string', group: 'Component', defaultValue: 'No data yet' },
+  { key: 'description', label: 'Description', type: 'string', group: 'Component' },
+  ...allStyleProps,
+]);
+
+// Data Display
+propertySchemas.set('data-table', allStyleProps);
+propertySchemas.set('metric-card', [
+  { key: 'title', label: 'Title', type: 'string', group: 'Component', defaultValue: 'Metric' },
+  { key: 'value', label: 'Value', type: 'string', group: 'Component', defaultValue: '0' },
+  ...allStyleProps,
+]);
+propertySchemas.set('chart-placeholder', allStyleProps);
+propertySchemas.set('kpi-dashboard', allStyleProps);
+propertySchemas.set('feature-list', allStyleProps);
+propertySchemas.set('pagination', allStyleProps);
+propertySchemas.set('breadcrumb-trail', allStyleProps);
+propertySchemas.set('tag-list', allStyleProps);
+
+// Social
+propertySchemas.set('testimonial-carousel', allStyleProps);
+propertySchemas.set('social-feed-card', allStyleProps);
+propertySchemas.set('user-profile-card', [
+  { key: 'name', label: 'Name', type: 'string', group: 'Component', defaultValue: 'User Name' },
+  { key: 'avatarUrl', label: 'Avatar', type: 'image', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('review-card', allStyleProps);
+propertySchemas.set('chat-bubble', allStyleProps);
+
+// Content Blocks
+propertySchemas.set('feature-card', [
+  { key: 'title', label: 'Title', type: 'string', group: 'Component', defaultValue: 'Feature' },
+  { key: 'description', label: 'Description', type: 'string', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('callout', [
+  { key: 'type', label: 'Type', type: 'select', group: 'Component', options: [
+    { label: 'Info', value: 'info' }, { label: 'Warning', value: 'warning' },
+    { label: 'Tip', value: 'tip' }, { label: 'Note', value: 'note' },
+  ], defaultValue: 'info' },
+  ...allStyleProps,
+]);
+propertySchemas.set('numbered-steps', allStyleProps);
+propertySchemas.set('marquee', [
+  { key: 'speed', label: 'Speed', type: 'number', group: 'Component', defaultValue: 30, min: 5, max: 100 },
+  { key: 'direction', label: 'Direction', type: 'select', group: 'Component', options: [
+    { label: 'Left', value: 'left' }, { label: 'Right', value: 'right' },
+  ], defaultValue: 'left' },
+  ...allStyleProps,
+]);
+propertySchemas.set('pricing-card', [
+  { key: 'planName', label: 'Plan', type: 'string', group: 'Component', defaultValue: 'Pro' },
+  { key: 'price', label: 'Price', type: 'string', group: 'Component', defaultValue: '$29/mo' },
+  ...allStyleProps,
+]);
+propertySchemas.set('image-overlay-card', allStyleProps);
+propertySchemas.set('divider-text', [
+  { key: 'text', label: 'Text', type: 'string', group: 'Component', defaultValue: 'or' },
+  ...allStyleProps,
+]);
+propertySchemas.set('blockquote-image', allStyleProps);
+propertySchemas.set('horizontal-gallery', allStyleProps);
+propertySchemas.set('content-switcher', allStyleProps);
+
+// Embeds
+propertySchemas.set('youtube-embed', [
+  { key: 'url', label: 'YouTube URL', type: 'url', group: 'Component', placeholder: 'https://youtube.com/watch?v=...' },
+  ...allStyleProps,
+]);
+propertySchemas.set('twitter-embed', [
+  { key: 'tweetUrl', label: 'Tweet URL', type: 'url', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('instagram-embed', [
+  { key: 'postUrl', label: 'Post URL', type: 'url', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('spotify-embed', [
+  { key: 'spotifyUrl', label: 'Spotify URL', type: 'url', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('soundcloud-embed', [
+  { key: 'trackUrl', label: 'Track URL', type: 'url', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('vimeo-embed', [
+  { key: 'url', label: 'Vimeo URL', type: 'url', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('tiktok-embed', [
+  { key: 'videoUrl', label: 'Video URL', type: 'url', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('pinterest-embed', [
+  { key: 'pinUrl', label: 'Pin URL', type: 'url', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('reddit-embed', [
+  { key: 'postUrl', label: 'Post URL', type: 'url', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('flickr-embed', [
+  { key: 'photoUrl', label: 'Photo URL', type: 'url', group: 'Component' },
+  ...allStyleProps,
+]);
+propertySchemas.set('pdf-viewer', [
+  { key: 'url', label: 'PDF URL', type: 'url', group: 'Component' },
+  ...allStyleProps,
+]);
+
+// Theme extras
+propertySchemas.set('query-loop', allStyleProps);
+propertySchemas.set('post-list', allStyleProps);
+propertySchemas.set('post-navigation', allStyleProps);
+propertySchemas.set('comments', allStyleProps);
+propertySchemas.set('comment-form', allStyleProps);
+propertySchemas.set('login-out', allStyleProps);
+propertySchemas.set('template-part', allStyleProps);
+propertySchemas.set('archive-title', allStyleProps);
+propertySchemas.set('search-results-title', allStyleProps);
+propertySchemas.set('search-bar', [
+  { key: 'placeholder', label: 'Placeholder', type: 'string', group: 'Component', defaultValue: 'Search...' },
+  ...allStyleProps,
+]);
+propertySchemas.set('archives', allStyleProps);
+propertySchemas.set('calendar-widget', allStyleProps);
+propertySchemas.set('categories', allStyleProps);
+propertySchemas.set('latest-posts', allStyleProps);
+propertySchemas.set('latest-comments', allStyleProps);
+propertySchemas.set('page-list', allStyleProps);
+propertySchemas.set('rss', allStyleProps);
+propertySchemas.set('shortcode', allStyleProps);
+propertySchemas.set('tag-cloud', allStyleProps);
+
+// Design extras
+propertySchemas.set('table', allStyleProps);
+propertySchemas.set('pull-quote', allStyleProps);
+propertySchemas.set('code-block', [
+  { key: 'language', label: 'Language', type: 'string', group: 'Component', defaultValue: 'javascript' },
+  ...allStyleProps,
+]);
+propertySchemas.set('preformatted', allStyleProps);
+propertySchemas.set('verse', allStyleProps);
+propertySchemas.set('group', allStyleProps);
+propertySchemas.set('row', allStyleProps);
+propertySchemas.set('stack', allStyleProps);
+propertySchemas.set('separator', allStyleProps);
+propertySchemas.set('more', allStyleProps);
+propertySchemas.set('page-break', allStyleProps);
+propertySchemas.set('cover', allStyleProps);
+propertySchemas.set('media-text', allStyleProps);
+propertySchemas.set('file', allStyleProps);
+propertySchemas.set('audio', [
+  { key: 'src', label: 'Audio URL', type: 'url', group: 'Component' },
+  ...allStyleProps,
+]);
+
 
 export const getPropertySchema = (type: string): PropertySchema[] => {
   return propertySchemas.get(type) || allStyleProps;

@@ -1,5 +1,6 @@
-import React, { memo, useState, useCallback, useRef } from 'react';
+import React, { memo, useState, useCallback, useRef, useEffect } from 'react';
 import { getComponent } from '@/engine/registry';
+import { onRegistryUpdate } from '@/engine/registry/componentRegistry';
 import { useBuilderStore } from '@/store/builderStore';
 import { useDroppable, useDraggable } from '@dnd-kit/core';
 import { isContainerType, type BuilderComponent } from '@/types/builder';
@@ -127,6 +128,12 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
   const [showDimensions, setShowDimensions] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isInlineEditing, setIsInlineEditing] = useState(false);
+  const [, forceUpdate] = useState(0);
+
+  // Re-render when extended components finish loading
+  useEffect(() => {
+    return onRegistryUpdate(() => forceUpdate(n => n + 1));
+  }, []);
 
   const {
     attributes: dragAttributes,
@@ -304,13 +311,27 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
 
   // Duplicate component
   const handleDuplicate = useCallback(() => {
-    const clone: BuilderComponent = JSON.parse(JSON.stringify(node));
-    clone.id = `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-    clone.label = `${node.label} (copy)`;
+    const cloneDeep = (comp: BuilderComponent): BuilderComponent => {
+      const clone: BuilderComponent = { ...JSON.parse(JSON.stringify(comp)) };
+      clone.id = `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      clone.label = `${comp.label} (copy)`;
+      if (clone.children) {
+        clone.children = clone.children.map(cloneDeep);
+      }
+      return clone;
+    };
+    const clone = cloneDeep(node);
     if (parentId) {
-      addComponentToContainer(parentId, clone);
+      // Check if parentId is a section or a component
+      const schema = useBuilderStore.getState().schema;
+      const isSection = schema.sections.some(s => s.id === parentId);
+      if (isSection) {
+        useBuilderStore.getState().addComponent(parentId, clone, index !== undefined ? index + 1 : undefined);
+      } else {
+        addComponentToContainer(parentId, clone);
+      }
     }
-  }, [node, parentId, addComponentToContainer]);
+  }, [node, parentId, index, addComponentToContainer]);
 
   if (isHidden) {
     return (
