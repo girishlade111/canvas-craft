@@ -122,15 +122,9 @@ const LandingPage = () => {
 
       {/* === HERO === */}
       <section className="relative pt-32 pb-24 px-6 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full opacity-15 blur-[150px] animate-gradient"
-            style={{ background: 'var(--gradient-primary)' }} />
-          <div className="absolute top-40 right-0 w-[300px] h-[300px] rounded-full opacity-10 blur-[100px]"
-            style={{ background: 'hsl(var(--accent))' }} />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-8 blur-[120px]"
-            style={{ background: 'hsl(var(--primary))' }} />
-          <div className="absolute inset-0 opacity-[0.03]"
-            style={{ backgroundImage: 'radial-gradient(circle, hsl(var(--foreground)) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ contain: 'strict' }}>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full opacity-12 blur-[80px]"
+            style={{ background: 'var(--gradient-primary)', willChange: 'auto' }} />
         </div>
 
         <div className="max-w-5xl mx-auto text-center relative z-10">
