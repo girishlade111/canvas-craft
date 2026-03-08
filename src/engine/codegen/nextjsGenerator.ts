@@ -730,21 +730,21 @@ Host: https://your-domain.com
   // sitemap.xml - Dynamic sitemap based on pages
   const today = new Date().toISOString().split('T')[0];
   const sitemapUrls = pages.map(({ slug }, index) => {
-    const loc = slug === 'index' || slug === '' ? '/' : \`/\${slug}\`;
+    const loc = slug === 'index' || slug === '' ? '/' : `/${slug}`;
     const priority = (slug === 'index' || slug === '') ? '1.0' : (index === 1 ? '0.9' : '0.8');
-    return \`  <url>
-    <loc>https://your-domain.com\${loc}</loc>
-    <lastmod>\${today}</lastmod>
+    return `  <url>
+    <loc>https://your-domain.com${loc}</loc>
+    <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>\${priority}</priority>
-  </url>\`;
-  }).join('\\n');
+    <priority>${priority}</priority>
+  </url>`;
+  }).join('\n');
 
-  files['public/sitemap.xml'] = \`<?xml version="1.0" encoding="UTF-8"?>
+  files['public/sitemap.xml'] = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-\${sitemapUrls}
+${sitemapUrls}
 </urlset>
-\`;
+`;
 
   return files;
 };
