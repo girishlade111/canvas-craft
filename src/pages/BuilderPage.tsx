@@ -290,10 +290,11 @@ const BuilderPage = () => {
     // ── CASE 2: Library to canvas (add new component) ──
     if (!activeData?.fromLibrary) return;
 
+    if (!_componentLibraryCache) return;
     const compType = activeData.type as string;
     let compDef = null;
-    for (const cat of Object.keys(componentLibrary) as ComponentCategory[]) {
-      compDef = componentLibrary[cat].find(c => c.type === compType);
+    for (const cat of Object.keys(_componentLibraryCache) as ComponentCategory[]) {
+      compDef = _componentLibraryCache[cat].find(c => c.type === compType);
       if (compDef) break;
     }
     if (!compDef) return;
