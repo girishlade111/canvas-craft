@@ -62,7 +62,7 @@ export const useDeleteAsset = () => {
   return useMutation({
     mutationFn: async ({ assetId, filePath }: { assetId: string; filePath: string }) => {
       await supabase.storage.from('project-assets').remove([filePath]);
-      const { error } = await supabase.from('assets' as any).delete().eq('id', assetId);
+      const { error } = await supabase.from('assets').delete().eq('id', assetId);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['assets'] }),
