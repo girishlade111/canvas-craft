@@ -312,10 +312,21 @@ const BuilderPage = () => {
       // Standard component from library
       if (!_componentLibraryCache) return;
       const compType = activeData.type as string;
+      const compLabel = activeData.label as string | undefined;
       let compDef = null;
+      
+      // Find component - match by type and label for better specificity (handles Icons with same type)
       for (const cat of Object.keys(_componentLibraryCache) as ComponentCategory[]) {
-        compDef = _componentLibraryCache[cat].find(c => c.type === compType);
-        if (compDef) break;
+        // First try exact match with label
+        if (compLabel) {
+          compDef = _componentLibraryCache[cat].find(c => c.type === compType && c.label === compLabel);
+          if (compDef) break;
+        }
+        // Fall back to type-only match
+        if (!compDef) {
+          compDef = _componentLibraryCache[cat].find(c => c.type === compType);
+          if (compDef) break;
+        }
       }
       if (!compDef) return;
 
