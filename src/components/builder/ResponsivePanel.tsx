@@ -29,10 +29,10 @@ const responsiveFields: { key: keyof ComponentStyles; label: string }[] = [
 
 const ResponsivePanel: React.FC<{ componentId: string }> = ({ componentId }) => {
   const { updateResponsiveStyles, deviceView, setDeviceView } = useBuilderStore();
+  const [activeDevice, setActiveDevice] = useState<DeviceView>(deviceView);
+
   const comp = useBuilderStore.getState().getSelectedComponent();
   if (!comp) return null;
-
-  const [activeDevice, setActiveDevice] = useState<DeviceView>(deviceView);
 
   const currentOverrides = comp.responsiveStyles?.[activeDevice] || {};
 

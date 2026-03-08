@@ -2,8 +2,8 @@ import React, { memo, useState, useCallback, useRef } from 'react';
 import { getComponent } from '@/engine/registry';
 import { useBuilderStore } from '@/store/builderStore';
 import { useDroppable } from '@dnd-kit/core';
-import { isContainerType, type BuilderComponent, type DeviceView } from '@/types/builder';
-import { Trash2, Code2, GripVertical, Copy, Lock, Eye, EyeOff } from 'lucide-react';
+import { isContainerType, type BuilderComponent } from '@/types/builder';
+import { Trash2, Code2, GripVertical } from 'lucide-react';
 
 interface RenderNodeProps {
   node: BuilderComponent;
