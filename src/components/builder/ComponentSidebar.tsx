@@ -9,7 +9,7 @@ import {
   PanelTop, ChevronDown, TextCursorInput, FileText, CheckSquare, LogIn, UserPlus,
   Mail, ShoppingCart, CreditCard, Wallet, Menu, PanelLeft, ChevronRight,
   Terminal, Globe, LayoutGrid, MousePointerClick, Circle, DollarSign,
-  MessageSquareQuote, Search, X, GripVertical,
+  MessageSquareQuote, Search, X, GripVertical, History,
 } from 'lucide-react';
 
 const iconMap: Record<string, any> = {
@@ -19,7 +19,7 @@ const iconMap: Record<string, any> = {
   PanelTop, ChevronDown, TextCursorInput, FileText, CheckSquare, LogIn, UserPlus,
   Mail, ShoppingCart, CreditCard, Wallet, Menu, PanelLeft, ChevronRight,
   Terminal, Globe, LayoutGrid, MousePointerClick, Circle, DollarSign,
-  MessageSquareQuote,
+  MessageSquareQuote, History, Search,
 };
 
 const DraggableItem = ({ type, label, icon, isContainer }: { type: string; label: string; icon: string; isContainer?: boolean }) => {
