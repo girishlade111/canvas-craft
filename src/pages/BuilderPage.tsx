@@ -151,11 +151,13 @@ const BuilderPage = () => {
         <BuilderToolbar
           onSave={handleSave}
           isSaving={savePage.isPending}
+          isAutosaving={isAutosaving}
           onToggleAssets={() => { setShowAssets(!showAssets); setShowVersions(false); }}
           onToggleVersions={() => { setShowVersions(!showVersions); setShowAssets(false); }}
           showAssets={showAssets}
           showVersions={showVersions}
           projectId={projectId}
+          onPublish={() => setShowPublish(true)}
         />
         {projectId && (
           <PageManager
