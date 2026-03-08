@@ -529,7 +529,7 @@ const BuilderPage = () => {
               {activePanel === 'store' && <EcommercePanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'marketing' && <MarketingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'booking' && <BookingPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
-              {activePanel === 'apps' && <AppMarketPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} onOpenVercel={() => setActivePanel('vercel')} onOpenNetlify={() => setActivePanel('netlify')} />}
+              {activePanel === 'apps' && <AppMarketPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} onOpenVercel={() => setActivePanel('vercel')} onOpenNetlify={() => setActivePanel('netlify')} onOpenRailway={() => setActivePanel('railway')} />}
               {activePanel === 'ai' && <AIToolsPanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'marketplace' && <MarketplacePanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'members' && <MemberAreaPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
@@ -540,6 +540,7 @@ const BuilderPage = () => {
               {activePanel === 'accessibility' && <AccessibilityPanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'vercel' && <VercelPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} onBack={() => setActivePanel('apps')} />}
               {activePanel === 'netlify' && <NetlifyPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} onBack={() => setActivePanel('apps')} />}
+              {activePanel === 'railway' && <RailwayPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} onBack={() => setActivePanel('apps')} />}
             </Suspense>
 
             {/* Main canvas */}
