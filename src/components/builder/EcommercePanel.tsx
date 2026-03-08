@@ -194,12 +194,11 @@ const EcommercePanel = ({ projectId, onClose }: EcommercePanelProps) => {
   const addComponent = useBuilderStore(s => s.addComponent);
   const { data: products = [], isLoading: productsLoading } = useProducts(projectId ?? null);
   const { data: orders = [], isLoading: ordersLoading } = useOrders(projectId ?? null);
-  const { data: coupons = [], isLoading: couponsLoading } = useCoupons(projectId ?? null);
+  const { data: coupons = [] } = useCoupons(projectId ?? null);
   const createProduct = useCreateProduct();
   const deleteProduct = useDeleteProduct();
 
   const totalRevenue = orders.reduce((s, o) => s + Number(o.total), 0);
-  const totalSales = products.reduce((s, p) => s + p.sales, 0);
 
   const filteredProducts = products.filter(p =>
     !search || p.name.toLowerCase().includes(search.toLowerCase())
