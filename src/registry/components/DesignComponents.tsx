@@ -232,7 +232,7 @@ export const FileComponent: React.FC<{
   fileName?: string;
   fileSize?: string;
   fileUrl?: string;
-}> = ({ fileName = 'document.pdf', fileSize = '2.4 MB', fileUrl }) => (
+}> = ({ fileName = 'document.pdf', fileSize = '2.4 MB' }) => (
   <div
     style={{
       display: 'flex',
