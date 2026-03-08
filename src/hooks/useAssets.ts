@@ -40,14 +40,14 @@ export const useUploadAsset = () => {
         .from('project-assets')
         .getPublicUrl(filePath);
 
-      const { error } = await supabase.from('assets' as any).insert({
+      const { error } = await supabase.from('assets').insert({
         project_id: projectId,
         name: file.name,
         file_path: filePath,
         file_url: publicUrl,
         file_type: file.type,
         file_size: file.size,
-      } as any);
+      });
       if (error) throw error;
 
       return publicUrl;
