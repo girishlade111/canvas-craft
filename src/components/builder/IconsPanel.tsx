@@ -555,9 +555,12 @@ const IconsPanel: React.FC<IconsPanelProps> = ({ onClose }) => {
                 href={lib.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 p-2 rounded-lg hover:bg-muted transition-colors"
+                className="relative flex items-center gap-2 p-2 rounded-lg hover:bg-muted transition-colors"
                 style={{ background: 'hsl(var(--builder-bg))' }}
               >
+                {lib.integrated && (
+                  <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full flex items-center justify-center text-[8px]" style={{ background: 'hsl(142 71% 45%)', color: 'white' }}>✓</span>
+                )}
                 <div
                   className="w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold"
                   style={{ background: lib.color, color: 'hsl(var(--primary-foreground))' }}
@@ -566,17 +569,14 @@ const IconsPanel: React.FC<IconsPanelProps> = ({ onClose }) => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-[11px] font-medium truncate">{lib.name}</div>
-                  <div className="text-[9px] opacity-50">{lib.count} icons</div>
+                  <div className="text-[9px]" style={{ color: 'hsl(var(--muted-foreground))' }}>{lib.count} icons</div>
                 </div>
               </a>
             ))}
           </div>
-          <button
-            className="w-full mt-2 py-1.5 text-[10px] text-center rounded-lg hover:bg-muted transition-colors"
-            style={{ color: 'hsl(var(--primary))' }}
-          >
-            View all 8 libraries →
-          </button>
+          <div className="text-[9px] mt-2 px-1" style={{ color: 'hsl(var(--muted-foreground))' }}>
+            <span style={{ color: 'hsl(142 71% 45%)' }}>✓</span> = Ready to use • Others via copy/paste
+          </div>
         </div>
       )}
 
