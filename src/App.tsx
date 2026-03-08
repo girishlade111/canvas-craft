@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import AuthPage from "./pages/AuthPage";
 import ProjectSettingsPage from "./pages/ProjectSettingsPage";
 import PreviewPage from "./pages/PreviewPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import NotFound from "./pages/NotFound";
 import { Loader2 } from "lucide-react";
 
