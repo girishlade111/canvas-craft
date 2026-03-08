@@ -650,7 +650,7 @@ const EcommercePanel = ({ projectId, onClose }: EcommercePanelProps) => {
                     <Lock className="w-4 h-4 text-muted-foreground" />
                     <span className="text-[11px]">SSL Certificate</span>
                   </div>
-                  <Badge variant="secondary" className="text-[9px] bg-green-500/10 text-green-600">Active</Badge>
+                  <Badge variant="secondary" className="text-[9px] bg-success/10 text-success">Active</Badge>
                 </div>
                 <div className="flex items-center justify-between p-2.5 rounded-lg border border-border/50">
                   <div className="flex items-center gap-2">
