@@ -2,3 +2,6 @@ project_id = "smisyziojkbiysudsrfj"
 
 [functions.seed-all-templates]
 verify_jwt = false
+
+[functions.seed-detailed-templates]
+verify_jwt = false
