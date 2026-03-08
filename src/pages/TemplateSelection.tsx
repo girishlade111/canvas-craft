@@ -227,13 +227,35 @@ const TemplateSelection = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 stagger-children">
-            {filtered.map((template) => (
-              <div key={template.id} className="template-card text-left group relative">
+            {filtered.map((template: any) => {
+              const isFeatured = template.is_featured;
+              const isNew = template.is_new;
+              const isPremium = template.is_premium;
+              return (
+              <div key={template.id} className={`template-card text-left group relative ${isFeatured ? 'ring-1 ring-primary/30' : ''}`}>
                 <button
                   onClick={() => handleSelect(template)}
                   className="w-full text-left"
                 >
                   <div className="h-44 flex items-center justify-center text-6xl bg-muted/30 group-hover:bg-muted/50 transition-colors relative overflow-hidden">
+                    {/* Badges */}
+                    <div className="absolute top-3 right-3 flex flex-col gap-1.5 z-20">
+                      {isFeatured && (
+                        <span className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-amber-500/90 text-white backdrop-blur-sm shadow-sm">
+                          <Star className="w-3 h-3" /> Featured
+                        </span>
+                      )}
+                      {isNew && (
+                        <span className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-500/90 text-white backdrop-blur-sm shadow-sm">
+                          <Sparkles className="w-3 h-3" /> New
+                        </span>
+                      )}
+                      {isPremium && (
+                        <span className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-violet-500/90 text-white backdrop-blur-sm shadow-sm">
+                          ✦ Premium
+                        </span>
+                      )}
+                    </div>
                     <span className="relative z-10">{template.thumbnail}</span>
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 bg-foreground/5">
                       <div className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
@@ -245,11 +267,27 @@ const TemplateSelection = () => {
                   <div className="p-4">
                     <div className="flex items-center justify-between mb-1">
                       <h3 className="font-semibold group-hover:text-primary transition-colors">{template.name}</h3>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground uppercase tracking-wider font-medium">
-                        {template.category}
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        {template.installs > 0 && source === 'cloud' && (
+                          <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground font-medium">
+                            <TrendingUp className="w-3 h-3" /> {template.installs}
+                          </span>
+                        )}
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground uppercase tracking-wider font-medium">
+                          {template.category}
+                        </span>
+                      </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">{template.description}</p>
+                    <p className="text-sm text-muted-foreground line-clamp-2">{template.description}</p>
+                    {template.tags?.length > 0 && source === 'cloud' && (
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {template.tags.slice(0, 3).map((tag: string) => (
+                          <span key={tag} className="text-[9px] px-1.5 py-0.5 rounded bg-muted/60 text-muted-foreground font-medium">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </button>
 
