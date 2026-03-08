@@ -128,6 +128,12 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
   const [showDimensions, setShowDimensions] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isInlineEditing, setIsInlineEditing] = useState(false);
+  const [, forceUpdate] = useState(0);
+
+  // Re-render when extended components finish loading
+  useEffect(() => {
+    return onRegistryUpdate(() => forceUpdate(n => n + 1));
+  }, []);
 
   const {
     attributes: dragAttributes,
