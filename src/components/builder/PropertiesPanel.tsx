@@ -563,15 +563,34 @@ const AccessibilityPanel: React.FC<{ componentId: string }> = ({ componentId }) 
 // ─── Main Properties Panel ─────────────────────────────────
 
 const PropertiesPanel = () => {
-  const { selectedComponentId, updateComponentStyles, updateComponent, toggleRightSidebar } = useBuilderStore();
-  const [openGroups, setOpenGroups] = useState<string[]>(['Auto Layout', 'Component', 'Layout', 'Responsive']);
+  const { selectedComponentId, updateComponentStyles, updateComponent, toggleRightSidebar, schema } = useBuilderStore();
+  const [openGroups, setOpenGroups] = useState<string[]>(['Auto Layout', 'Component', 'Layout', 'Responsive', 'Typography', 'Appearance', 'Background', 'Advanced']);
   const [activeTab, setActiveTab] = useState<'design' | 'layout' | 'animate' | 'link' | 'a11y' | 'responsive'>('design');
 
   if (!selectedComponentId) {
     return <PageSettingsPanel />;
   }
 
-  const selectedComponent = useBuilderStore.getState().getSelectedComponent();
+  // Use schema from reactive subscription to ensure re-render on changes
+  const selectedComponent = useMemo(() => {
+    if (!selectedComponentId) return null;
+    const findRecursive = (components: any[]): any => {
+      for (const comp of components) {
+        if (comp.id === selectedComponentId) return comp;
+        if (comp.children) {
+          const found = findRecursive(comp.children);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
+    for (const section of schema.sections) {
+      const found = findRecursive(section.components);
+      if (found) return found;
+    }
+    return null;
+  }, [selectedComponentId, schema]);
+
   if (!selectedComponent) return null;
 
   const isContainer = isContainerType(selectedComponent.type);
