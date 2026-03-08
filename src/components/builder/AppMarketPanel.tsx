@@ -2073,13 +2073,14 @@ interface AppMarketPanelProps {
   onClose?: () => void;
   onOpenVercel?: () => void;
   onOpenNetlify?: () => void;
+  onOpenRailway?: () => void;
 }
 
 /* ── Badge helpers ── */
 const FEATURED_APPS = new Set(['supabase', 'stripe', 'chatgpt', 'vercel', 'github', 'slack', 'figma', 'notion', 'auth0', 'clerk']);
 const NEW_APPS = new Set(['twitch', 'reddit', 'pinterest', 'mailgun', 'convertkit', 'supabase-edge-functions', 'vercel-ai-sdk', 'langchain', 'crewai']);
 
-const AppMarketPanel = ({ projectId, onClose, onOpenVercel, onOpenNetlify }: AppMarketPanelProps) => {
+const AppMarketPanel = ({ projectId, onClose, onOpenVercel, onOpenNetlify, onOpenRailway }: AppMarketPanelProps) => {
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState('All');
   const [activeView, setActiveView] = useState<'browse' | 'installed'>('browse');
@@ -2127,15 +2128,23 @@ const AppMarketPanel = ({ projectId, onClose, onOpenVercel, onOpenNetlify }: App
     setSelectedApp(null);
     return null;
   }
+  if (selectedApp === 'railway' && onOpenRailway) {
+    onOpenRailway();
+    setSelectedApp(null);
+    return null;
+  }
 
   const detailApp = selectedApp ? APP_CATALOG.find(a => a.key === selectedApp) : null;
   if (detailApp) {
-    // Dedicated panels for Vercel & Netlify
+    // Dedicated panels for Vercel, Netlify & Railway
     if (detailApp.key === 'vercel' && onOpenVercel) {
       onOpenVercel();
       setSelectedApp(null);
     } else if (detailApp.key === 'netlify' && onOpenNetlify) {
       onOpenNetlify();
+      setSelectedApp(null);
+    } else if (detailApp.key === 'railway' && onOpenRailway) {
+      onOpenRailway();
       setSelectedApp(null);
     } else {
       return (
