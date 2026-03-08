@@ -538,6 +538,7 @@ const BuilderPage = () => {
               {activePanel === 'domain' && <DomainPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'accessibility' && <AccessibilityPanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'vercel' && <VercelPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} onBack={() => setActivePanel('apps')} />}
+              {activePanel === 'netlify' && <NetlifyPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} onBack={() => setActivePanel('apps')} />}
             </Suspense>
 
             {/* Main canvas */}
