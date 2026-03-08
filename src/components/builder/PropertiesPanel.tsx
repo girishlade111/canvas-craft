@@ -846,7 +846,7 @@ const PropertiesPanel = () => {
           <div className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider opacity-60">
             Accessibility
           </div>
-          <AccessibilityPanel componentId={selectedComponentId} />
+          <AccessibilityPanelInner componentId={selectedComponentId} />
         </div>
       )}
 
