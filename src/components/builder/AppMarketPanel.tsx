@@ -25,6 +25,8 @@ import {
   PineconeIcon, SentryIcon, RenderIcon, DigitalOceanIcon,
   FramerIcon, WebflowIcon, PaddleIcon, GumroadIcon, WooCommerceIcon,
   PostHogIcon, UpstashIcon, NeonIcon, PlausibleIcon, DenoIcon, TursoIcon,
+  TwitchIcon, RedditIcon, PinterestIcon, MailgunIcon, ConvertKitIcon,
+  SupabaseEdgeFnIcon, VercelAIIcon, LangChainIcon, CrewAIIcon,
 } from './BrandIcons';
 import { useInstalledApps, useInstallApp, useUninstallApp } from '@/hooks/useInstalledApps';
 import { toast } from 'sonner';
