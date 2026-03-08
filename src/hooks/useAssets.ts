@@ -2,16 +2,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 
-export interface Asset {
-  id: string;
-  project_id: string;
-  name: string;
-  file_path: string;
-  file_url: string;
-  file_type: string;
-  file_size: number | null;
-  created_at: string;
-}
+import type { Tables } from '@/integrations/supabase/types';
+
+export type Asset = Tables<'assets'>;
 
 export const useAssets = (projectId: string | null) => {
   return useQuery({
