@@ -19,7 +19,7 @@ const DroppableSection = ({ section }: { section: PageSection }) => {
     <div
       ref={setNodeRef}
       style={section.styles as React.CSSProperties}
-      className={`relative transition-all min-h-[40px] ${isOver ? 'ring-2 ring-primary ring-inset' : ''}`}
+      className={`relative transition-all min-h-[60px] ${isOver ? 'ring-2 ring-primary ring-inset bg-primary/5' : ''}`}
     >
       {section.components.length === 0 && (
         <div className="empty-container-placeholder">
@@ -29,6 +29,29 @@ const DroppableSection = ({ section }: { section: PageSection }) => {
       {section.components.map((comp) => (
         <RenderNode key={comp.id} node={comp} depth={0} />
       ))}
+    </div>
+  );
+};
+
+// Empty canvas droppable (when no sections exist)
+const EmptyCanvasDropZone = () => {
+  const { setNodeRef, isOver } = useDroppable({
+    id: 'empty-canvas',
+    data: { type: 'empty-canvas' },
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`flex flex-col items-center justify-center h-96 rounded-lg border-2 border-dashed transition-all m-4 ${
+        isOver
+          ? 'border-primary bg-primary/5'
+          : 'border-border/40 opacity-40'
+      }`}
+    >
+      <div className="text-4xl mb-4">📦</div>
+      <p className="text-sm font-medium mb-1">Drag & drop components here</p>
+      <p className="text-xs opacity-60">Pick a component from the left sidebar and drop it on the canvas</p>
     </div>
   );
 };
@@ -224,11 +247,7 @@ const BuilderCanvas = () => {
           {schema.sections.map((section) => (
             <DroppableSection key={section.id} section={section} />
           ))}
-          {schema.sections.length === 0 && (
-            <div className="flex items-center justify-center h-96 opacity-30 text-sm">
-              No sections yet. Add components from the sidebar.
-            </div>
-          )}
+          {schema.sections.length === 0 && <EmptyCanvasDropZone />}
         </div>
       </div>
 

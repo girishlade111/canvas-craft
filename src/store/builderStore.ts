@@ -77,7 +77,15 @@ interface BuilderState {
 const defaultSchema: PageSchema = {
   id: 'page-1',
   name: 'Home',
-  sections: [],
+  sections: [
+    {
+      id: 'section-default-body',
+      type: 'body',
+      label: 'Body',
+      components: [],
+      styles: { padding: '40px 20px', width: '100%', minHeight: '200px' },
+    },
+  ],
 };
 
 const applySchemaChange = (
