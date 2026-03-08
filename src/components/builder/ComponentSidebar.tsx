@@ -9,7 +9,16 @@ import {
   PanelTop, ChevronDown, TextCursorInput, FileText, CheckSquare, LogIn, UserPlus,
   Mail, ShoppingCart, CreditCard, Wallet, Menu, PanelLeft, ChevronRight,
   Terminal, Globe, LayoutGrid, MousePointerClick, Circle, DollarSign,
-  MessageSquareQuote, Search, X, GripVertical, History,
+  MessageSquareQuote, Search, X, GripVertical, History, Smile, Users, Palette,
+  Home, User, Settings, Heart, Star, Bell, CheckCircle, Play, Pause, Volume2,
+  Download, Upload, Share, Edit, Trash2, ArrowLeft, ArrowRight, ArrowUp, ArrowDown,
+  Lock, Unlock, Eye, EyeOff, Zap, Flame, Rocket, Award, Trophy, Crown, Gift,
+  Camera, Music, Film, MapPin, Phone, Calendar, Clock, Bookmark, Tag, Link,
+  ExternalLink, Mic, Wifi, Sun, Moon, Cloud, Coffee, Briefcase, Package,
+  CreditCard as CreditCardIcon, Truck, Building, Map, Compass, Flag,
+  ThumbsUp, ThumbsDown, MessageCircle, Send, Inbox, Archive, Cpu, Database, Server,
+  Monitor, Smartphone, Tablet, Laptop, Headphones, Speaker, Battery,
+  Facebook, Instagram, Github, Figma, Twitter, Youtube, Linkedin,
 } from 'lucide-react';
 
 const iconMap: Record<string, any> = {
@@ -19,7 +28,16 @@ const iconMap: Record<string, any> = {
   PanelTop, ChevronDown, TextCursorInput, FileText, CheckSquare, LogIn, UserPlus,
   Mail, ShoppingCart, CreditCard, Wallet, Menu, PanelLeft, ChevronRight,
   Terminal, Globe, LayoutGrid, MousePointerClick, Circle, DollarSign,
-  MessageSquareQuote, History, Search,
+  MessageSquareQuote, History, Search, Smile, Users, Palette,
+  Home, User, Settings, Heart, Star, Bell, CheckCircle, Play, Pause, Volume2,
+  Download, Upload, Share, Edit, Trash2, ArrowLeft, ArrowRight, ArrowUp, ArrowDown,
+  Lock, Unlock, Eye, EyeOff, Zap, Flame, Rocket, Award, Trophy, Crown, Gift,
+  Camera, Music, Film, MapPin, Phone, Calendar, Clock, Bookmark, Tag, Link,
+  ExternalLink, Mic, Wifi, Sun, Moon, Cloud, Coffee, Briefcase, Package,
+  CreditCardIcon, Truck, Building, Map, Compass, Flag,
+  ThumbsUp, ThumbsDown, MessageCircle, Send, Inbox, Archive, Cpu, Database, Server,
+  Monitor, Smartphone, Tablet, Laptop, Headphones, Speaker, Battery,
+  Facebook, Instagram, Github, Figma, Twitter, Youtube, Linkedin,
 };
 
 const DraggableItem = ({ type, label, icon, isContainer }: { type: string; label: string; icon: string; isContainer?: boolean }) => {

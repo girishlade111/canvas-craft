@@ -2,19 +2,19 @@
  * Icons Panel - Browse and insert icons from various icon libraries
  */
 
-import { useState, useMemo, lazy, Suspense } from 'react';
+import { useState, useMemo } from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import {
-  X, Search, Grid3x3, List, ChevronDown, Copy, Check, Loader2,
+  X, Search, Grid3x3, List, ChevronDown, Copy, Check, ChevronLeft,
   // Lucide sample icons for different categories
-  Home, User, Settings, Mail, Phone, MapPin, Calendar, Clock, Heart,
+  Home, User, Settings, Mail, Phone, MapPin, Heart,
   Star, Bell, Camera, Image, Video, Music, File, Folder, Download,
   Upload, Share, Link, ExternalLink, Eye, EyeOff, Lock, Unlock,
   Key, Shield, CheckCircle, XCircle, AlertCircle, Info, HelpCircle,
   MessageCircle, MessageSquare, Send, Inbox, Archive, Trash2, Edit,
-  Pencil, PenTool, Brush, Palette, Layers, Grid2x2, LayoutGrid,
+  Pencil, PenTool, Brush, Palette, Layers, Grid2x2,
   LayoutList, LayoutDashboard, Menu, MoreHorizontal, MoreVertical,
-  ChevronLeft, ChevronRight, ChevronUp, ArrowLeft, ArrowRight,
+  ChevronRight, ChevronUp, ArrowLeft, ArrowRight,
   ArrowUp, ArrowDown, RefreshCw, RotateCw, Maximize2, Minimize2,
   ZoomIn, ZoomOut, Search as SearchIcon, Filter, SlidersHorizontal,
   Play, Pause, SkipBack, SkipForward, Volume2, VolumeX,
@@ -28,25 +28,25 @@ import {
   Bookmark, Tag, Tags, Award, Trophy, Medal, Crown, Gem, Diamond,
   Sparkles, PartyPopper, Rocket, Target, Crosshair, Compass,
   Navigation, Map, Building, Building2, Factory, Store, Hospital,
-  School, GraduationCap, BookOpen, Library, Newspaper, FileText,
+  School, Library,
   ClipboardList, Briefcase, Lightbulb, Puzzle, Gamepad2, Dice1,
   Coffee, Pizza, Utensils, Wine, Beer, Cake, Apple, Banana,
   Carrot, Leaf, Sprout, Skull, Ghost, Bot, Smile, Frown, Meh,
   Angry, Laugh, ThumbsUp, ThumbsDown, Hand, Handshake, Users,
   UserPlus, UserMinus, UserCheck, UserX, Baby, Accessibility,
-  Activity, Anchor, Aperture, Box, Boxes, Braces, BrainCircuit,
-  Cable, Calculator, CalendarCheck, CalendarDays, CircleDot,
-  Clapperboard, Clipboard, CloudCog, Codesandbox, Cog, Coins,
-  Command, Contrast, Cookie, CopyCheck, CornerDownLeft,
+  Activity, Anchor, Aperture, Box, Boxes, Braces,
+  Cable, Calculator, CircleDot,
+  Clapperboard, Clipboard, Codesandbox, Coins,
+  Command, Contrast, Cookie, CornerDownLeft,
   CornerDownRight, CornerLeftDown, CornerLeftUp, CornerRightDown,
-  CornerRightUp, CornerUpLeft, CornerUpRight, Crop, Crown as CrownIcon,
+  CornerRightUp, CornerUpLeft, CornerUpRight, Crop,
   Disc, Divide, DoorClosed, DoorOpen, Dribbble, Droplets,
-  Ear, EarOff, Egg, Equal, Eraser, Euro, Expand, Facebook,
+  Egg, Equal, Eraser, Euro, Expand, Facebook,
   FastForward, Feather, Figma, FileBadge, FileBarChart, FileCheck,
   FileCode, FileCog, FileDiff, FileDigit, FileHeart, FileImage,
   FileInput, FileJson, FileKey, FileLock, FileMinus, FileMusic,
   FileOutput, FilePlus, FileQuestion, FileScan, FileSearch, FileSpreadsheet,
-  FileStar, FileTerminal, FileType, FileVideo, FileVolume, FileWarning,
+  FileStack, FileTerminal, FileType, FileVideo, FileVolume, FileWarning,
   FileX, Files, Film, Fingerprint, Fish, FlagOff, FlameKindling,
   Flashlight, FlaskConical, FlaskRound, FlipHorizontal, FlipVertical,
   Focus, FolderArchive, FolderCheck, FolderClock, FolderClosed,
@@ -54,19 +54,19 @@ import {
   FolderHeart, FolderInput, FolderKanban, FolderKey, FolderLock,
   FolderMinus, FolderOpen, FolderOutput, FolderPlus, FolderRoot,
   FolderSearch, FolderSymlink, FolderSync, FolderTree, FolderUp,
-  FolderX, Folders, Footprints as FootprintsIcon, Forklift, FormInput,
-  Forward, Frame, Framer, Frown as FrownIcon, Fuel, Fullscreen,
+  FolderX, Folders, Forklift, FormInput,
+  Forward, Frame, Framer, Fuel, Fullscreen,
   FunctionSquare, Gauge, Gavel, Github, Gitlab, GlassWater, Glasses,
-  GlobeLock, Grab, GraduationCap as GradCapIcon, Grape, Grip, GripHorizontal,
+  GlobeLock, Grab, Grape, Grip, GripHorizontal,
   GripVertical, Group, Hammer, HandMetal, HardDrive, HardHat,
   Heading, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6,
   Headset, HeartCrack, HeartHandshake, HeartOff, HeartPulse, HelpingHand,
   Hexagon, Highlighter, History, HopOff, Hop, Hourglass, IceCream,
   ImageDown, ImageMinus, ImageOff, ImagePlus, Import, Indent,
-  IndianRupee, Infinity, InspectionPanel, Instagram, Italic, IterationCcw,
+  IndianRupee, InspectionPanel, Instagram, Italic, IterationCcw,
   IterationCw, JapaneseYen, Joystick, Kanban, KeyRound, KeySquare,
   Lamp, LampCeiling, LampDesk, LampFloor, LampWallDown, LampWallUp,
-  LandPlot, Languages, LaptopMinimal, Lasso, LassoSelect, Laugh as LaughIcon,
+  LandPlot, Languages, LaptopMinimal, Lasso, LassoSelect,
   Layers2, Layers3, LayoutPanelLeft, LayoutPanelTop, LayoutTemplate,
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -207,7 +207,7 @@ const ICON_CATEGORIES = {
   ],
   'Files & Folders': [
     { name: 'File', icon: File },
-    { name: 'FileText', icon: FileText },
+    { name: 'FileText', icon: FileStack },
     { name: 'FileCode', icon: FileCode },
     { name: 'FileImage', icon: FileImage },
     { name: 'FileVideo', icon: FileVideo },
@@ -350,7 +350,6 @@ const ICON_CATEGORIES = {
     { name: 'Code', icon: Code },
     { name: 'Puzzle', icon: Puzzle },
     { name: 'Kanban', icon: Kanban },
-    { name: 'Infinity', icon: Infinity },
     { name: 'Equal', icon: Equal },
     { name: 'Divide', icon: Divide },
     { name: 'Focus', icon: Focus },
@@ -358,6 +357,7 @@ const ICON_CATEGORIES = {
     { name: 'Grip', icon: Grip },
     { name: 'GripHorizontal', icon: GripHorizontal },
     { name: 'GripVertical', icon: GripVertical },
+    { name: 'Layers2', icon: Layers2 },
   ],
   'Travel & Places': [
     { name: 'Map', icon: Map },
@@ -426,14 +426,14 @@ const ICON_CATEGORIES = {
 
 // Icon libraries info
 const ICON_LIBRARIES = [
-  { name: 'Lucide', count: '1000+', description: 'Beautiful & consistent icons', url: 'https://lucide.dev', color: '#f56565' },
-  { name: 'Heroicons', count: '450+', description: 'By the makers of Tailwind CSS', url: 'https://heroicons.com', color: '#8b5cf6' },
-  { name: 'Phosphor', count: '6000+', description: 'Flexible icon family', url: 'https://phosphoricons.com', color: '#10b981' },
-  { name: 'Tabler', count: '4500+', description: 'Free and open source', url: 'https://tabler-icons.io', color: '#3b82f6' },
-  { name: 'Feather', count: '287', description: 'Simply beautiful', url: 'https://feathericons.com', color: '#06b6d4' },
-  { name: 'Ionicons', count: '1300+', description: 'Premium designed icons', url: 'https://ionic.io/ionicons', color: '#6366f1' },
-  { name: 'Bootstrap', count: '1800+', description: 'Official Bootstrap icons', url: 'https://icons.getbootstrap.com', color: '#7c3aed' },
-  { name: 'Font Awesome', count: '16000+', description: 'The iconic library', url: 'https://fontawesome.com', color: '#f59e0b' },
+  { name: 'Lucide', count: '1000+', description: 'Beautiful & consistent icons', url: 'https://lucide.dev', color: 'hsl(var(--destructive))' },
+  { name: 'Heroicons', count: '450+', description: 'By the makers of Tailwind CSS', url: 'https://heroicons.com', color: 'hsl(var(--primary))' },
+  { name: 'Phosphor', count: '6000+', description: 'Flexible icon family', url: 'https://phosphoricons.com', color: 'hsl(142 71% 45%)' },
+  { name: 'Tabler', count: '4500+', description: 'Free and open source', url: 'https://tabler-icons.io', color: 'hsl(217 91% 60%)' },
+  { name: 'Feather', count: '287', description: 'Simply beautiful', url: 'https://feathericons.com', color: 'hsl(187 92% 41%)' },
+  { name: 'Ionicons', count: '1300+', description: 'Premium designed icons', url: 'https://ionic.io/ionicons', color: 'hsl(239 84% 67%)' },
+  { name: 'Bootstrap', count: '1800+', description: 'Official Bootstrap icons', url: 'https://icons.getbootstrap.com', color: 'hsl(263 70% 50%)' },
+  { name: 'Font Awesome', count: '16000+', description: 'The iconic library', url: 'https://fontawesome.com', color: 'hsl(38 92% 50%)' },
 ];
 
 interface IconsPanelProps {
@@ -441,7 +441,7 @@ interface IconsPanelProps {
   onInsertIcon?: (iconName: string) => void;
 }
 
-const DraggableIcon = ({ name, Icon }: { name: string; Icon: React.ComponentType<any> }) => {
+const DraggableIcon = ({ name, Icon }: { name: string; Icon: React.ComponentType<{ className?: string }> }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `icon-${name}`,
     data: { type: 'icon', iconName: name, fromLibrary: true },
@@ -480,7 +480,7 @@ const DraggableIcon = ({ name, Icon }: { name: string; Icon: React.ComponentType
   );
 };
 
-const IconsPanel: React.FC<IconsPanelProps> = ({ onClose, onInsertIcon }) => {
+const IconsPanel: React.FC<IconsPanelProps> = ({ onClose }) => {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -579,8 +579,8 @@ const IconsPanel: React.FC<IconsPanelProps> = ({ onClose, onInsertIcon }) => {
                 style={{ background: 'hsl(var(--builder-bg))' }}
               >
                 <div
-                  className="w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold text-white"
-                  style={{ background: lib.color }}
+                  className="w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold"
+                  style={{ background: lib.color, color: 'hsl(var(--primary-foreground))' }}
                 >
                   {lib.name[0]}
                 </div>

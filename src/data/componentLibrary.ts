@@ -652,6 +652,85 @@ export const componentLibrary: Record<ComponentCategory, ComponentDefinition[]> 
     { type: 'level-indicator', label: 'Level Indicator', category: 'Social', icon: 'TrendingUp', defaultStyles: {} },
     { type: 'streak-counter', label: 'Streak Counter', category: 'Social', icon: 'Flame', defaultStyles: {} },
   ],
+  Icons: [
+    // Lucide Icons
+    { type: 'lucide-icon', label: 'Lucide Icon', category: 'Icons', icon: 'Sparkles', defaultStyles: {}, defaultProps: { iconName: 'Star', size: 24, color: 'currentColor' } },
+    { type: 'lucide-home', label: 'Home Icon', category: 'Icons', icon: 'Home', defaultStyles: {}, defaultProps: { size: 24 } },
+    { type: 'lucide-user', label: 'User Icon', category: 'Icons', icon: 'User', defaultStyles: {}, defaultProps: { size: 24 } },
+    { type: 'lucide-settings', label: 'Settings Icon', category: 'Icons', icon: 'Settings', defaultStyles: {}, defaultProps: { size: 24 } },
+    { type: 'lucide-search', label: 'Search Icon', category: 'Icons', icon: 'Search', defaultStyles: {}, defaultProps: { size: 24 } },
+    { type: 'lucide-mail', label: 'Mail Icon', category: 'Icons', icon: 'Mail', defaultStyles: {}, defaultProps: { size: 24 } },
+    { type: 'lucide-phone', label: 'Phone Icon', category: 'Icons', icon: 'Phone', defaultStyles: {}, defaultProps: { size: 24 } },
+    { type: 'lucide-heart', label: 'Heart Icon', category: 'Icons', icon: 'Heart', defaultStyles: {}, defaultProps: { size: 24 } },
+    { type: 'lucide-star', label: 'Star Icon', category: 'Icons', icon: 'Star', defaultStyles: {}, defaultProps: { size: 24 } },
+    { type: 'lucide-bell', label: 'Bell Icon', category: 'Icons', icon: 'Bell', defaultStyles: {}, defaultProps: { size: 24 } },
+    { type: 'lucide-check', label: 'Check Icon', category: 'Icons', icon: 'CheckCircle', defaultStyles: {}, defaultProps: { size: 24 } },
+    // Icon Containers & Styling
+    { type: 'icon-circle', label: 'Circle Icon Box', category: 'Icons', icon: 'Circle', defaultStyles: { borderRadius: '50%', padding: '12px' }, defaultProps: { icon: '⭐', size: 32 } },
+    { type: 'icon-square', label: 'Square Icon Box', category: 'Icons', icon: 'Square', defaultStyles: { borderRadius: '8px', padding: '12px' }, defaultProps: { icon: '🚀', size: 32 } },
+    { type: 'icon-gradient', label: 'Gradient Icon', category: 'Icons', icon: 'Sparkles', defaultStyles: {}, defaultProps: { icon: '✨', size: 48 } },
+    { type: 'icon-outline', label: 'Outline Icon', category: 'Icons', icon: 'Circle', defaultStyles: { border: '2px solid currentColor', borderRadius: '50%', padding: '8px' } },
+    { type: 'icon-filled', label: 'Filled Icon', category: 'Icons', icon: 'Circle', defaultStyles: { borderRadius: '50%', padding: '8px' } },
+    // Icon Groups
+    { type: 'icon-row', label: 'Icon Row', category: 'Icons', icon: 'LayoutList', defaultStyles: { display: 'flex', gap: '12px' } },
+    { type: 'icon-grid', label: 'Icon Grid', category: 'Icons', icon: 'Grid3x3', defaultStyles: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' } },
+    { type: 'icon-stack', label: 'Icon Stack', category: 'Icons', icon: 'Layers', defaultStyles: {} },
+    // Animated Icons
+    { type: 'icon-spin', label: 'Spinning Icon', category: 'Icons', icon: 'RefreshCw', defaultStyles: {}, defaultProps: { animation: 'spin' } },
+    { type: 'icon-pulse', label: 'Pulsing Icon', category: 'Icons', icon: 'Heart', defaultStyles: {}, defaultProps: { animation: 'pulse' } },
+    { type: 'icon-bounce', label: 'Bouncing Icon', category: 'Icons', icon: 'ArrowDown', defaultStyles: {}, defaultProps: { animation: 'bounce' } },
+    // Social Media Icons
+    { type: 'icon-facebook', label: 'Facebook', category: 'Icons', icon: 'Facebook', defaultStyles: {}, defaultProps: { platform: 'facebook' } },
+    { type: 'icon-twitter', label: 'Twitter / X', category: 'Icons', icon: 'Twitter', defaultStyles: {}, defaultProps: { platform: 'twitter' } },
+    { type: 'icon-instagram', label: 'Instagram', category: 'Icons', icon: 'Instagram', defaultStyles: {}, defaultProps: { platform: 'instagram' } },
+    { type: 'icon-linkedin', label: 'LinkedIn', category: 'Icons', icon: 'Linkedin', defaultStyles: {}, defaultProps: { platform: 'linkedin' } },
+    { type: 'icon-youtube', label: 'YouTube', category: 'Icons', icon: 'Youtube', defaultStyles: {}, defaultProps: { platform: 'youtube' } },
+    { type: 'icon-github', label: 'GitHub', category: 'Icons', icon: 'Github', defaultStyles: {}, defaultProps: { platform: 'github' } },
+    { type: 'icon-discord', label: 'Discord', category: 'Icons', icon: 'MessageCircle', defaultStyles: {}, defaultProps: { platform: 'discord' } },
+    { type: 'icon-tiktok', label: 'TikTok', category: 'Icons', icon: 'Music', defaultStyles: {}, defaultProps: { platform: 'tiktok' } },
+    // Action Icons
+    { type: 'icon-download', label: 'Download', category: 'Icons', icon: 'Download', defaultStyles: {} },
+    { type: 'icon-upload', label: 'Upload', category: 'Icons', icon: 'Upload', defaultStyles: {} },
+    { type: 'icon-share', label: 'Share', category: 'Icons', icon: 'Share2', defaultStyles: {} },
+    { type: 'icon-copy', label: 'Copy', category: 'Icons', icon: 'Copy', defaultStyles: {} },
+    { type: 'icon-edit', label: 'Edit', category: 'Icons', icon: 'Edit', defaultStyles: {} },
+    { type: 'icon-delete', label: 'Delete', category: 'Icons', icon: 'Trash2', defaultStyles: {} },
+    { type: 'icon-save', label: 'Save', category: 'Icons', icon: 'Save', defaultStyles: {} },
+    { type: 'icon-print', label: 'Print', category: 'Icons', icon: 'Printer', defaultStyles: {} },
+    // Navigation Icons
+    { type: 'icon-menu', label: 'Menu', category: 'Icons', icon: 'Menu', defaultStyles: {} },
+    { type: 'icon-close', label: 'Close', category: 'Icons', icon: 'X', defaultStyles: {} },
+    { type: 'icon-arrow-left', label: 'Arrow Left', category: 'Icons', icon: 'ArrowLeft', defaultStyles: {} },
+    { type: 'icon-arrow-right', label: 'Arrow Right', category: 'Icons', icon: 'ArrowRight', defaultStyles: {} },
+    { type: 'icon-arrow-up', label: 'Arrow Up', category: 'Icons', icon: 'ArrowUp', defaultStyles: {} },
+    { type: 'icon-arrow-down', label: 'Arrow Down', category: 'Icons', icon: 'ArrowDown', defaultStyles: {} },
+    { type: 'icon-chevron-left', label: 'Chevron Left', category: 'Icons', icon: 'ChevronLeft', defaultStyles: {} },
+    { type: 'icon-chevron-right', label: 'Chevron Right', category: 'Icons', icon: 'ChevronRight', defaultStyles: {} },
+    // Status Icons
+    { type: 'icon-success', label: 'Success', category: 'Icons', icon: 'CheckCircle', defaultStyles: {}, defaultProps: { color: '#10b981' } },
+    { type: 'icon-error', label: 'Error', category: 'Icons', icon: 'XCircle', defaultStyles: {}, defaultProps: { color: '#ef4444' } },
+    { type: 'icon-warning', label: 'Warning', category: 'Icons', icon: 'AlertTriangle', defaultStyles: {}, defaultProps: { color: '#f59e0b' } },
+    { type: 'icon-info', label: 'Info', category: 'Icons', icon: 'Info', defaultStyles: {}, defaultProps: { color: '#3b82f6' } },
+    { type: 'icon-help', label: 'Help', category: 'Icons', icon: 'HelpCircle', defaultStyles: {} },
+    // Media Icons
+    { type: 'icon-play', label: 'Play', category: 'Icons', icon: 'Play', defaultStyles: {} },
+    { type: 'icon-pause', label: 'Pause', category: 'Icons', icon: 'Pause', defaultStyles: {} },
+    { type: 'icon-volume', label: 'Volume', category: 'Icons', icon: 'Volume2', defaultStyles: {} },
+    { type: 'icon-mute', label: 'Mute', category: 'Icons', icon: 'VolumeX', defaultStyles: {} },
+    { type: 'icon-fullscreen', label: 'Fullscreen', category: 'Icons', icon: 'Maximize', defaultStyles: {} },
+    // Emoji Icons
+    { type: 'emoji-smile', label: 'Smile Emoji', category: 'Icons', icon: 'Smile', defaultContent: '😊', defaultStyles: { fontSize: '32px' } },
+    { type: 'emoji-heart', label: 'Heart Emoji', category: 'Icons', icon: 'Heart', defaultContent: '❤️', defaultStyles: { fontSize: '32px' } },
+    { type: 'emoji-fire', label: 'Fire Emoji', category: 'Icons', icon: 'Flame', defaultContent: '🔥', defaultStyles: { fontSize: '32px' } },
+    { type: 'emoji-star', label: 'Star Emoji', category: 'Icons', icon: 'Star', defaultContent: '⭐', defaultStyles: { fontSize: '32px' } },
+    { type: 'emoji-rocket', label: 'Rocket Emoji', category: 'Icons', icon: 'Rocket', defaultContent: '🚀', defaultStyles: { fontSize: '32px' } },
+    { type: 'emoji-check', label: 'Check Emoji', category: 'Icons', icon: 'Check', defaultContent: '✅', defaultStyles: { fontSize: '32px' } },
+    { type: 'emoji-sparkle', label: 'Sparkle Emoji', category: 'Icons', icon: 'Sparkles', defaultContent: '✨', defaultStyles: { fontSize: '32px' } },
+    { type: 'emoji-party', label: 'Party Emoji', category: 'Icons', icon: 'PartyPopper', defaultContent: '🎉', defaultStyles: { fontSize: '32px' } },
+    // Custom SVG
+    { type: 'custom-svg', label: 'Custom SVG', category: 'Icons', icon: 'Code', defaultStyles: {}, defaultProps: { svgCode: '' } },
+    { type: 'svg-upload', label: 'Upload SVG', category: 'Icons', icon: 'Upload', defaultStyles: {} },
+  ],
 };
 
 export const categoryIcons: Record<ComponentCategory, string> = {
@@ -668,4 +747,5 @@ export const categoryIcons: Record<ComponentCategory, string> = {
   Advanced: 'Code2',
   Blog: 'FileText',
   Social: 'Users',
+  Icons: 'Smile',
 };
