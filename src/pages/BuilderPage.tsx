@@ -591,6 +591,13 @@ const BuilderPage = () => {
               }))}
             />
           )}
+
+          {showSaveTemplate && (
+            <SaveTemplateDialog
+              open={showSaveTemplate}
+              onClose={() => setShowSaveTemplate(false)}
+            />
+          )}
         </Suspense>
       </DndContext>
     </ClipboardProvider>
