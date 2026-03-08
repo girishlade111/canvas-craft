@@ -466,7 +466,8 @@ const BuilderPage = () => {
             <Suspense fallback={<div className="builder-flyout-panel p-4 text-center text-muted-foreground text-sm">Loading...</div>}>
               {activePanel === 'elements' && (
                 <ComponentSidebar onClose={() => setActivePanel(null)} />
-              )}
+               )}
+              {activePanel === 'templates' && <TemplatesPanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'layers' && <LayersPanel />}
               {activePanel === 'assets' && actualProjectId && <AssetPanel projectId={actualProjectId} />}
               {activePanel === 'seo' && <AdvancedSEOPanel onClose={() => setActivePanel(null)} />}
