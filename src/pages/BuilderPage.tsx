@@ -531,6 +531,7 @@ const BuilderPage = () => {
               {activePanel === 'marketplace' && <MarketplacePanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'members' && <MemberAreaPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'interactions' && <InteractionsPanel onClose={() => setActivePanel(null)} />}
+              {activePanel === 'interactive-elements' && <InteractiveElementsPanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'languages' && <MultiLanguagePanel onClose={() => setActivePanel(null)} />}
               {activePanel === 'domain' && <DomainPanel projectId={actualProjectId} onClose={() => setActivePanel(null)} />}
               {activePanel === 'accessibility' && <AccessibilityPanel onClose={() => setActivePanel(null)} />}
