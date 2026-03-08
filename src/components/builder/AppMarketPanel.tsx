@@ -2116,9 +2116,14 @@ const AppMarketPanel = ({ projectId, onClose, onOpenVercel, onOpenNetlify }: App
     }
   };
 
-  // Special handling: Vercel opens its dedicated panel
+  // Special handling: Vercel/Netlify open dedicated panels
   if (selectedApp === 'vercel' && onOpenVercel) {
     onOpenVercel();
+    setSelectedApp(null);
+    return null;
+  }
+  if (selectedApp === 'netlify' && onOpenNetlify) {
+    onOpenNetlify();
     setSelectedApp(null);
     return null;
   }
