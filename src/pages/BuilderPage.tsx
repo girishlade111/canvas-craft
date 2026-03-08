@@ -429,11 +429,13 @@ const BuilderPage = () => {
           />
 
           {actualProjectId && (
-            <PageManager
-              projectId={actualProjectId}
-              currentPageId={currentPageId}
-              onSelectPage={handleSelectPage}
-            />
+            <Suspense fallback={null}>
+              <PageManager
+                projectId={actualProjectId}
+                currentPageId={currentPageId}
+                onSelectPage={handleSelectPage}
+              />
+            </Suspense>
           )}
 
           <div className="flex flex-1 overflow-hidden">
