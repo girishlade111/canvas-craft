@@ -1923,6 +1923,7 @@ const AppDetailView = ({ app, installed, onBack, onToggle, isPending, projectId 
 interface AppMarketPanelProps {
   projectId?: string | null;
   onClose?: () => void;
+  onOpenVercel?: () => void;
 }
 
 /* ── Badge helpers ── */
