@@ -10,8 +10,18 @@ const CodeEditorPanel = () => {
 
   const component = useMemo(() => {
     if (!codeEditorComponentId) return null;
+    const findRecursive = (components: any[]): any => {
+      for (const comp of components) {
+        if (comp.id === codeEditorComponentId) return comp;
+        if (comp.children) {
+          const found = findRecursive(comp.children);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
     for (const section of schema.sections) {
-      const found = section.components.find(c => c.id === codeEditorComponentId);
+      const found = findRecursive(section.components);
       if (found) return found;
     }
     return null;

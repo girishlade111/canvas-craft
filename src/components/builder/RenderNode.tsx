@@ -304,13 +304,27 @@ const RenderNode: React.FC<RenderNodeProps> = memo(({ node, depth = 0, parentId,
 
   // Duplicate component
   const handleDuplicate = useCallback(() => {
-    const clone: BuilderComponent = JSON.parse(JSON.stringify(node));
-    clone.id = `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-    clone.label = `${node.label} (copy)`;
+    const cloneDeep = (comp: BuilderComponent): BuilderComponent => {
+      const clone: BuilderComponent = { ...JSON.parse(JSON.stringify(comp)) };
+      clone.id = `comp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      clone.label = `${comp.label} (copy)`;
+      if (clone.children) {
+        clone.children = clone.children.map(cloneDeep);
+      }
+      return clone;
+    };
+    const clone = cloneDeep(node);
     if (parentId) {
-      addComponentToContainer(parentId, clone);
+      // Check if parentId is a section or a component
+      const schema = useBuilderStore.getState().schema;
+      const isSection = schema.sections.some(s => s.id === parentId);
+      if (isSection) {
+        useBuilderStore.getState().addComponent(parentId, clone, index !== undefined ? index + 1 : undefined);
+      } else {
+        addComponentToContainer(parentId, clone);
+      }
     }
-  }, [node, parentId, addComponentToContainer]);
+  }, [node, parentId, index, addComponentToContainer]);
 
   if (isHidden) {
     return (

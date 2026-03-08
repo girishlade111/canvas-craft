@@ -245,6 +245,20 @@ const loadExtendedComponents = async () => {
   return extendedLoadingPromise;
 };
 
+// ─── Fallback Cache (prevents React remount loops) ─────────
+
+const fallbackCache: Map<string, React.FC<any>> = new Map();
+
+const getFallback = (type: string): React.FC<any> => {
+  let cached = fallbackCache.get(type);
+  if (!cached) {
+    cached = (props: any) => React.createElement(FallbackComponent, { type }, props.children);
+    cached.displayName = `Fallback(${type})`;
+    fallbackCache.set(type, cached);
+  }
+  return cached;
+};
+
 // ─── Public API ────────────────────────────────────────────
 
 export const getComponent = (type: string): React.FC<any> => {
@@ -256,12 +270,8 @@ export const getComponent = (type: string): React.FC<any> => {
     loadExtendedComponents();
   }
 
-  // Return a fallback that shows the type name
-  const Fallback: React.FC<any> = (props) => {
-    return React.createElement(FallbackComponent, { type }, props.children);
-  };
-  Fallback.displayName = `Fallback(${type})`;
-  return Fallback;
+  // Return a CACHED fallback to prevent React remount loops
+  return getFallback(type);
 };
 
 export const registerComponent = (type: string, component: React.FC<any>): void => {
