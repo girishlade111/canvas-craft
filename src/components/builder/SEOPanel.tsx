@@ -2,10 +2,10 @@ import { useState } from 'react';
 import {
   Search, X, Globe, Share2, Code2, FileText, Map, Shield, Zap, CheckCircle2, AlertCircle,
   ChevronDown, Copy, Eye, TrendingUp, BarChart3, Target, Link2, Image, Type, Hash,
-  Smartphone, Monitor, Clock, Users, MousePointerClick, ExternalLink, RefreshCw,
-  Lightbulb, Award, Gauge, ArrowUp, ArrowDown, Minus, Settings, Sparkles, BookOpen,
-  Layout, Layers, PieChart, Activity, Bot, FileCode, Heading1, AlignLeft, List,
-  CircleDot, Languages, Megaphone, Bell, Mail, Rss, Bookmark, Star, HelpCircle,
+  Monitor, Clock, Users, MousePointerClick, ExternalLink, RefreshCw,
+  Lightbulb, Award, Gauge, ArrowUp, ArrowDown, Minus, Settings, Sparkles,
+  Layers, PieChart, Activity, Bot, FileCode, Heading1, AlignLeft, List,
+  CircleDot, Languages, HelpCircle, Store, MapPin, Building2, DollarSign,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
