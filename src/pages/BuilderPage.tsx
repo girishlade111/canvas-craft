@@ -149,6 +149,10 @@ const BuilderPage = () => {
 
   const handleExportZip = async () => {
     try {
+      const [{ generateProjectFiles }, { downloadZip }] = await Promise.all([
+        import('@/engine/deploy/vercelDeploy'),
+        import('@/engine/codegen/zipExporter'),
+      ]);
       const files = generateProjectFiles(schema);
       await downloadZip(files, schema.name || 'my-website');
       toast.success('ZIP downloaded — open in VS Code and run npm install');
@@ -157,12 +161,14 @@ const BuilderPage = () => {
     }
   };
 
-  const handleExportHTML = () => {
+  const handleExportHTML = async () => {
+    const { exportToStaticHTML, downloadFile } = await import('@/lib/exportProject');
     const html = exportToStaticHTML(schema);
     downloadFile(`${schema.name || 'page'}.html`, html);
   };
 
-  const handleExportReact = () => {
+  const handleExportReact = async () => {
+    const { exportToReact, downloadFile } = await import('@/lib/exportProject');
     const files = exportToReact(schema);
     Object.entries(files).forEach(([filename, content]) => {
       downloadFile(filename, content, 'text/typescript');
