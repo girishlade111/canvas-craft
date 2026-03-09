@@ -2081,7 +2081,7 @@ add(
               comp("container", "", { display: "flex", marginBottom: "32px" }, {
                 children: Array.from({ length: 5 }).map(() => comp("image", "", { width: "40px", height: "40px", borderRadius: "50%", border: "2px solid #ffffff", marginLeft: "-12px", backgroundColor: "#e2e8f0" }, { src: "/placeholder.svg" })),
               }),
-              comp("text", ""This is exactly what I've been waiting for. Can't wait to get access!"", { fontSize: "16px", color: "#475569", fontStyle: "italic", marginBottom: "16px" }),
+              comp("text", "\"This is exactly what I've been waiting for. Can't wait to get access!\"", { fontSize: "16px", color: "#475569", fontStyle: "italic", marginBottom: "16px" }),
               comp("text", "— Sarah, Product Designer", { fontSize: "14px", color: "#94a3b8" }),
             ],
           }),
