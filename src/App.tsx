@@ -17,6 +17,7 @@ const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
 const ProjectSettingsPage = lazy(() => import("./pages/ProjectSettingsPage"));
 const PreviewPage = lazy(() => import("./pages/PreviewPage"));
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
+const TemplateManagerPage = lazy(() => import("./pages/TemplateManagerPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const DocumentationPage = lazy(() => import("./pages/DocumentationPage"));
 const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
