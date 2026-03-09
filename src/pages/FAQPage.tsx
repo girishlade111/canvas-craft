@@ -186,11 +186,16 @@ const FAQPage = () => {
                       <IconComponent className="w-5 h-5 text-primary-foreground" />
                     </div>
                     <h2 className="text-2xl font-bold">{category.title}</h2>
-                  </div>
-                  <FAQAccordion faqs={category.faqs} />
-                </div>
-              );
-            })}
+                  <Accordion type="single" collapsible className="w-full">
+                    {category.faqs.map((faq, index) => (
+                      <AccordionItem key={index} value={`item-${categoryIndex}-${index}`}>
+                        <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
+                        <AccordionContent className="text-muted-foreground">
+                          {faq.answer}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
           </div>
 
           {/* Still Have Questions */}
