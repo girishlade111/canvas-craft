@@ -81,9 +81,9 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2.5">
               {quickLinks.map((link) => (
-                <li key={link.target}>
+                <li key={link.path}>
                   <button
-                    onClick={() => scrollTo(link.target)}
+                    onClick={() => navigateToPage(link.path)}
                     className="text-gray-400 hover:text-white text-sm transition-colors cursor-pointer"
                   >
                     {link.label}
