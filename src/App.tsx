@@ -92,6 +92,11 @@ const App = () => (
               <Route path="/api-reference" element={<ApiReferencePage />} />
               <Route path="/privacy" element={<PrivacyPolicyPage />} />
               <Route path="/terms" element={<TermsOfServicePage />} />
+              <Route path="/calculator" element={<CalculatorPage />} />
+              <Route path="/appliance-calculator" element={<ApplianceCalculatorPage />} />
+              <Route path="/saving-tips" element={<SavingTipsPage />} />
+              <Route path="/tariff-rates" element={<TariffRatesPage />} />
+              <Route path="/faq" element={<FAQPage />} />
 
               {/* Protected routes */}
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
