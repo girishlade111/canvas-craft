@@ -18,6 +18,11 @@ const ProjectSettingsPage = lazy(() => import("./pages/ProjectSettingsPage"));
 const PreviewPage = lazy(() => import("./pages/PreviewPage"));
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
 const TemplateManagerPage = lazy(() => import("./pages/TemplateManagerPage"));
+const CalculatorPage = lazy(() => import("./pages/CalculatorPage"));
+const ApplianceCalculatorPage = lazy(() => import("./pages/ApplianceCalculatorPage"));
+const SavingTipsPage = lazy(() => import("./pages/SavingTipsPage"));
+const TariffRatesPage = lazy(() => import("./pages/TariffRatesPage"));
+const FAQPage = lazy(() => import("./pages/FAQPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const DocumentationPage = lazy(() => import("./pages/DocumentationPage"));
 const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
@@ -87,6 +92,11 @@ const App = () => (
               <Route path="/api-reference" element={<ApiReferencePage />} />
               <Route path="/privacy" element={<PrivacyPolicyPage />} />
               <Route path="/terms" element={<TermsOfServicePage />} />
+              <Route path="/calculator" element={<CalculatorPage />} />
+              <Route path="/appliance-calculator" element={<ApplianceCalculatorPage />} />
+              <Route path="/saving-tips" element={<SavingTipsPage />} />
+              <Route path="/tariff-rates" element={<TariffRatesPage />} />
+              <Route path="/faq" element={<FAQPage />} />
 
               {/* Protected routes */}
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

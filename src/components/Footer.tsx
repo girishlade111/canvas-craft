@@ -1,16 +1,19 @@
 import { Zap, Globe, Github, Mail } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const navigate = useNavigate();
+  
+  const navigateToPage = (path: string) => {
+    navigate(path);
   };
 
   const quickLinks = [
-    { label: 'Calculator', target: 'calculator' },
-    { label: 'Appliance Calculator', target: 'appliance-calculator' },
-    { label: 'Saving Tips', target: 'saving-tips' },
-    { label: 'State Tariff Rates', target: 'tariff-table' },
-    { label: 'FAQ', target: 'faq' },
+    { label: 'Calculator', path: '/calculator' },
+    { label: 'Appliance Calculator', path: '/appliance-calculator' },
+    { label: 'Saving Tips', path: '/saving-tips' },
+    { label: 'State Tariff Rates', path: '/tariff-rates' },
+    { label: 'FAQ', path: '/faq' },
   ];
 
   return (
@@ -78,9 +81,9 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2.5">
               {quickLinks.map((link) => (
-                <li key={link.target}>
+                <li key={link.path}>
                   <button
-                    onClick={() => scrollTo(link.target)}
+                    onClick={() => navigateToPage(link.path)}
                     className="text-gray-400 hover:text-white text-sm transition-colors cursor-pointer"
                   >
                     {link.label}
