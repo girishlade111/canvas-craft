@@ -85,6 +85,10 @@ const Dashboard = () => {
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border text-sm font-medium hover:bg-muted transition-colors">
               <LayoutGrid className="w-4 h-4" /> Templates
             </button>
+            <button onClick={() => navigate('/template-manager')}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border text-sm font-medium hover:bg-muted transition-colors">
+              <Settings className="w-4 h-4" /> Template Manager
+            </button>
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
                 <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity shadow-lg shadow-primary/20"
