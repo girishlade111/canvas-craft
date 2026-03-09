@@ -91,6 +91,7 @@ const App = () => (
               {/* Protected routes */}
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/templates/:projectId" element={<ProtectedRoute><TemplateSelection /></ProtectedRoute>} />
+              <Route path="/template-manager" element={<ProtectedRoute><TemplateManagerPage /></ProtectedRoute>} />
               <Route path="/builder" element={<Navigate to="/templates" replace />} />
               <Route path="/preview/:projectId" element={<ProtectedRoute><PreviewPage /></ProtectedRoute>} />
               <Route path="/project/:projectId/settings" element={<ProtectedRoute><ProjectSettingsPage /></ProtectedRoute>} />
