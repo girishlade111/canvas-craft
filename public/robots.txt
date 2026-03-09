@@ -1,17 +1,87 @@
 # robots.txt — DevBuilder
-# Allow all crawlers full access
+# https://devbuilder.app/robots.txt
+# Last updated: 2026-03-09
 
+# ── Allow all crawlers full access ──────────────────────────
 User-agent: *
 Allow: /
-Disallow:
+Disallow: /builder/
+Disallow: /preview/
+Disallow: /project/
+Disallow: /analytics/
 
-# Specific crawlers
+# ── Google ───────────────────────────────────────────────────
 User-agent: Googlebot
 Allow: /
+Disallow: /builder/
+Disallow: /preview/
+Disallow: /project/
+Disallow: /analytics/
 
-User-agent: Bingbot
+User-agent: Googlebot-Image
+Allow: /
+Disallow: /builder/
+Disallow: /preview/
+
+User-agent: Googlebot-Video
 Allow: /
 
+User-agent: Googlebot-News
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: AdsBot-Google-Mobile
+Allow: /
+
+# ── Bing / Microsoft ─────────────────────────────────────────
+User-agent: Bingbot
+Allow: /
+Disallow: /builder/
+Disallow: /preview/
+Disallow: /project/
+Disallow: /analytics/
+
+User-agent: msnbot
+Allow: /
+
+User-agent: msnbot-media
+Allow: /
+
+User-agent: BingPreview
+Allow: /
+
+# ── Yahoo ────────────────────────────────────────────────────
+User-agent: Slurp
+Allow: /
+
+# ── DuckDuckGo ───────────────────────────────────────────────
+User-agent: DuckDuckBot
+Allow: /
+
+# ── Yandex ───────────────────────────────────────────────────
+User-agent: YandexBot
+Allow: /
+
+User-agent: YandexImages
+Allow: /
+
+User-agent: YandexMedia
+Allow: /
+
+# ── Baidu ────────────────────────────────────────────────────
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Baiduspider-image
+Allow: /
+
+# ── Apple ────────────────────────────────────────────────────
+User-agent: Applebot
+Allow: /
+
+# ── Social Media Crawlers ────────────────────────────────────
 User-agent: Twitterbot
 Allow: /
 
@@ -21,26 +91,59 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-User-agent: Slurp
+User-agent: WhatsApp
 Allow: /
 
-User-agent: DuckDuckBot
+User-agent: TelegramBot
 Allow: /
 
-User-agent: Baiduspider
+User-agent: Slackbot
 Allow: /
 
-User-agent: YandexBot
+User-agent: Discordbot
 Allow: /
 
-User-agent: Applebot
+User-agent: ia_archiver
 Allow: /
 
-# Sitemap
+# ── SEO & Analytics Tools ────────────────────────────────────
+User-agent: SemrushBot
+Allow: /
+
+User-agent: AhrefsBot
+Allow: /
+
+User-agent: rogerbot
+Allow: /
+
+User-agent: DotBot
+Allow: /
+
+User-agent: MJ12bot
+Allow: /
+
+# ── AI Training Crawlers (block for content protection) ──────
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+# ── Sitemaps ─────────────────────────────────────────────────
 Sitemap: https://devbuilder.app/sitemap.xml
+Sitemap: https://devbuilder.app/sitemap-images.xml
 
-# Crawl-delay (optional, polite)
-# Crawl-delay: 1
-
-# Host
-Host: https://devbuilder.app
+# ── Host ─────────────────────────────────────────────────────
+Host: devbuilder.app

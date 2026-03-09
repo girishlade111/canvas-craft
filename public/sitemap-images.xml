@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <url>
+    <loc>https://devbuilder.app/</loc>
+    <image:image>
+      <image:loc>https://devbuilder.app/og-image.png</image:loc>
+      <image:title>DevBuilder — Free Visual Website Builder</image:title>
+      <image:caption>Build professional websites with drag-and-drop. 100+ components, SEO tools, eCommerce, CMS, and React export. No coding required.</image:caption>
+      <image:geo_location>United States</image:geo_location>
+      <image:license>https://devbuilder.app/</image:license>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://devbuilder.app/templates</loc>
+    <image:image>
+      <image:loc>https://devbuilder.app/og-image.png</image:loc>
+      <image:title>Website Templates — DevBuilder</image:title>
+      <image:caption>50+ professional website templates for every industry. SaaS, eCommerce, portfolio, restaurant, agency, and more. Free to use.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://devbuilder.app/docs</loc>
+    <image:image>
+      <image:loc>https://devbuilder.app/og-image.png</image:loc>
+      <image:title>DevBuilder Documentation</image:title>
+      <image:caption>Complete developer and user documentation for DevBuilder website builder platform.</image:caption>
+    </image:image>
+  </url>
+
+</urlset>
