@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowLeft, HelpCircle, Calculator, Zap, Home, IndianRupee, FileText, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import FAQAccordion from '@/components/FAQAccordion';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 const FAQPage = () => {
   const navigate = useNavigate();
