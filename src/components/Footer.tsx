@@ -9,11 +9,11 @@ const Footer = () => {
   };
 
   const quickLinks = [
-    { label: 'Calculator', target: 'calculator' },
-    { label: 'Appliance Calculator', target: 'appliance-calculator' },
-    { label: 'Saving Tips', target: 'saving-tips' },
-    { label: 'State Tariff Rates', target: 'tariff-table' },
-    { label: 'FAQ', target: 'faq' },
+    { label: 'Calculator', path: '/calculator' },
+    { label: 'Appliance Calculator', path: '/appliance-calculator' },
+    { label: 'Saving Tips', path: '/saving-tips' },
+    { label: 'State Tariff Rates', path: '/tariff-rates' },
+    { label: 'FAQ', path: '/faq' },
   ];
 
   return (
