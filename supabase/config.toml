@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.seed-premium-templates]
 verify_jwt = false
+
+[functions.upload-templates]
+verify_jwt = false
