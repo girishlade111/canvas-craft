@@ -201,7 +201,6 @@ const FAQPage = () => {
               );
             })}
           </div>
-          </div>
 
           {/* Still Have Questions */}
           <div className="mt-12 p-6 bg-primary text-primary-foreground rounded-lg text-center">
