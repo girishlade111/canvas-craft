@@ -17,6 +17,7 @@ const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
 const ProjectSettingsPage = lazy(() => import("./pages/ProjectSettingsPage"));
 const PreviewPage = lazy(() => import("./pages/PreviewPage"));
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
+const TemplateManagerPage = lazy(() => import("./pages/TemplateManagerPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const DocumentationPage = lazy(() => import("./pages/DocumentationPage"));
 const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
@@ -90,6 +91,7 @@ const App = () => (
               {/* Protected routes */}
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/templates/:projectId" element={<ProtectedRoute><TemplateSelection /></ProtectedRoute>} />
+              <Route path="/template-manager" element={<ProtectedRoute><TemplateManagerPage /></ProtectedRoute>} />
               <Route path="/builder" element={<Navigate to="/templates" replace />} />
               <Route path="/preview/:projectId" element={<ProtectedRoute><PreviewPage /></ProtectedRoute>} />
               <Route path="/project/:projectId/settings" element={<ProtectedRoute><ProjectSettingsPage /></ProtectedRoute>} />

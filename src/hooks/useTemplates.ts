@@ -22,7 +22,7 @@ export interface TemplateRow {
 }
 
 // Convert DB row → app Template type
-const toTemplate = (row: TemplateRow): Template & { is_premium: boolean; is_featured: boolean; is_new: boolean; installs: number; tags: string[]; preview_image_url: string | null } => ({
+const toTemplate = (row: TemplateRow): Template & { is_premium: boolean; is_public: boolean; is_featured: boolean; is_new: boolean; installs: number; tags: string[]; preview_image_url: string | null } => ({
   id: row.id,
   name: row.name,
   description: row.description,
@@ -30,6 +30,7 @@ const toTemplate = (row: TemplateRow): Template & { is_premium: boolean; is_feat
   thumbnail: row.thumbnail,
   schema: row.schema as PageSchema,
   is_premium: row.is_premium,
+  is_public: row.is_public,
   is_featured: row.installs >= 200,
   is_new: (Date.now() - new Date(row.created_at).getTime()) < 7 * 24 * 60 * 60 * 1000,
   installs: row.installs,
