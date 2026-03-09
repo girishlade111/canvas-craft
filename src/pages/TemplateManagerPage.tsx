@@ -7,7 +7,7 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import {
   Code2, Plus, Trash2, Pencil, LogOut, Loader2,
-  Search, LayoutTemplate, X, Tag, Save, Eye, EyeOff,
+  Search, LayoutTemplate, Tag, Save,
   Star, Globe, Lock, Upload, ArrowLeft, ChevronDown, ChevronUp,
   Copy,
 } from 'lucide-react';
