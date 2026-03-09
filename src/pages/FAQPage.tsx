@@ -177,15 +177,16 @@ const FAQPage = () => {
 
           {/* FAQ Categories */}
           <div className="space-y-8">
-            {faqCategories.map((category, index) => {
+            {faqCategories.map((category, categoryIndex) => {
               const IconComponent = category.icon;
               return (
-                <div key={index}>
+                <div key={categoryIndex}>
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
                       <IconComponent className="w-5 h-5 text-primary-foreground" />
                     </div>
                     <h2 className="text-2xl font-bold">{category.title}</h2>
+                  </div>
                   <Accordion type="single" collapsible className="w-full">
                     {category.faqs.map((faq, index) => (
                       <AccordionItem key={index} value={`item-${categoryIndex}-${index}`}>
@@ -196,6 +197,10 @@ const FAQPage = () => {
                       </AccordionItem>
                     ))}
                   </Accordion>
+                </div>
+              );
+            })}
+          </div>
           </div>
 
           {/* Still Have Questions */}
