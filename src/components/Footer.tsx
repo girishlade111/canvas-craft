@@ -1,8 +1,10 @@
 import { Zap, Globe, Github, Mail } from 'lucide-react';
 
 const Footer = () => {
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const navigate = useNavigate();
+  
+  const navigateToPage = (path: string) => {
+    navigate(path);
   };
 
   const quickLinks = [
